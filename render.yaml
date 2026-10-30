@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: ejari-students-egypt-v31
+    env: python
+    plan: free
+    region: frankfurt
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn --chdir backend app:app --bind 0.0.0.0:$PORT --workers 3"
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ejari-postgres-db
+          property: connectionString
+      - key: PAYMOB_API_KEY
+        sync: false
+      - key: PAYMOB_INTEGRATION_ID_CARD
+        value: "392019"
+      - key: PAYMOB_INTEGRATION_ID_WALLET
+        value: "392020"
+      - key: PAYMOB_IFRAME_ID
+        value: "778899"
+
+databases:
+  - name: ejari-postgres-db
+    plan: free
+    region: frankfurt
+    databaseName: ejari_students

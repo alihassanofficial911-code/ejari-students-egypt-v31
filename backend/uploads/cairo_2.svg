@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="g_cai" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9D174D" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.95" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#g_cai)" />
+  <circle cx="400" cy="200" r="100" fill="white" fill-opacity="0.08" />
+  <rect x="70" y="70" width="660" height="360" rx="24" fill="none" stroke="white" stroke-opacity="0.2" stroke-width="2" />
+  <text x="400" y="195" font-family="Cairo, Arial, sans-serif" font-size="30" font-weight="bold" fill="#FFFFFF" text-anchor="middle">سكن النيل للطالبات - الدقي</text>
+  <text x="400" y="250" font-family="Cairo, Arial, sans-serif" font-size="18" fill="#E2E8F0" text-anchor="middle">المطبخ والصالة المجهزة بالكامل</text>
+  <rect x="310" y="295" width="180" height="38" rx="10" fill="#E36414" />
+  <text x="400" y="320" font-family="Cairo, Arial, sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">سكن طلاب مصر v2.0</text>
+</svg>
