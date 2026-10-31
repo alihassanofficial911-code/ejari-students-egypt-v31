@@ -345,6 +345,62 @@ class EjariStudentsV31TestCase(unittest.TestCase):
         self.assertEqual(latest['parent_phone'], '01099884433')
         self.assertIn('Escrow', latest['message'])
 
+    def test_escrow_receipt_verification_and_filters(self):
+        """Test v3.2 Escrow receipt verification endpoint and governorate/budget filters."""
+        client = ejari_students_app.app.test_client()
+
+        # 1. Verify pre-seeded valid receipt (EJR-202610-101)
+        res = client.get('/api/bookings/verify/EJR-202610-101')
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertTrue(data['verified'])
+        self.assertEqual(data['escrow_status'], 'HELD_IN_ESCROW')
+        self.assertEqual(data['receipt_code'], 'EJR-202610-101')
+        self.assertEqual(data['student_name'], 'أحمد الشريف')
+        self.assertIn('الدقهلية', data['governorate'])
+        self.assertIn('حساب الضمان البنكي', data['bank_escrow_guarantee'])
+
+        # 2. Book a new student bed and verify its newly generated receipt code
+        booking = ejari_students_app.book_student_bed({
+            'property_id': 1,
+            'student_name': 'عمر عبد العزيز',
+            'faculty': 'كلية الهندسة',
+            'academic_year': 'الفرقة الثالثة',
+            'home_governorate': 'الشرقية',
+            'whatsapp_phone': '01098765432',
+            'parent_phone': '01011223344',
+            'study_habit': 'مذاكرة هادئة',
+            'monthly_share': 2200.0,
+            'deposit_escrow': 2000.0
+        })
+        self.assertEqual(booking['status'], 'booked')
+        new_receipt = booking['receipt_code']
+        self.assertTrue(new_receipt.startswith('EJR-'))
+
+        res_new = client.get(f'/api/bookings/verify/{new_receipt}')
+        self.assertEqual(res_new.status_code, 200)
+        data_new = res_new.get_json()
+        self.assertTrue(data_new['verified'])
+        self.assertEqual(data_new['student_name'], 'عمر عبد العزيز')
+        self.assertEqual(data_new['deposit_escrow'], 2000.0)
+
+        # 3. Verify non-existent receipt returns 404
+        res_invalid = client.get('/api/bookings/verify/EJR-INVALID-999999')
+        self.assertEqual(res_invalid.status_code, 404)
+        data_inv = res_invalid.get_json()
+        self.assertFalse(data_inv['verified'])
+
+        # 4. Filter properties by governorate and max_rent
+        gov_filtered = ejari_students_app.list_properties(governorate='الدقهلية')
+        self.assertGreaterEqual(len(gov_filtered), 1)
+        for p in gov_filtered:
+            self.assertIn('الدقهلية', p['governorate'])
+
+        budget_filtered = ejari_students_app.list_properties(max_rent='1800')
+        self.assertGreaterEqual(len(budget_filtered), 1)
+        for p in budget_filtered:
+            self.assertLessEqual(p['bed_monthly_price'], 1800)
+
 
 if __name__ == '__main__':
     unittest.main()

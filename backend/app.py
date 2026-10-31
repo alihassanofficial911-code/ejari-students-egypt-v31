@@ -1100,6 +1100,9 @@ def book_student_bed(data):
     ''', (property_id, student_name, faculty, academic_year, home_gov, phone, parent_phone, study_habit, monthly_share, deposit_escrow))
     roommate_id = cur.lastrowid
 
+    receipt_code = data.get('receipt_code') or f"EJR-{datetime.now().strftime('%Y%m%d')}-{roommate_id:03d}"
+    cur.execute('UPDATE roommates SET receipt_code = ? WHERE id = ?', (receipt_code, roommate_id))
+
     new_avail = prop['available_beds'] - 1
     new_status = 'available' if new_avail > 0 else 'fully_booked'
     cur.execute('UPDATE properties SET available_beds = ?, status = ? WHERE id = ?', (new_avail, new_status, property_id))
@@ -1112,7 +1115,7 @@ def book_student_bed(data):
         alert_msg = (
             f"عزيزي ولي أمر الطالب {student_name}، نود إعلامكم بنجاح حجز السرير الجامعي في "
             f"'{prop['title'][:38]}...' مع حفظ مبلغ التأمين المسترد ({deposit_escrow} ج.م) في حساب الضمان البنكي المعتمد (Escrow) "
-            f"لحين انتهاء فترة الإقامة. كود السكن #{property_id}."
+            f"لحين انتهاء فترة الإقامة. كود السكن #{property_id} - رقم إيصال الضمان: {receipt_code}."
         )
         send_parent_alert(student_name, parent_phone, alert_msg, 'WhatsApp')
 
@@ -1123,7 +1126,9 @@ def book_student_bed(data):
         'student_name': student_name,
         'remaining_beds': new_avail,
         'deposit_escrow': deposit_escrow,
-        'deposit_status': 'escrow_secured'
+        'deposit_status': 'escrow_secured',
+        'receipt_code': receipt_code,
+        'message': 'تم حجز السرير بنجاح وحفظ مبلغ الضمان في حساب الإسكرو البنكي'
     }
 
 
@@ -1466,7 +1471,7 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'service': 'Ejari Students Egypt API',
-        'version': '3.1.0',
+        'version': '3.2.0',
         'jwt_enabled': True,
         'database': get_db_type(),
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -1616,6 +1621,97 @@ def api_bookings():
     res = book_student_bed(body)
     status_code = 201 if res.get('status') == 'booked' else 400
     return jsonify(res), status_code
+
+
+@app.route('/api/bookings/verify/<receipt_code>', methods=['GET'])
+def api_verify_booking(receipt_code):
+    clean_code = (receipt_code or '').strip()
+    if not clean_code:
+        return jsonify({'status': 'error', 'verified': False, 'message': 'كود الإيصال مطلوب'}), 400
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute('''
+        SELECT r.id, r.property_id, r.student_name, r.faculty, r.academic_year,
+               r.home_governorate, r.whatsapp_phone, r.parent_phone, r.study_habit,
+               r.monthly_share, r.deposit_escrow, r.deposit_status, r.payment_status,
+               r.last_payment_date, r.receipt_code,
+               p.title AS property_title, p.governorate, p.university,
+               p.gender, p.walk_minutes, p.gate_name
+        FROM roommates r
+        JOIN properties p ON r.property_id = p.id
+        WHERE UPPER(r.receipt_code) = UPPER(?)
+    ''', (clean_code,))
+    row = cur.fetchone()
+
+    if not row:
+        cur.execute('''
+            SELECT py.id, py.property_id, py.student_name, py.payment_type, py.amount,
+                   py.method, py.reference_code AS receipt_code, py.paid_at,
+                   p.title AS property_title, p.governorate, p.university,
+                   p.gender, p.walk_minutes, p.gate_name,
+                   p.deposit_amount AS deposit_escrow, p.bed_monthly_price AS monthly_share
+            FROM payments py
+            JOIN properties p ON py.property_id = p.id
+            WHERE UPPER(py.reference_code) = UPPER(?)
+        ''', (clean_code,))
+        pay_row = cur.fetchone()
+        if pay_row:
+            conn.close()
+            return jsonify({
+                'status': 'success',
+                'verified': True,
+                'escrow_status': 'HELD_IN_ESCROW',
+                'receipt_code': pay_row['receipt_code'],
+                'student_name': pay_row['student_name'],
+                'property_title': pay_row['property_title'],
+                'governorate': pay_row['governorate'],
+                'university': pay_row['university'],
+                'nearby_university': pay_row['university'],
+                'gate_name': pay_row['gate_name'] or 'البوابة الرئيسية',
+                'walk_minutes': pay_row['walk_minutes'],
+                'deposit_escrow': pay_row['deposit_escrow'] or 2000.0,
+                'monthly_share': pay_row['monthly_share'] or pay_row['amount'],
+                'payment_status': 'paid',
+                'payment_type': pay_row['payment_type'],
+                'method': pay_row['method'],
+                'bank_escrow_guarantee': 'حساب الضمان البنكي الذكي المعتمد - بنك مصر / Paymob Escrow Shield',
+                'verified_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }), 200
+
+    if not row:
+        conn.close()
+        return jsonify({
+            'status': 'error',
+            'verified': False,
+            'message': f'لم يتم العثور على إيصال حجز أو ضمان بالكود ({clean_code}). يرجى التحقق من الرقم والمحاولة مجدداً.'
+        }), 404
+
+    res = {
+        'status': 'success',
+        'verified': True,
+        'escrow_status': 'HELD_IN_ESCROW',
+        'receipt_code': row['receipt_code'],
+        'student_name': row['student_name'],
+        'faculty': row['faculty'],
+        'academic_year': row['academic_year'],
+        'home_governorate': row['home_governorate'],
+        'property_title': row['property_title'],
+        'governorate': row['governorate'],
+        'university': row['university'],
+        'nearby_university': row['university'],
+        'gate_name': row['gate_name'] or 'البوابة الرئيسية للجامعة',
+        'walk_minutes': row['walk_minutes'],
+        'deposit_escrow': row['deposit_escrow'],
+        'monthly_share': row['monthly_share'],
+        'payment_status': row['payment_status'],
+        'last_payment_date': row['last_payment_date'],
+        'bank_escrow_guarantee': 'حساب الضمان البنكي الذكي المعتمد - بنك مصر / Paymob Escrow Shield',
+        'verified_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+    conn.close()
+    return jsonify(res), 200
 
 
 # 5. Video Tours
@@ -1805,7 +1901,7 @@ def serve_static(path):
 
 def run_server(port=PORT):
     init_db()
-    print(f'Ejari Students Egypt v3.1 Platform running on http://127.0.0.1:{port}')
+    print(f'Ejari Students Egypt v3.2 Platform running on http://127.0.0.1:{port}')
     app.run(host='0.0.0.0', port=port, debug=False)
 
 

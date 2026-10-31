@@ -89,6 +89,31 @@
       background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
       background-size: 16px 16px;
     }
+    .gov-pill-active {
+      background-color: #0F4C5C;
+      color: #FFFFFF;
+      box-shadow: 0 4px 10px rgba(15, 76, 92, 0.25);
+    }
+    .dark .gov-pill-active {
+      background-color: #10B981;
+      color: #022C22;
+    }
+    .gov-pill-inactive {
+      background-color: #F8FAFC;
+      color: #475569;
+      border: 1px solid #E2E8F0;
+    }
+    .dark .gov-pill-inactive {
+      background-color: #1E293B;
+      color: #94A3B8;
+      border-color: #334155;
+    }
+    .gov-pill-inactive:hover {
+      background-color: #F1F5F9;
+    }
+    .dark .gov-pill-inactive:hover {
+      background-color: #334155;
+    }
     .dark .receipt-pattern {
       background-image: radial-gradient(#334155 1px, transparent 1px);
       background-size: 16px 16px;
@@ -158,7 +183,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-black text-[#0F4C5C] dark:text-emerald-400 tracking-tight">إيجاري طلاب مصر</h1>
-            <span class="text-[10px] bg-[#E36414]/10 text-[#E36414] dark:bg-amber-400/20 dark:text-amber-300 font-bold px-2 py-0.5 rounded-full border border-[#E36414]/20">v3.1 Production</span>
+            <span class="text-[10px] bg-[#E36414]/10 text-[#E36414] dark:bg-amber-400/20 dark:text-amber-300 font-bold px-2 py-0.5 rounded-full border border-[#E36414]/20">v3.2 Production-Ready</span>
           </div>
           <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سوق وحجز سكن الطلاب المغتربين • خرائط البوابات • حماية التأمين بالضمان والـ JWT</p>
         </div>
@@ -194,10 +219,10 @@
           <span>تسجيل الدخول / حساب جديد</span>
         </button>
 
-        <!-- Cloud Deploy Guide Button (Visible to Admin & Quick Access) -->
-        <button id="adminDeployBtn" onclick="openCloudDeployModal()" class="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-xl transition shadow-sm">
-          <span>🚀</span>
-          <span>دليل النشر السحابي</span>
+        <!-- Prominent Render Live Button -->
+        <button onclick="openCloudDeployModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-black px-3.5 py-2 rounded-xl transition shadow-md shadow-emerald-600/30 border border-emerald-400/40">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-200 animate-pulse"></span>
+          <span>🌐 رابط النشر السحابي المباشر (Render Live)</span>
         </button>
 
         <!-- Add Property Button (Visible to Landlord & Admin) -->
@@ -272,6 +297,57 @@
         </div>
       </div>
 
+      <!-- ESCROW RECEIPT TRACKER (v3.2) -->
+      <div class="bg-gradient-to-r from-slate-900 via-[#0a2e36] to-slate-900 text-white rounded-3xl p-6 border-2 border-emerald-500/40 shadow-xl space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-2xl font-black">
+              🛡️
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-black text-base sm:text-lg text-white">التحقق الفوري من إيصال التأمين وحالة الضمان (Escrow Receipt Tracker)</h3>
+                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/30">جديد v3.2</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-0.5">للطالب وولي الأمر بالمحافظات: أدخل كود الإيصال المعتمد للتحقق من حفظ وتأمين وديعة السكن في حساب الضمان البنكي الرسمي.</p>
+            </div>
+          </div>
+          <span class="text-xs bg-emerald-500/20 text-emerald-300 font-extrabold px-3 py-1.5 rounded-xl border border-emerald-500/30 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            حساب الضمان البنكي الذكي المعتمد
+          </span>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-slate-400 text-base">
+              🏷️
+            </span>
+            <input type="text" id="escrowReceiptInput" placeholder="أدخل كود الإيصال (مثال: EJR-202610-101)..." class="w-full bg-black/40 border border-emerald-500/40 rounded-xl pr-11 pl-4 py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-mono tracking-wider">
+          </div>
+          <button onclick="verifyEscrowReceipt()" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+            <span>🔍 تحقق من الضمان الآن</span>
+          </button>
+        </div>
+
+        <!-- Demo pills to test instantly with 1-click -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="text-slate-400 font-bold text-[11px]">أكواد معتمدة للفحص التجريبي السريع:</span>
+          <button onclick="quickTestReceipt('EJR-202610-101')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-emerald-500/20 transition">
+            EJR-202610-101 (المنصورة)
+          </button>
+          <button onclick="quickTestReceipt('EJR-202610-201')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-emerald-500/20 transition">
+            EJR-202610-201 (القاهرة)
+          </button>
+          <button onclick="quickTestReceipt('EJR-202610-301')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-emerald-500/20 transition">
+            EJR-202610-301 (الإسكندرية)
+          </button>
+        </div>
+
+        <!-- Result Card Box (Injected via JS) -->
+        <div id="escrowReceiptResultBox" class="hidden"></div>
+      </div>
+
       <!-- Filters Bar -->
       <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         <div class="flex items-center justify-between">
@@ -280,6 +356,52 @@
             <h3 class="font-extrabold text-sm sm:text-base text-slate-800 dark:text-slate-100">تصفية وبحث سكن الطلاب حسب الجامعة، التوافق، والبيئة الدراسية</h3>
           </div>
           <button onclick="resetFilters()" class="text-xs text-[#0F4C5C] dark:text-emerald-400 hover:underline font-bold">إعادة تعيين الفلاتر</button>
+        </div>
+
+        <!-- Governorate Quick Filter Pills (v3.2) -->
+        <div class="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+          <span class="text-xs font-bold text-slate-600 dark:text-slate-400 block">تصفية سريعة بالمحافظة والجامعة:</span>
+          <div class="flex flex-wrap items-center gap-1.5" id="govPillsContainer">
+            <button onclick="selectGovPill('all')" data-gov="all" class="gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition">
+              🏛️ كل المحافظات
+            </button>
+            <button onclick="selectGovPill('المنصورة')" data-gov="المنصورة" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              الدقهلية (المنصورة والدلتا)
+            </button>
+            <button onclick="selectGovPill('القاهرة')" data-gov="القاهرة" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              الجيزة والقاهرة (جامعة القاهرة وعين شمس)
+            </button>
+            <button onclick="selectGovPill('الإسكندرية')" data-gov="الإسكندرية" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              الإسكندرية والأكاديمية
+            </button>
+            <button onclick="selectGovPill('أسيوط')" data-gov="أسيوط" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              أسيوط والمنيا
+            </button>
+            <button onclick="selectGovPill('طنطا')" data-gov="طنطا" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              الغربية والمنوفية (طنطا)
+            </button>
+            <button onclick="selectGovPill('أكتوبر')" data-gov="أكتوبر" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              6 أكتوبر وزايد (MUST & AUC)
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Max Price Slider (v3.2) -->
+        <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/60 space-y-2">
+          <div class="flex items-center justify-between text-xs sm:text-sm font-bold">
+            <span class="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <span>💰</span>
+              <span>شريط تحديد الحد الأقصى لسعر السرير الشهري (Max Price Slider):</span>
+            </span>
+            <span id="priceSliderValueLabel" class="font-black text-[#0F4C5C] dark:text-emerald-400 bg-white dark:bg-slate-900 px-3 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
+              حتى 4,000 ج.م / شهرياً
+            </span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-slate-400 font-bold">1,000 ج.م</span>
+            <input type="range" id="filterPriceSlider" min="1000" max="4000" step="100" value="4000" oninput="onPriceSliderChange(this.value)" class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#0F4C5C] dark:accent-emerald-500">
+            <span class="text-xs text-slate-400 font-bold">4,000 ج.م</span>
+          </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs sm:text-sm">
@@ -1665,61 +1787,97 @@ git push -u origin main</pre>
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-2xl w-full p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-bold">
-            ☁️
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center text-2xl font-black shadow-md">
+            🌐
           </div>
           <div>
-            <h3 class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-slate-100">دليل النشر السحابي السريع (GitHub & Render Free Tier)</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400">إطلاق منصة إيجاري طلاب مصر v3.1 للإنتاج السحابي بدون أي تكاليف</p>
+            <div class="flex items-center gap-2">
+              <h3 class="font-extrabold text-base sm:text-lg text-slate-900 dark:text-slate-100">رابط النشر السحابي المباشر (Render Live Deploy)</h3>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">v3.2 Production</span>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">إطلاق منصة إيجاري طلاب مصر على الإنترنت برابط عام مجاني 100% في 30 ثانية</p>
           </div>
         </div>
         <button onclick="closeCloudDeployModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 text-xl font-bold">✕</button>
       </div>
 
-      <!-- Commit & Status Badge -->
-      <div class="p-4 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
-          <span class="font-extrabold text-xs sm:text-sm text-emerald-800 dark:text-emerald-200">جاهزية كاملة: Render Free Tier Ready</span>
+      <!-- One-Click Deploy Direct Link Generator -->
+      <div class="bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white p-5 rounded-2xl border border-emerald-500/40 shadow-inner space-y-3.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-black text-emerald-300 flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            رابط النشر بنقرة واحدة (One-Click Deploy URL):
+          </span>
+          <span class="text-[10px] bg-emerald-500/20 text-emerald-200 px-2 py-0.5 rounded font-mono font-bold">خطة Render المجانية ($0/mo)</span>
         </div>
-        <span class="font-mono text-xs bg-emerald-200/80 dark:bg-emerald-900 text-emerald-950 dark:text-emerald-100 px-2 py-0.5 rounded-lg font-bold">Commit: e0fd987</span>
+
+        <div class="space-y-1.5">
+          <label class="block text-[11px] text-slate-300 font-bold">اسم حسابك على GitHub:</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="deployGithubUser" placeholder="أدخل اسم حسابك على GitHub..." oninput="updateDeployLink(this.value)" class="flex-1 bg-black/50 border border-emerald-500/30 rounded-xl px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400">
+            <button onclick="copyOneClickDeployUrl()" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center gap-1">
+              <span>📋</span>
+              <span id="copyDeployUrlText">نسخ الرابط</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="p-3 bg-black/60 rounded-xl border border-emerald-500/20">
+          <span class="text-[10px] text-slate-400 block mb-1 font-bold">رابط النشر الفوري المباشر:</span>
+          <a id="oneClickDeployLink" href="https://dashboard.render.com/blueprints" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-emerald-300 hover:text-emerald-200 underline break-all dir-ltr block text-left">
+            https://dashboard.render.com/blueprint/new?repo=https://github.com/USERNAME/ejari-students-egypt-v31
+          </a>
+        </div>
+
+        <a id="oneClickDeployBtn" href="https://dashboard.render.com/blueprints" target="_blank" rel="noopener noreferrer" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-center text-xs sm:text-sm shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 transition">
+          <span>🚀 فتح ونشر التطبيق فوراً بنقرة واحدة على Render (30 ثانية)</span>
+          <span>↗</span>
+        </a>
       </div>
 
       <!-- Quick Steps -->
-      <div class="space-y-3 text-xs sm:text-sm">
+      <div class="space-y-2.5 text-xs sm:text-sm">
         <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
           <span class="font-black text-emerald-600 dark:text-emerald-400 text-base">1.</span>
           <div>
-            <p class="font-bold text-slate-800 dark:text-slate-200">إنشاء مستودع GitHub</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">افتح GitHub وأنشئ مستودعاً جديداً باسم <code class="font-mono text-amber-600 dark:text-amber-400">ejari-students-egypt-v31</code>.</p>
+            <p class="font-bold text-slate-800 dark:text-slate-200">الرفع السريع إلى مستودع GitHub</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">انقر مرتين على سكربت <code class="font-mono text-emerald-600 dark:text-emerald-400 font-bold">push_to_github.bat</code> في مجلد المشروع، أو نفّذ أوامر Git أدناه.</p>
           </div>
         </div>
 
         <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
           <span class="font-black text-emerald-600 dark:text-emerald-400 text-base">2.</span>
-          <div class="flex-1">
-            <p class="font-bold text-slate-800 dark:text-slate-200">الرفع السريع (تشغيل السكربت أو أوامر Terminal)</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">شغّل <code class="font-mono text-emerald-600 dark:text-emerald-400 font-bold">push_to_github.bat</code> بنقرة مزدوجة، أو انسخ الأوامر أدناه:</p>
-            <div class="mt-2 bg-slate-900 text-emerald-400 p-3 rounded-xl font-mono text-xs relative group">
-              <pre class="select-all whitespace-pre-wrap">git remote add origin https://github.com/&lt;USERNAME&gt;/ejari-students-egypt-v31.git&#10;git branch -M main&#10;git push -u origin main</pre>
-            </div>
+          <div>
+            <p class="font-bold text-slate-800 dark:text-slate-200">تطبيق الإعدادات التلقائية (Blueprint)</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">سيقرأ Render ملف <code class="font-mono text-amber-600 dark:text-amber-400 font-bold">render.yaml</code> تلقائياً ويقوم بتهيئة السيرفر وقاعدة بيانات PostgreSQL السحابية على الخطة المجانية ($0).</p>
           </div>
         </div>
 
         <div class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
           <span class="font-black text-emerald-600 dark:text-emerald-400 text-base">3.</span>
           <div>
-            <p class="font-bold text-slate-800 dark:text-slate-200">الربط التلقائي بـ Render Blueprints (مجاني 100%)</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">افتح Render، واختر New Blueprint Instance، ثم اربط المستودع ليتم بناء خادم الويب وقاعدة بيانات PostgreSQL السحابية تلقائياً بموجب ملف <code class="font-mono text-amber-600 dark:text-amber-400">render.yaml</code> المجهز مسبقاً.</p>
+            <p class="font-bold text-slate-800 dark:text-slate-200">الحصول على الرابط الحي للجمهور</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">ستحصل فور اكتمال البناء على عنوان دائم مثل: <code class="font-mono text-teal-600 dark:text-teal-400 font-bold">https://ejari-students-egypt-v31.onrender.com</code> متاح للطلاب وأولياء الأمور عالمياً.</p>
           </div>
         </div>
       </div>
 
+      <!-- Quick Copy Git Command Box -->
+      <div class="bg-slate-900 text-emerald-400 p-3 rounded-xl font-mono text-xs relative group border border-slate-800">
+        <div class="flex items-center justify-between text-slate-400 mb-1.5 text-[11px]">
+          <span>أوامر الرفع عبر سطر الأوامر (Terminal):</span>
+          <button onclick="copyGitPushCommands()" class="text-white hover:text-emerald-300 font-bold text-xs underline">نسخ</button>
+        </div>
+        <pre class="select-all whitespace-pre-wrap dir-ltr text-left">git remote add origin https://github.com/&lt;USERNAME&gt;/ejari-students-egypt-v31.git
+git branch -M main
+git push -u origin main</pre>
+      </div>
+
       <!-- Action Buttons -->
-      <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
         <button onclick="copyGitPushCommands()" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition">
           <span>📋</span>
-          <span>نسخ أوامر الرفع Git</span>
+          <span>نسخ أوامر Git للرفع</span>
         </button>
         <div class="flex items-center gap-2">
           <button onclick="closeCloudDeployModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs sm:text-sm">إغلاق</button>
@@ -1742,7 +1900,7 @@ git push -u origin main</pre>
   <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-12 py-6 text-center text-xs text-slate-500 dark:text-slate-400 font-medium">
     <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2">
-        <span class="font-bold text-[#0F4C5C] dark:text-emerald-400">منصة إيجاري طلاب مصر | Ejari Students Egypt v3.1</span>
+        <span class="font-bold text-[#0F4C5C] dark:text-emerald-400">منصة إيجاري طلاب مصر | Ejari Students Egypt v3.2</span>
         <span>• سكن الطلاب المغتربين والوافدين بالمحافظات (Production-Ready)</span>
       </div>
       <div>
@@ -1974,6 +2132,193 @@ git push -u origin main</pre>
         modal.classList.add('hidden');
         modal.classList.remove('flex');
       }
+    }
+
+    function updateDeployLink(user) {
+      const u = (user || '').trim() || 'USERNAME';
+      const url = `https://dashboard.render.com/blueprint/new?repo=https://github.com/${u}/ejari-students-egypt-v31`;
+      const link = document.getElementById('oneClickDeployLink');
+      const btn = document.getElementById('oneClickDeployBtn');
+      if (link) {
+        link.textContent = url;
+        link.href = url;
+      }
+      if (btn) btn.href = url;
+    }
+
+    function copyOneClickDeployUrl() {
+      const link = document.getElementById('oneClickDeployLink');
+      const url = link ? link.href : 'https://dashboard.render.com/blueprints';
+      navigator.clipboard.writeText(url).then(() => {
+        const text = document.getElementById('copyDeployUrlText');
+        if (text) text.textContent = 'تم النسخ! ✓';
+        showToast('تم نسخ رابط النشر السحابي المباشر 📋', 'success');
+        setTimeout(() => { if (text) text.textContent = 'نسخ الرابط'; }, 3000);
+      });
+    }
+
+    // =========================================================================
+    // Escrow Receipt Verification Tracker (v3.2)
+    // =========================================================================
+    function quickTestReceipt(code) {
+      const input = document.getElementById('escrowReceiptInput');
+      if (input) input.value = code;
+      verifyEscrowReceipt();
+    }
+
+    async function verifyEscrowReceipt() {
+      const input = document.getElementById('escrowReceiptInput');
+      const resultBox = document.getElementById('escrowReceiptResultBox');
+      const code = (input ? input.value : '').trim();
+
+      if (!code) {
+        showToast('برجاء إدخال كود الإيصال أولاً (مثال: EJR-202610-101)', 'warning');
+        if (input) input.focus();
+        return;
+      }
+
+      resultBox.classList.remove('hidden');
+      resultBox.innerHTML = `
+        <div class="bg-black/60 rounded-2xl p-6 text-center space-y-2 border border-emerald-500/20">
+          <div class="inline-block animate-spin text-2xl">⏳</div>
+          <p class="text-xs text-slate-300 font-bold">جاري التحقق من كود الإيصال وحساب الضمان البنكي...</p>
+        </div>
+      `;
+
+      try {
+        const res = await fetch(`/api/bookings/verify/${encodeURIComponent(code)}`);
+        const data = await res.json();
+
+        if (res.ok && data.verified) {
+          resultBox.innerHTML = `
+            <div class="bg-gradient-to-br from-emerald-950 via-slate-900 to-[#0F4C5C] rounded-2xl p-5 sm:p-6 border-2 border-emerald-400 shadow-2xl space-y-4 text-white animate-fade-in">
+              
+              <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-500/30 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-sm">✓</span>
+                  <div>
+                    <h4 class="font-black text-sm sm:text-base text-emerald-300">إيصال حجز وتأمين معتمد رسمياً</h4>
+                    <span class="text-[11px] text-slate-300 font-mono">رقم الإيصال: <b class="text-white">${data.receipt_code}</b></span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs bg-emerald-500 text-slate-950 font-black px-3 py-1 rounded-full shadow-md">
+                    🔒 ${data.escrow_status}
+                  </span>
+                  <button onclick="document.getElementById('escrowReceiptResultBox').classList.add('hidden')" class="text-slate-400 hover:text-white text-sm font-bold px-2 py-1">✕</button>
+                </div>
+              </div>
+
+              <!-- Escrow Shield Guarantee Banner -->
+              <div class="p-3 bg-emerald-500/15 border border-emerald-500/30 rounded-xl flex items-center gap-3">
+                <span class="text-2xl">🛡️</span>
+                <div class="text-xs space-y-0.5">
+                  <span class="font-black text-emerald-200 block">${data.bank_escrow_guarantee}</span>
+                  <span class="text-[11px] text-emerald-300/80">مبلغ التأمين محتجز بالكامل في حساب الضمان ويسترد آلياً بنهاية العام الدراسي دون تدخل المالك.</span>
+                </div>
+              </div>
+
+              <!-- Verified Details Grid -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div class="bg-black/40 p-3 rounded-xl border border-white/10 space-y-0.5">
+                  <span class="text-slate-400 text-[10px] block">اسم الطالب المغترب:</span>
+                  <span class="font-bold text-white text-sm">${data.student_name}</span>
+                  <span class="text-[11px] text-slate-300 block">${data.faculty || ''} (${data.academic_year || ''})</span>
+                </div>
+
+                <div class="bg-black/40 p-3 rounded-xl border border-white/10 space-y-0.5">
+                  <span class="text-slate-400 text-[10px] block">السكن والجامعة:</span>
+                  <span class="font-bold text-white text-xs">${data.property_title}</span>
+                  <span class="text-[11px] text-emerald-300 block">🏛️ ${data.nearby_university || data.university} (${data.governorate})</span>
+                </div>
+
+                <div class="bg-black/40 p-3 rounded-xl border border-white/10 space-y-0.5">
+                  <span class="text-slate-400 text-[10px] block">مبلغ التأمين المحتجز (Escrow):</span>
+                  <span class="font-black text-emerald-400 text-base">${formatEGP(data.deposit_escrow)}</span>
+                  <span class="text-[10px] text-emerald-200/80 block">✓ محمي ومسترد بالكامل</span>
+                </div>
+
+                <div class="bg-black/40 p-3 rounded-xl border border-white/10 space-y-0.5">
+                  <span class="text-slate-400 text-[10px] block">القرب من بوابة الجامعة:</span>
+                  <span class="font-bold text-amber-300 text-xs">${data.walk_minutes || 5} دقائق مشياً</span>
+                  <span class="text-[11px] text-slate-300 block">🚶 إلى ${data.gate_name || 'البوابة الرئيسية'}</span>
+                </div>
+              </div>
+
+              <!-- Verification Timestamp & Actions -->
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/10 text-[11px] text-slate-300">
+                <span>توقيت التحقق المعتمد: <b class="font-mono text-white">${data.verified_at}</b></span>
+                <button onclick="window.print()" class="px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white font-bold rounded-lg border border-white/20 transition flex items-center gap-1">
+                  <span>🖨️ طباعة الإيصال المعتمد</span>
+                </button>
+              </div>
+
+            </div>
+          `;
+          showToast(`تم التحقق بنجاح من إيصال الطالب: ${data.student_name} ✓`, 'success');
+        } else {
+          resultBox.innerHTML = `
+            <div class="bg-rose-950/80 border border-rose-500/50 rounded-2xl p-5 text-rose-200 flex items-start justify-between gap-3 text-xs">
+              <div class="flex items-start gap-3">
+                <span class="text-xl">❌</span>
+                <div>
+                  <h4 class="font-bold text-sm text-white">تعذر العثور على إيصال الضمان</h4>
+                  <p class="mt-1">${data.message || 'كود الإيصال غير مسجل. يرجى التأكد من كتابة الكود بدقة.'}</p>
+                </div>
+              </div>
+              <button onclick="document.getElementById('escrowReceiptResultBox').classList.add('hidden')" class="text-rose-300 hover:text-white font-bold">✕</button>
+            </div>
+          `;
+          showToast('تعذر العثور على الإيصال المطلوب', 'error');
+        }
+      } catch (err) {
+        resultBox.innerHTML = `
+          <div class="bg-rose-950/80 border border-rose-500/50 rounded-2xl p-4 text-rose-200 text-xs">
+            حدث خطأ أثناء الاتصال بالخادم للتحقق من الإيصال.
+          </div>
+        `;
+      }
+    }
+
+    // =========================================================================
+    // Interactive Governorate Pills & Slider Filters (v3.2)
+    // =========================================================================
+    let selectedGovernoratePill = 'all';
+
+    function selectGovPill(gov) {
+      selectedGovernoratePill = gov;
+      const pills = document.querySelectorAll('#govPillsContainer button');
+      pills.forEach(btn => {
+        if (btn.getAttribute('data-gov') === gov) {
+          btn.className = 'gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition';
+        } else {
+          btn.className = 'gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition';
+        }
+      });
+
+      const uniSelect = document.getElementById('filterUniversity');
+      if (uniSelect) {
+        if (gov === 'all') {
+          uniSelect.value = 'all';
+        } else {
+          for (let opt of uniSelect.options) {
+            if (opt.value.includes(gov) || opt.text.includes(gov)) {
+              uniSelect.value = opt.value;
+              break;
+            }
+          }
+        }
+      }
+
+      applyFilters();
+    }
+
+    function onPriceSliderChange(val) {
+      const label = document.getElementById('priceSliderValueLabel');
+      if (label) {
+        label.textContent = `حتى ${Number(val).toLocaleString('en-US')} ج.م / شهرياً`;
+      }
+      applyFilters();
     }
 
     function copyGitPushCommands() {
@@ -2387,6 +2732,43 @@ git push -u origin main</pre>
                 ${amenitiesList.map(a => `<span class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-md">✓ ${a.trim()}</span>`).join('')}
               </div>
 
+              <!-- Commute Cost & Time Saver Badge (v3.2) -->
+              ${(() => {
+                const walkMin = p.walk_minutes || 5;
+                const gateName = p.gate_name || 'بوابة الجامعة';
+                if (walkMin <= 5) {
+                  return `
+                    <div class="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 rounded-2xl p-2.5 text-xs text-emerald-900 dark:text-emerald-200">
+                      <span class="text-xl">⚡</span>
+                      <div class="leading-tight">
+                        <span class="font-black text-emerald-700 dark:text-emerald-300 block">وفر ~650 ج.م شهرياً و 35 ساعة مذاكرة</span>
+                        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5 block">${walkMin} دقائق مشياً فقط إلى ${gateName} (بدون مواصلات داخلية)</span>
+                      </div>
+                    </div>
+                  `;
+                } else if (walkMin <= 10) {
+                  return `
+                    <div class="flex items-center gap-2 bg-teal-50 dark:bg-teal-950/70 border border-teal-300 dark:border-teal-800 rounded-2xl p-2.5 text-xs text-teal-900 dark:text-teal-200">
+                      <span class="text-xl">🚶</span>
+                      <div class="leading-tight">
+                        <span class="font-black text-teal-700 dark:text-teal-300 block">وفر ~450 ج.م شهرياً و 20 ساعة</span>
+                        <span class="text-[10px] text-teal-600 dark:text-teal-400 mt-0.5 block">${walkMin} دقائق سيراً إلى ${gateName}</span>
+                      </div>
+                    </div>
+                  `;
+                } else {
+                  return `
+                    <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-2 text-xs text-slate-700 dark:text-slate-300">
+                      <span class="text-base">🚌</span>
+                      <div class="leading-tight">
+                        <span class="font-bold block">وفر ~250 ج.م شهرياً</span>
+                        <span class="text-[10px] text-slate-500 dark:text-slate-400 block">${walkMin} دقيقة بالمواصلات الخفيفة</span>
+                      </div>
+                    </div>
+                  `;
+                }
+              })()}
+
               <!-- Pricing Highlight Box -->
               <div class="bg-gradient-to-r from-slate-50 to-slate-100/70 dark:from-slate-800/80 dark:to-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-2xl p-3.5 space-y-1">
                 <div class="flex items-baseline justify-between">
@@ -2425,33 +2807,73 @@ git push -u origin main</pre>
     }
 
     function getFilteredProperties() {
-      const uniFilter = document.getElementById('filterUniversity').value;
-      const genderFilter = document.getElementById('filterGender').value;
-      const rentFilter = document.getElementById('filterMaxRent').value;
-      const envFilter = document.getElementById('filterStudyEnv').value;
-      const availFilter = document.getElementById('filterAvailability').value;
+      const uniFilter = document.getElementById('filterUniversity')?.value || 'all';
+      const genderFilter = document.getElementById('filterGender')?.value || 'all';
+      const rentFilter = document.getElementById('filterMaxRent')?.value || 'all';
+      const envFilter = document.getElementById('filterStudyEnv')?.value || 'all';
+      const availFilter = document.getElementById('filterAvailability')?.value || 'all';
+      const sliderPrice = document.getElementById('filterPriceSlider')?.value;
 
       return propertiesData.filter(p => {
+        // 1. Quick Governorate Pill Filter
+        if (selectedGovernoratePill && selectedGovernoratePill !== 'all') {
+          const matchGov = (p.governorate || '').includes(selectedGovernoratePill);
+          const matchUni = (p.university || '').includes(selectedGovernoratePill);
+          if (!matchGov && !matchUni) return false;
+        }
+
+        // 2. University Dropdown Filter
         if (uniFilter !== 'all' && !p.university.includes(uniFilter) && !p.governorate.includes(uniFilter)) return false;
+
+        // 3. Gender Filter
         if (genderFilter !== 'all' && p.gender !== genderFilter) return false;
+
+        // 4. Study Environment
         if (envFilter !== 'all' && !p.study_environment.includes(envFilter)) return false;
+
+        // 5. Max Rent Dropdown
         if (rentFilter !== 'all' && p.bed_monthly_price > Number(rentFilter)) return false;
+
+        // 6. Max Price Slider (v3.2)
+        if (sliderPrice && p.bed_monthly_price > Number(sliderPrice)) return false;
+
+        // 7. Instant Availability
         if (availFilter === 'available' && p.available_beds <= 0) return false;
+
         return true;
       });
     }
 
     function applyFilters() {
       renderMarketplace();
+      updateMapMarkers();
     }
 
     function resetFilters() {
-      document.getElementById('filterUniversity').value = 'all';
-      document.getElementById('filterGender').value = 'all';
-      document.getElementById('filterStudyEnv').value = 'all';
-      document.getElementById('filterMaxRent').value = 'all';
-      document.getElementById('filterAvailability').value = 'all';
-      renderMarketplace();
+      selectedGovernoratePill = 'all';
+      const pills = document.querySelectorAll('#govPillsContainer button');
+      pills.forEach(btn => {
+        if (btn.getAttribute('data-gov') === 'all') {
+          btn.className = 'gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition';
+        } else {
+          btn.className = 'gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition';
+        }
+      });
+
+      if (document.getElementById('filterUniversity')) document.getElementById('filterUniversity').value = 'all';
+      if (document.getElementById('filterGender')) document.getElementById('filterGender').value = 'all';
+      if (document.getElementById('filterStudyEnv')) document.getElementById('filterStudyEnv').value = 'all';
+      if (document.getElementById('filterMaxRent')) document.getElementById('filterMaxRent').value = 'all';
+      if (document.getElementById('filterAvailability')) document.getElementById('filterAvailability').value = 'all';
+
+      const slider = document.getElementById('filterPriceSlider');
+      if (slider) {
+        slider.value = 4000;
+        const lbl = document.getElementById('priceSliderValueLabel');
+        if (lbl) lbl.textContent = 'حتى 4,000 ج.م / شهرياً';
+      }
+
+      applyFilters();
     }
 
     // Video Tour Modal
@@ -3326,8 +3748,9 @@ git push -u origin main</pre>
       mapLayers = [];
 
       const bounds = [];
+      const displayedProps = getFilteredProperties();
 
-      propertiesData.forEach(p => {
+      displayedProps.forEach(p => {
         const lat = p.lat || 30.0;
         const lng = p.lng || 31.0;
         const gateLat = p.gate_lat || (lat + 0.003);
