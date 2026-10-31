@@ -222,7 +222,210 @@
       </div>
       <!-- BLOCK 3: UNIFORM 3-COLUMN APARTMENTS GRID -->
       <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-        <!-- Rendered via JavaScript dynamically -->
+        <!-- Card 1: Minya Main University (Pre-rendered Static) -->
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+          <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
+            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleFavorite(event, 1)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 3 دقائق مشياً لبوابة مجمع الكليات الطبية</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن النخبة الطبي — حي شلبي (أمام بوابة طب المنيا)</h3>
+              <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ تكييف</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إنترنت فايبر WE</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مكاتب مذاكرة خاصة</span>
+              </div>
+            </div>
+            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 أسرة شاغرة</div>
+          </div>
+          <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 1,800 ج.م 🔒</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openDetailsModal(1)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
+              <a href="https://wa.me/201019876543?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%86%D8%AE%D8%A8%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openBookingModal(1)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2: Minya National University (Pre-rendered Static) -->
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+          <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا الأهلية</span>
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleFavorite(event, 2)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 4 دقائق مشياً لبوابة الحرم الجامعي</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن الرواد الفندقي — المنيا الجديدة (بجوار جامعة المنيا الأهلية)</h3>
+              <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مستوى فندقي</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ تكييفات سبليت</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ ميكروويف ونظافة</span>
+              </div>
+            </div>
+            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+          </div>
+          <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,300 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 2,200 ج.م 🔒</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openDetailsModal(2)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
+              <a href="https://wa.me/201123450987?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D8%B1%D9%88%D8%A7%D8%AF" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openBookingModal(2)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3: Deraya University (Pre-rendered Static) -->
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+          <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
+            <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة دراية</span>
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-rose-600 text-white">👩‍🎓 طالبات</span>
+              <button onclick="toggleFavorite(event, 3)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 3 دقائق مشياً لكليات صيدلة وعلاج طبيعي دراية</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">إقامة الصفوة للطالبات — المنيا الجديدة (أمام جامعة دراية Deraya)</h3>
+              <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ أمن نسائي 24 ساعة</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مطبخ إيطالي كامل</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مكتبة هادئة</span>
+              </div>
+            </div>
+            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 أسرة شاغرة</div>
+          </div>
+          <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,500 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 2,500 ج.م 🔒</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openDetailsModal(3)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
+              <a href="https://wa.me/201278901234?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openBookingModal(3)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
+            </div>
+          </div>
+        </div>
+        <!-- Card 4: Lotus University (Pre-rendered Static) -->
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+          <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة اللوتس</span>
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleFavorite(event, 4)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 5 دقائق مشياً لبوابة جامعة اللوتس</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن اللوتس المتميز — المنيا الجديدة (قرب جامعة اللوتس)</h3>
+              <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إنترنت فايبر سريع</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مكاتب مذاكرة زان</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ أمن ذكي</span>
+              </div>
+            </div>
+            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+          </div>
+          <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,100 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 2,000 ج.م 🔒</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openDetailsModal(4)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
+              <a href="https://wa.me/201065432109?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%84%D9%88%D8%AA%D8%B3" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openBookingModal(4)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
+            </div>
+          </div>
+        </div>
+        <!-- Card 5: Minya Corniche (Pre-rendered Static) -->
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+          <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
+            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleFavorite(event, 5)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 خطوات لكورنيش النيل و5 دقائق للموقف</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">برج الكورنيش الجامعي — أرض سلطان وشارع طه حسين (جامعة المنيا)</h3>
+              <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إطلالة نيلية مفتوحة</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ شرفة واسعة</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ غسالة أوتوماتيك</span>
+              </div>
+            </div>
+            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 أسرة شاغرة</div>
+          </div>
+          <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,950 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 1,900 ج.م 🔒</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openDetailsModal(5)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
+              <a href="https://wa.me/201156789012?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%83%D9%88%D8%B1%D9%86%D9%8A%D8%B4" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openBookingModal(5)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
+            </div>
+          </div>
+        </div>
+        <!-- Card 6: Minya Girls University (Pre-rendered Static) -->
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+          <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
+            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+              <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-rose-600 text-white">👩‍🎓 طالبات</span>
+              <button onclick="toggleFavorite(event, 6)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 4 دقائق مشياً لبوابات كليات الآداب والتربية</div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن الياسمين للطالبات — حي شلبي (جامعة المنيا)</h3>
+              <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إشراف نسائي دوري</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مطبخ متكامل</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إنترنت فايبر</span>
+              </div>
+            </div>
+            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+          </div>
+          <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+            <div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,700 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 1,600 ج.م 🔒</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="openDetailsModal(6)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
+              <a href="https://wa.me/201099887766?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%8A%D8%A7%D8%B3%D9%85%D9%8A%D9%86" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openBookingModal(6)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
     <!-- ========================================================================= -->
@@ -494,20 +697,41 @@
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    // 2. Fetch Properties from Backend API
+    // 2. Fetch Properties & Safe Merge with MINYA_PROPERTIES
     async function loadProperties() {
       try {
         const resp = await fetch('/api/properties');
         if (resp.ok) {
-          const data = await resp.json();
-          propertiesData = Array.isArray(data) ? data : (data.properties || DEFAULT_PROPERTIES);
-        } else {
-          propertiesData = DEFAULT_PROPERTIES;
+          const apiList = await resp.json();
+          if (Array.isArray(apiList) && apiList.length > 0) {
+            // Keep the 6 rich Minya properties as base, and append any new properties added from admin (id > 6)
+            const newAdminProps = apiList.filter(p => p.id > 6 || !DEFAULT_PROPERTIES.some(m => m.id === p.id)).map(p => ({
+              id: p.id,
+              title: p.title || 'سكن جامعي موثق',
+              university: p.university || 'جامعة المنيا',
+              governorate: p.governorate || 'المنيا',
+              gender: p.gender || 'male',
+              bed_monthly_price: p.bed_monthly_price || 1850,
+              deposit_amount: p.deposit_amount || 1800,
+              available_beds: p.available_beds || 1,
+              distance_walk: p.distance_walk || (p.walk_minutes ? `${p.walk_minutes} دقائق للبوابة` : '3 دقائق للبوابة'),
+              lat: p.lat || 28.1174,
+              lng: p.lng || 30.7508,
+              amenities: p.amenities || 'تكييف, إنترنت فايبر WE, مكاتب مذاكرة خاصة',
+              whatsapp_phone: p.whatsapp_phone || p.landlord_phone || '01019876543',
+              images: (Array.isArray(p.images) && p.images.length > 0) ? p.images : ['https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80']
+            }));
+            propertiesData = [...DEFAULT_PROPERTIES, ...newAdminProps];
+          }
         }
       } catch (err) {
-        propertiesData = DEFAULT_PROPERTIES;
+        console.warn('API fallback to base properties', err);
+        propertiesData = [...DEFAULT_PROPERTIES];
       }
-      renderPropertiesGrid();
+      // Re-render only if filters are applied or extra admin properties exist
+      if (selectedUni !== 'all' || selectedGender !== 'all' || selectedBudget !== 'all' || propertiesData.length > 6) {
+        renderPropertiesGrid();
+      }
     }
     // 3. Render Uniform 3-Column Grid
     function renderPropertiesGrid() {
@@ -649,6 +873,29 @@
           `);
         }
       });
+    }
+    // Details & Video Tour Modal Flow
+    function openDetailsModal(propId) {
+      const prop = propertiesData.find(x => x.id === propId) || DEFAULT_PROPERTIES[0];
+      const img = (prop.images && prop.images.length > 0) ? prop.images[0] : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80';
+      document.getElementById('detailsModalTitle').textContent = `معاينة: ${prop.title}`;
+      document.getElementById('detailsModalImg').src = img;
+      document.getElementById('detailsModalPrice').textContent = `${Number(prop.bed_monthly_price).toLocaleString()} ج.م / شهر`;
+      document.getElementById('detailsModalDeposit').textContent = `تأمين مسترد ${Number(prop.deposit_amount || 1800).toLocaleString()} ج.م 🔒`;
+      document.getElementById('detailsModalDesc').textContent = `${prop.title} — سكن طلابي موثق ومفحوص بجوار ${prop.university}. المسافة للبوابة: ${prop.distance_walk}. المميزات المتوفرة: ${prop.amenities}.`;
+      const waBtn = document.getElementById('detailsModalWaBtn');
+      if (waBtn) waBtn.href = `https://wa.me/2${prop.whatsapp_phone || '01019876543'}?text=${encodeURIComponent('مرحباً، أود معاينة فيديو للسكن: ' + prop.title)}`;
+      const bookBtn = document.getElementById('detailsModalBookBtn');
+      if (bookBtn) {
+        bookBtn.onclick = () => {
+          closeDetailsModal();
+          openBookingModal(propId);
+        };
+      }
+      document.getElementById('detailsModal').classList.remove('hidden');
+    }
+    function closeDetailsModal() {
+      document.getElementById('detailsModal').classList.add('hidden');
     }
     // 6. Booking Modal & Contract Flow
     function openBookingModal(propId) {
@@ -848,5 +1095,37 @@
       }
     }
   </script>
+  <!-- MODAL: تفاصيل ومعاينة فيديو السكن (Details & Video Tour Modal) -->
+  <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <h3 class="font-black text-base text-slate-900 dark:text-white" id="detailsModalTitle">تفاصيل ومعاينة السكن</h3>
+        <button onclick="closeDetailsModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition">✕</button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 text-xs" id="detailsModalBody">
+        <div class="relative w-full h-56 rounded-2xl overflow-hidden bg-slate-900">
+          <img id="detailsModalImg" src="" alt="معاينة السكن" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+            <div class="bg-white/20 hover:bg-white/30 backdrop-blur-md p-4 rounded-full text-white text-2xl cursor-pointer transition" onclick="alert('جارٍ تشغيل جولة الفيديو التفاعلية عالية الدقة...')">▶️</div>
+          </div>
+          <span class="absolute bottom-3 left-3 bg-black/70 text-white text-[11px] px-2.5 py-1 rounded-lg">🎥 معاينة فيديو موثقة للحرم</span>
+        </div>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-emerald-600 dark:text-emerald-400 font-black text-sm" id="detailsModalPrice">1,850 ج.م / شهر</span>
+            <span class="text-slate-400 font-bold" id="detailsModalDeposit">تأمين مسترد 1,800 ج.م 🔒</span>
+          </div>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed" id="detailsModalDesc">سكن طلابي مجهز بالكامل ومفحوص ميدانياً ومطابق للمواصفات الجامعية بمحافظة المنيا، يتضمن إنترنت فايبر فائق السرعة ومكاتب مذاكرة خاصة وتكييف وحراسة.</p>
+        </div>
+      </div>
+      <div class="p-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <button onclick="closeDetailsModal()" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition">إغلاق</button>
+        <div class="flex items-center gap-2">
+          <a id="detailsModalWaBtn" href="#" target="_blank" class="px-4 py-2.5 bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 rounded-xl font-bold transition border border-emerald-300 dark:border-emerald-800 flex items-center gap-1.5">💬 واتساب</a>
+          <button id="detailsModalBookBtn" onclick="" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black transition shadow-md">احجز سريرك الآن</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
