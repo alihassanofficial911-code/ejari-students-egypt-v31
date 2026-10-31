@@ -195,6 +195,28 @@ def create_session(user_id):
     cur = conn.cursor()
     cur.execute('INSERT OR REPLACE INTO sessions (token, user_id, created_at, expires_at) VALUES (?, ?, ?, ?)',
                 (token, user_id, created_at, expires_at))
+        # Upgrade any existing svg images to Unsplash HD photos
+    try:
+        cur.execute("SELECT id, images_json FROM properties")
+        rows = cur.fetchall()
+        unsplash_pool = [
+            'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80'
+        ]
+        for idx, r in enumerate(rows):
+            img_val = r['images_json'] or ''
+            if '.svg' in img_val or img_val == '[]' or not img_val:
+                p1 = unsplash_pool[idx % len(unsplash_pool)]
+                p2 = unsplash_pool[(idx + 1) % len(unsplash_pool)]
+                new_json = json.dumps([p1, p2], ensure_ascii=False)
+                cur.execute("UPDATE properties SET images_json = ?, images = ? WHERE id = ?", (new_json, new_json, r['id']))
+    except Exception:
+        pass
+
     conn.commit()
     conn.close()
     return token
@@ -263,18 +285,18 @@ def jwt_required(roles=None):
 
 def seed_sample_images():
     samples = [
-        ('mansoura_1.svg', '#0F4C5C', 'سكن الفردوس - المنصورة', 'غرفة النوم والمكاتب المخصصة للطلبة'),
-        ('mansoura_2.svg', '#1E6B7B', 'سكن الفردوس - المنصورة', 'صالة المذاكرة والإنترنت الفايبر'),
-        ('cairo_1.svg', '#BE185D', 'سكن النيل للطالبات - الدقي', 'غرفة الطالبات وإضاءة المذاكرة'),
-        ('cairo_2.svg', '#9D174D', 'سكن النيل للطالبات - الدقي', 'المطبخ والصالة المجهزة بالكامل'),
-        ('alex_1.svg', '#0369A1', 'سكن إطلالة البحر - سوتر الإسكندرية', 'غرفة نوم بحرية قرب المجمع النظري'),
-        ('alex_2.svg', '#0284C7', 'سكن إطلالة البحر - سوتر الإسكندرية', 'مكتبة المذاكرة والإنترنت المنزلي'),
-        ('assiut_1.svg', '#B45309', 'سكن الأكاديميين - حي فريال بأسيوط', 'غرفة الطلاب قرب البوابة البحرية'),
-        ('assiut_2.svg', '#D97706', 'سكن الأكاديميين - أسيوط', 'صالة المعيشة وشاشة العرض'),
-        ('tanta_1.svg', '#047857', 'سكن سبرباي - طنطا', 'غرفة الطلاب المزدوجة ومكاتب المذاكرة'),
-        ('tanta_2.svg', '#059669', 'سكن سبرباي - طنطا', 'المطبخ والغسالة الأوتوماتيك'),
-        ('october_1.svg', '#7C3AED', 'فيلا النخبة - الحي المتميز 6 أكتوبر', 'جناح فندقي للطالبات قرب MUST'),
-        ('october_2.svg', '#6D28D9', 'فيلا النخبة - 6 أكتوبر', 'تراس ومكان المذاكرة الهادئ')
+        ('minya_main_1.svg', '#0F4C5C', 'سكن النخبة الطبي - جامعة المنيا', 'غرفة النوم والمكاتب المخصصة للطلبة'),
+        ('minya_main_2.svg', '#1E6B7B', 'سكن النخبة الطبي - حي شلبي', 'صالة المذاكرة والإنترنت الفايبر'),
+        ('minya_ahleya_1.svg', '#0D9488', 'سكن الرواد الفندقي - المنيا الأهلية', 'غرفة فندقية فاخرة ومكاتب مضيئة'),
+        ('minya_ahleya_2.svg', '#115E59', 'سكن الرواد الفندقي - المنيا الجديدة', 'صالة المعيشة والميكروويف'),
+        ('deraya_1.svg', '#BE185D', 'إقامة الصفوة للطالبات - جامعة دراية', 'غرفة طالبات هادئة بحراسة نسائية'),
+        ('deraya_2.svg', '#9D174D', 'إقامة الصفوة للطالبات - دراية', 'المكتبة والمطبخ الإيطالي الكامل'),
+        ('lotus_1.svg', '#0369A1', 'سكن اللوتس المتميز - جامعة اللوتس', 'غرفة الطلاب قرب بوابة اللوتس'),
+        ('lotus_2.svg', '#0284C7', 'سكن اللوتس المتميز - المنيا الجديدة', 'صالة المذاكرة وشاشة العرض'),
+        ('minya_corniche_1.svg', '#0284C7', 'برج الكورنيش الجامعي - المنيا', 'إطلالة نيلية مفتوحة ومكاتب دراسية'),
+        ('minya_corniche_2.svg', '#0369A1', 'برج الكورنيش الجامعي - طه حسين', 'شرفة واسعة وصالة مذاكرة'),
+        ('minya_girls_1.svg', '#DB2777', 'سكن الياسمين للطالبات - شلبي', 'إشراف نسائي وسكن طالبات هادئ'),
+        ('minya_girls_2.svg', '#BE185D', 'سكن الياسمين للطالبات - جامعة المنيا', 'مطبخ متكامل وإنترنت فايبر')
     ]
     for filename, color, title, subtitle in samples:
         path = os.path.join(UPLOADS_DIR, filename)
@@ -492,42 +514,42 @@ def init_db():
     if cur.fetchone()['cnt'] == 0:
         demo_users = [
             (
-                'أحمد محمود - طالب هندسة مغترب',
+                'أحمد محمود - طالب طب بشري مغترب',
                 '01012345678',
                 '01099881122',
                 'student@ejari-egypt.com',
                 hash_password('student123'),
                 'student',
-                'جامعة المنصورة',
-                'كلية الهندسة - قسم حاسبات',
-                'كفر الشيخ',
+                'جامعة المنيا',
+                'كلية الطب البشري - الفرقة الرابعة',
+                'المنيا - حي شلبي',
                 'مذاكرة هادئة - غير مدخن - نوم مبكر',
                 '2026-10-01 10:00:00'
             ),
             (
-                'الحاج محمود عبد السلام - مالك عمارات سكن طلاب',
+                'الحاج محمود المنياوي - مالك سكن النخبة',
                 '01123456789',
                 '01123456789',
                 'landlord@ejari-egypt.com',
                 hash_password('landlord123'),
                 'landlord',
-                'جامعة القاهرة',
+                'جامعة المنيا',
                 '',
-                'الجيزة',
-                'إشراف كامل وتسكين هادئ',
+                'المنيا',
+                'إشراف كامل وتسكين فندقي هادئ',
                 '2026-10-01 10:00:00'
             ),
             (
-                'مدير المنصة (Admin)',
+                'مدير منصة إيجاري المنيا (Admin)',
                 '01234567890',
                 '01234567890',
                 'admin@ejari-egypt.com',
                 hash_password('admin123'),
                 'admin',
-                'جامعات مصر الموحدة',
-                'إدارة السكن الجامعي',
-                'القاهرة',
-                'إدارة وتوثيق العقود',
+                'جامعات المنيا الأربع',
+                'إدارة السكن الجامعي الموثق',
+                'المنيا',
+                'إدارة وتوثيق العقود والضمان',
                 '2026-10-01 10:00:00'
             )
         ]
@@ -565,7 +587,7 @@ def init_db():
                 'الحاج محمود المنياوي',
                 '01019876543',
                 'available',
-                json.dumps(['/uploads/minya_main_1.svg', '/uploads/minya_main_2.svg'], ensure_ascii=False),
+                json.dumps(['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80'], ensure_ascii=False),
                 2,
                 28.1174, 30.7508, 28.1158, 30.7525, 'بوابة الجامعة الرئيسية ومجمع الكليات الطبية — جامعة المنيا', 3, 4.9, 12
             ),
@@ -588,7 +610,7 @@ def init_db():
                 'المهندس كريم الشريف',
                 '01123450987',
                 'available',
-                json.dumps(['/uploads/minya_ahleya_1.svg', '/uploads/minya_ahleya_2.svg'], ensure_ascii=False),
+                json.dumps(['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80'], ensure_ascii=False),
                 2,
                 28.0712, 30.8275, 28.0694, 30.8294, 'بوابة الحرم الجامعي — جامعة المنيا الأهلية', 4, 4.8, 9
             ),
@@ -611,7 +633,7 @@ def init_db():
                 'الدكتورة مرفت الصاوي',
                 '01278901234',
                 'available',
-                json.dumps(['/uploads/deraya_1.svg', '/uploads/deraya_2.svg'], ensure_ascii=False),
+                json.dumps(['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80'], ensure_ascii=False),
                 2,
                 28.0785, 30.8226, 28.0768, 30.8242, 'بوابة كليات الصيدلة والعلاج الطبيعي — جامعة دراية Deraya', 3, 5.0, 14
             ),
@@ -634,7 +656,7 @@ def init_db():
                 'الأستاذ حسام فتحي',
                 '01065432109',
                 'available',
-                json.dumps(['/uploads/lotus_1.svg', '/uploads/lotus_2.svg'], ensure_ascii=False),
+                json.dumps(['https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80'], ensure_ascii=False),
                 2,
                 28.0638, 30.8362, 28.0655, 30.8385, 'بوابة الحرم الجامعي — جامعة اللوتس Lotus University', 5, 4.8, 7
             ),
@@ -680,7 +702,7 @@ def init_db():
                 'الحاجة أم أحمد البهنساوي',
                 '01099887766',
                 'available',
-                json.dumps(['/uploads/minya_girls_1.svg', '/uploads/minya_girls_2.svg'], ensure_ascii=False),
+                json.dumps(['https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80'], ensure_ascii=False),
                 2,
                 28.1186, 30.7512, 28.1158, 30.7525, 'بوابة كليات الآداب والتربية — جامعة المنيا', 4, 4.9, 10
             )
@@ -697,12 +719,12 @@ def init_db():
     else:
         # Guarantee existing properties have updated coordinates, gates & ratings
         coords_seed = [
-            (1, 31.0421, 31.3582, 31.0442, 31.3540, 'بوابة توشكى - مجمع الكليات الطبية بالمنصورة', 4, 4.9, 8),
-            (2, 30.0385, 31.2115, 30.0263, 31.2090, 'بوابة كلية التجارة ومترو جامعة القاهرة', 6, 4.8, 5),
-            (3, 31.2085, 29.9142, 31.2062, 29.9180, 'بوابة المجمع النظري بسوتر - جامعة الإسكندرية', 3, 4.9, 6),
-            (4, 27.1852, 31.1785, 27.1895, 31.1712, 'البوابة البحرية - جامعة أسيوط', 5, 4.7, 4),
-            (5, 30.7682, 31.0125, 30.7645, 31.0090, 'بوابة مجمع كليات سبرباي - جامعة طنطا', 4, 4.8, 7),
-            (6, 29.9740, 30.9520, 29.9715, 30.9565, 'بوابة جامعة مصر للعلوم والتكنولوجيا (MUST)', 7, 5.0, 9),
+            (1, 28.1174, 30.7508, 28.1158, 30.7525, 'بوابة الجامعة الرئيسية ومجمع الكليات الطبية — جامعة المنيا', 3, 4.9, 12),
+            (2, 28.0712, 30.8275, 28.0694, 30.8294, 'بوابة الحرم الجامعي — جامعة المنيا الأهلية', 4, 4.8, 9),
+            (3, 28.0785, 30.8226, 28.0768, 30.8242, 'بوابة كليات الصيدلة والعلاج الطبيعي — جامعة دراية Deraya', 3, 5.0, 14),
+            (4, 28.0638, 30.8362, 28.0655, 30.8385, 'بوابة الحرم الجامعي — جامعة اللوتس Lotus University', 5, 4.8, 7),
+            (5, 28.1120, 30.7555, 28.1158, 30.7525, 'بوابة الجامعة الرئيسية وكورنيش النيل — جامعة المنيا', 5, 4.9, 11),
+            (6, 28.1186, 30.7512, 28.1158, 30.7525, 'بوابة كليات الآداب والتربية — جامعة المنيا', 4, 4.9, 10),
         ]
         for pid, lat, lng, glat, glng, gname, walk, ravg, rcnt in coords_seed:
             cur.execute('''
@@ -763,10 +785,10 @@ def init_db():
     cur.execute('SELECT COUNT(*) as cnt FROM reviews')
     if cur.fetchone()['cnt'] == 0:
         sample_reviews = [
-            (1, 'طارق سليم', 'كلية الطب البشري - جامعة المنصورة', 5.0, 'سكن ممتاز وهادئ جداً ومناسب لأجواء الامتحانات، وبوابة توشكى على بُعد خطوات.', 'الفصل الدراسي الثاني 2026', '2026-10-15 14:00'),
+            (1, 'طارق سليم', 'كلية الطب البشري - جامعة المنيا', 5.0, 'سكن ممتاز وهادئ جداً ومناسب لأجواء الامتحانات، وبوابة توشكى على بُعد خطوات.', 'الفصل الدراسي الثاني 2026', '2026-10-15 14:00'),
             (1, 'محمود رضوان', 'كلية الهندسة', 4.8, 'الإنترنت فايبر ممتاز وسريع جداً والمؤجر متعاون في كافة أعمال الصيانة الدورية.', 'الفصل الدراسي الأول 2026', '2026-10-20 18:30'),
-            (2, 'آية الشريف', 'كلية الإعلام - جامعة القاهرة', 4.9, 'إشراف وأمن ممتاز للطالبات ونظافة عالية وقريبة جداً من محطة مترو الدقي.', 'الفصل الدراسي الأول 2026', '2026-10-18 11:20'),
-            (3, 'سارة نصر', 'كلية الصيدلة - الإسكندرية', 5.0, 'فيو بحري رائع وهدوء كامل للدراسة وموقع قريب جداً من مجمع الكليات بسوتر.', 'الفصل الدراسي الثاني 2026', '2026-10-22 16:45')
+            (2, 'آية الشريف', 'كلية التربية للطفولة - جامعة المنيا', 4.9, 'إشراف وأمن ممتاز للطالبات ونظافة عالية وقريبة جداً من محطة مترو الدقي.', 'الفصل الدراسي الأول 2026', '2026-10-18 11:20'),
+            (3, 'سارة نصر', 'كلية الصيدلة - جامعة دراية', 5.0, 'فيو بحري رائع وهدوء كامل للدراسة وموقع قريب جداً من مجمع الكليات بسوتر.', 'الفصل الدراسي الثاني 2026', '2026-10-22 16:45')
         ]
         cur.executemany('''
             INSERT INTO reviews (property_id, student_name, faculty, rating, comment, semester, created_at)
@@ -817,9 +839,9 @@ def init_db():
             (1, 'فاتورة مياه الشرب والصرف الصحي', 'أكتوبر 2026', 120.0, 30.0, 'unpaid'),
             (2, 'اشتراك إنترنت فايبر WE Space منزلي', 'أكتوبر 2026', 360.0, 120.0, 'paid'),
             (2, 'شحن كارت الكهرباء الذكي بالدقي', 'أكتوبر 2026', 450.0, 150.0, 'unpaid'),
-            (3, 'اشتراك إنترنت طلاب الإسكندرية فايبر', 'أكتوبر 2026', 400.0, 100.0, 'unpaid'),
-            (4, 'اشتراك إنترنت فايبر لطلبة أسيوط', 'أكتوبر 2026', 320.0, 80.0, 'paid'),
-            (5, 'فاتورة مياه وإنترنت سبرباي طنطا', 'أكتوبر 2026', 380.0, 95.0, 'unpaid'),
+            (3, 'اشتراك إنترنت سكن دراية فايبر', 'أكتوبر 2026', 400.0, 100.0, 'unpaid'),
+            (4, 'اشتراك إنترنت فايبر لطلبة الأهلية', 'أكتوبر 2026', 320.0, 80.0, 'paid'),
+            (5, 'فاتورة مياه وإنترنت سكن اللوتس', 'أكتوبر 2026', 380.0, 95.0, 'unpaid'),
             (6, 'إنترنت فايبر فائق السرعة + صيانة الحي المتميز', 'أكتوبر 2026', 800.0, 200.0, 'paid')
         ]
         cur.executemany('''
@@ -834,7 +856,7 @@ def init_db():
         sample_maintenance = [
             (
                 1,
-                'سكن الفردوس للطلاب — حي الجامعة بالمنصورة',
+                'سكن النخبة الطبي — حي شلبي (جامعة المنيا)',
                 'زياد العوضي',
                 'كهرباء',
                 'عاجل',
@@ -845,7 +867,7 @@ def init_db():
             ),
             (
                 1,
-                'سكن الفردوس للطلاب — حي الجامعة بالمنصورة',
+                'سكن النخبة الطبي — حي شلبي (جامعة المنيا)',
                 'أحمد الشريف',
                 'سباكة',
                 'متوسط',
@@ -856,7 +878,7 @@ def init_db():
             ),
             (
                 2,
-                'سكن النيل للطالبات المغتربات — الدقي',
+                'سكن الرواد الفندقي — المنيا الجديدة (جامعة المنيا الأهلية)',
                 'نوران مصطفى',
                 'راوتر وشبكة إنترنت',
                 'عاجل',
@@ -867,7 +889,7 @@ def init_db():
             ),
             (
                 3,
-                'سكن إطلالة البحر للطالبات — سوتر الإسكندرية',
+                'إقامة الصفوة للطالبات — المنيا الجديدة (جامعة دراية)',
                 'فاطمة الزهراء',
                 'نجارة وألوميتال',
                 'منخفض',
@@ -878,7 +900,7 @@ def init_db():
             ),
             (
                 4,
-                'سكن الأكاديميين للطلاب — حي فريال بأسيوط',
+                'سكن اللوتس المتميز — المنيا الجديدة (جامعة اللوتس)',
                 'محمود عبد الرحيم',
                 'سباكة',
                 'متوسط',
@@ -1298,15 +1320,15 @@ def create_property(data, landlord_user_id=2):
     images = data.get('images', [])
     if not images:
         if 'الأهلية' in university:
-            images = ['/uploads/minya_ahleya_1.svg', '/uploads/minya_ahleya_2.svg']
+            images = ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80']
         elif 'دراية' in university:
-            images = ['/uploads/deraya_1.svg', '/uploads/deraya_2.svg']
+            images = ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80']
         elif 'اللوتس' in university:
-            images = ['/uploads/lotus_1.svg', '/uploads/lotus_2.svg']
+            images = ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80']
         elif gender == 'female':
-            images = ['/uploads/minya_girls_1.svg', '/uploads/minya_girls_2.svg']
+            images = ['https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80']
         else:
-            images = ['/uploads/minya_main_1.svg', '/uploads/minya_main_2.svg']
+            images = ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80']
     images_json = json.dumps(images if isinstance(images, list) else [str(images)], ensure_ascii=False)
 
     status = 'available' if available_beds > 0 else 'fully_booked'
