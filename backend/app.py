@@ -11,16 +11,56 @@ from flask import Flask, request, jsonify, send_from_directory, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 
 PORT = int(os.environ.get('PORT', 5000))
-DB_PATH = os.path.join(os.path.dirname(__file__), 'ejari_students.db')
+IS_VERCEL = (
+    os.environ.get('VERCEL') == '1'
+    or os.environ.get('VERCEL_ENV') is not None
+    or os.environ.get('NOW_REGION') is not None
+    or os.environ.get('AWS_LAMBDA_FUNCTION_NAME') is not None
+)
+
+def _resolve_db_path():
+    if IS_VERCEL:
+        tmp_dir = '/tmp'
+        if not os.path.exists(tmp_dir):
+            try:
+                os.makedirs(tmp_dir, exist_ok=True)
+            except Exception:
+                import tempfile
+                tmp_dir = tempfile.gettempdir()
+        return os.path.join(tmp_dir, 'ejari_v32.db')
+    default_path = os.path.join(os.path.dirname(__file__), 'ejari_students.db')
+    try:
+        test_file = os.path.join(os.path.dirname(__file__), '.write_check')
+        with open(test_file, 'w') as f:
+            f.write('1')
+        os.remove(test_file)
+        return default_path
+    except (OSError, IOError, PermissionError):
+        import tempfile
+        return os.path.join(tempfile.gettempdir(), 'ejari_v32.db')
+
+DB_PATH = _resolve_db_path()
 DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'ejari_students_egypt_secret_v31_jwt_key_2026')
 JWT_ALGORITHM = 'HS256'
 JWT_EXPIRATION_HOURS = 72
 
-FRONTEND_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../frontend'))
-UPLOADS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'uploads'))
+_base_dir = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.abspath(os.path.join(_base_dir, '../frontend'))
+if not os.path.exists(FRONTEND_DIR):
+    if os.path.exists(os.path.abspath('frontend')):
+        FRONTEND_DIR = os.path.abspath('frontend')
+    elif os.path.exists(os.path.join(_base_dir, 'frontend')):
+        FRONTEND_DIR = os.path.join(_base_dir, 'frontend')
 
-os.makedirs(UPLOADS_DIR, exist_ok=True)
+UPLOADS_DIR = os.path.abspath(os.path.join(_base_dir, 'uploads'))
+if not os.path.exists(UPLOADS_DIR) and os.path.exists(os.path.abspath('backend/uploads')):
+    UPLOADS_DIR = os.path.abspath('backend/uploads')
+
+try:
+    os.makedirs(UPLOADS_DIR, exist_ok=True)
+except (OSError, PermissionError):
+    pass
 
 SAAS_PLANS = {
     'basic': {
@@ -251,8 +291,11 @@ def seed_sample_images():
   <rect x="290" y="295" width="220" height="38" rx="10" fill="#E36414" />
   <text x="400" y="320" font-family="Cairo, Arial, sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">سكن طلاب مصر v3.1 موثق ✓</text>
 </svg>'''
-            with open(path, 'w', encoding='utf-8') as f:
-                f.write(svg)
+            try:
+                with open(path, 'w', encoding='utf-8') as f:
+                    f.write(svg)
+            except (OSError, PermissionError):
+                pass
 
 
 def init_db():
@@ -848,6 +891,13 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+
+# Auto-initialize database on serverless boot (crucial for Vercel /tmp)
+try:
+    init_db()
+except Exception as _boot_err:
+    pass
 
 
 # ==============================================================================
