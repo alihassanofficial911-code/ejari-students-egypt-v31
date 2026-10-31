@@ -766,13 +766,16 @@ def init_db():
                 "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80"
             ]
         }
-        for prop_id, img_arr in minya_unsplash_map.items():
+        cur.execute("SELECT id FROM properties ORDER BY id ASC")
+        existing_props = cur.fetchall()
+        for idx, p_row in enumerate(existing_props):
+            img_arr = minya_unsplash_map.get((idx % 6) + 1, minya_unsplash_map[1])
             img_json = json.dumps(img_arr, ensure_ascii=False)
             cur.execute('''
                 UPDATE properties
                 SET images_json = ?, images = ?
-                WHERE id = ? AND (images_json IS NULL OR images_json = '' OR images_json = '[]' OR images_json LIKE '%.svg%')
-            ''', (img_json, img_json, prop_id))
+                WHERE id = ?
+            ''', (img_json, img_json, p_row['id']))
 
     # Roommates seed
     cur.execute('SELECT COUNT(*) as cnt FROM roommates')
@@ -1202,18 +1205,55 @@ def list_properties(governorate=None, gender=None, university=None, max_rent=Non
         cur.execute('SELECT * FROM utilities WHERE property_id = ?', (pid,))
         prop['utilities'] = [dict(u) for u in cur.fetchall()]
 
-        raw_imgs = prop.get('images') or prop.get('images_json') or '[]'
+        raw_imgs = prop.get('images')
+        if not raw_imgs or raw_imgs == '[]':
+            raw_imgs = prop.get('images_json')
         if isinstance(raw_imgs, list):
             prop['images'] = raw_imgs
         elif isinstance(raw_imgs, str):
             try:
-                prop['images'] = json.loads(raw_imgs)
+                parsed = json.loads(raw_imgs)
+                prop['images'] = parsed if isinstance(parsed, list) else [parsed]
             except Exception:
                 prop['images'] = [s.strip() for s in raw_imgs.split(',') if s.strip()]
         else:
             prop['images'] = []
-        if not isinstance(prop['images'], list):
-            prop['images'] = [str(prop['images'])]
+
+        unsplash_presets = [
+            [
+                "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+            ],
+            [
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+            ],
+            [
+                "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80"
+            ],
+            [
+                "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1540518614846-7ede433c4ef6?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80"
+            ],
+            [
+                "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80"
+            ],
+            [
+                "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80"
+            ]
+        ]
+
+        if not prop['images']:
+            prop['images'] = unsplash_presets[(pid - 1) % len(unsplash_presets)]
 
         prop['whatsapp_phone'] = prop.get('whatsapp_phone') or prop.get('landlord_phone') or '01019876543'
         prop['compatibility_score'] = calculate_roommate_compatibility(prop['roommates'], target_faculty)
@@ -1945,16 +1985,27 @@ def api_property_single(property_id):
         if not row:
             return jsonify({'status': 'error', 'message': 'غير موجود'}), 404
         prop = dict(row)
-        raw_imgs = prop.get('images') or prop.get('images_json') or '[]'
-        if isinstance(raw_imgs, str):
+        raw_imgs = prop.get('images')
+        if not raw_imgs or raw_imgs == '[]':
+            raw_imgs = prop.get('images_json')
+        if isinstance(raw_imgs, list):
+            prop['images'] = raw_imgs
+        elif isinstance(raw_imgs, str):
             try:
-                prop['images'] = json.loads(raw_imgs)
+                parsed = json.loads(raw_imgs)
+                prop['images'] = parsed if isinstance(parsed, list) else [parsed]
             except Exception:
                 prop['images'] = [s.strip() for s in raw_imgs.split(',') if s.strip()]
-        elif isinstance(raw_imgs, list):
-            prop['images'] = raw_imgs
         else:
             prop['images'] = []
+        if not prop['images']:
+            unsplash_single_presets = [
+                "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"
+            ]
+            prop['images'] = [unsplash_single_presets[(property_id - 1) % len(unsplash_single_presets)]]
         return jsonify(prop)
 
     if request.method == 'PUT':
