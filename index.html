@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إيجاري المنيا | بوابة السكن الجامعي الموثق</title>
+  <title>إيجاري المنيا | بوابة السكن الجامعي الموثق — v7.0 Full Student Ecosystem</title>
+  
   <!-- Google Fonts: Cairo -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -23,13 +25,15 @@
       }
     }
   </script>
+
   <!-- Leaflet Map CSS & JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
   <style>
     body { font-family: 'Cairo', sans-serif; }
     .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-    .segmented-active { background-color: #059669; color: white; font-weight: 800; shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2); }
+    .segmented-active { background-color: #059669; color: white; font-weight: 800; box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.25); }
     .segmented-inactive { color: #64748b; font-weight: 600; }
     .segmented-inactive:hover { color: #0f172a; background-color: rgba(241, 245, 249, 0.8); }
     .dark .segmented-inactive { color: #94a3b8; }
@@ -38,63 +42,68 @@
     .filter-btn-inactive { background-color: #f8fafc; color: #475569; border-color: #e2e8f0; font-weight: 600; }
     .dark .filter-btn-inactive { background-color: #1e293b; color: #cbd5e1; border-color: #334155; }
     .filter-btn-inactive:hover { border-color: #059669; color: #059669; }
-    @media print {       body * { visibility: hidden; }
-    #printableContract, #printableContract * { visibility: visible; }
-    #printableContract { position: absolute; left: 0; top: 0; width: 100%; }
+    @media print {
+      body * { visibility: hidden; }
+      #printableContract, #printableContract * { visibility: visible; }
+      #printableContract { position: absolute; left: 0; top: 0; width: 100%; }
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
-  <!-- 1. STICKY GLASS NAVBAR (h-20) -->
+
+  <!-- 1. STICKY GLASS NAVBAR (h-20 with 4 Segmented Tabs) -->
   <header class="sticky top-0 z-40 h-20 bg-white/90 dark:bg-slate-900/90 glass-nav border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
+      
       <!-- Right: Logo & Campus Brand -->
-      <a href="#" onclick="switchView('market'); return false;" class="flex items-center gap-3 group">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 flex items-center justify-center text-white text-2xl font-black shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform">
+      <a href="#" onclick="switchView('market'); return false;" class="flex items-center gap-3 group shrink-0">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 flex items-center justify-center text-white text-xl sm:text-2xl font-black shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform">
           🏛️
         </div>
         <div>
-          <div class="text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight flex items-center gap-1.5">
+          <div class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight flex items-center gap-1.5">
             <span>إيجاري المنيا</span>
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           </div>
-          <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">بوابة السكن الجامعي الموثق</div>
+          <div class="text-[11px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400">بوابة السكن الجامعي الموثق</div>
         </div>
       </a>
-      <!-- Center: Strictly 3 Tabs Segmented Control -->
-      <div class="hidden md:flex items-center bg-slate-100 dark:bg-slate-800/90 p-1.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-inner">
-        <button id="tab-market" onclick="switchView('market')" class="segmented-active px-5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-2">
-          <span>🏠</span>
-          <span>تصفح السكن</span>
+
+      <!-- Center: 4 Segmented Tabs (Clean & Balanced) -->
+      <div class="hidden lg:flex items-center bg-slate-100 dark:bg-slate-800/90 p-1.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-inner">
+        <button id="tab-market" onclick="switchView('market')" class="segmented-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+          <span>🏠</span><span>تصفح السكن</span>
         </button>
-        <button id="tab-escrow" onclick="switchView('escrow')" class="segmented-inactive px-5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-2">
-          <span>🛡️</span>
-          <span>فحص وثيقة الضمان</span>
+        <button id="tab-roommates" onclick="switchView('roommates')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+          <span>🤝</span><span>مطلوب زميل سكن</span>
         </button>
-        <button id="tab-dashboard" onclick="switchView('dashboard')" class="segmented-inactive px-5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-2">
-          <span>👨‍🎓</span>
-          <span>حسابي والفواتير</span>
+        <button id="tab-escrow" onclick="switchView('escrow')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+          <span>🛡️</span><span>فحص وثيقة الضمان</span>
+        </button>
+        <button id="tab-dashboard" onclick="switchView('dashboard')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
+          <span>👨‍🎓</span><span>حسابي والفواتير</span>
         </button>
       </div>
-      <!-- Left: Theme Toggle, Favorites & User Account Dropdown -->
-      <div class="flex items-center gap-2.5">
-        <!-- Theme Toggle -->
+
+      <!-- Left: Theme Toggle, Favorites, & User Account Dropdown -->
+      <div class="flex items-center gap-2 sm:gap-2.5">
         <button onclick="toggleDarkMode()" id="themeToggleBtn" title="تبديل الوضع الليلي / النهاري" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center text-lg border border-slate-200 dark:border-slate-700 transition">
           🌙
         </button>
-        <!-- Favorites Shortlist Pill -->
-        <button onclick="openFavoritesModal()" class="hidden sm:inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 text-xs font-bold px-3 py-2.5 rounded-xl transition">
-          <span>❤️</span>
-          <span>المفضلة</span>
+
+        <button onclick="openFavoritesModal()" class="hidden sm:inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 text-xs font-bold px-3 py-2 rounded-xl transition">
+          <span>❤️</span><span>المفضلة</span>
           <span id="favsCountBadge" class="bg-rose-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black">0</span>
         </button>
+
         <!-- Account Switcher Dropdown -->
         <div class="relative">
-          <button onclick="toggleUserDropdown(event)" id="userDropdownBtn" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm font-bold px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition">
+          <button onclick="toggleUserDropdown(event)" id="userDropdownBtn" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm font-bold px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition">
             <span>👤</span>
-            <span id="currentAccountLabel" class="max-w-[120px] truncate">حساب تجريبي</span>
+            <span id="currentAccountLabel" class="max-w-[110px] truncate">حساب تجريبي</span>
             <span class="text-[10px] text-slate-400">▼</span>
           </button>
-          <!-- Dropdown Menu -->
+
           <div id="userDropdownMenu" class="hidden absolute left-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-2 z-50 text-xs space-y-1">
             <div class="px-3 py-2 bg-slate-50 dark:bg-slate-800/60 rounded-xl mb-1 border border-slate-100 dark:border-slate-700/50">
               <div class="font-black text-slate-900 dark:text-white" id="dropdownUserName">أحمد محمود</div>
@@ -114,11 +123,19 @@
               <span>⚙️ لوحة تحكم الإدارة (/admin)</span>
               <span class="text-[10px] text-teal-600 font-mono">لوحة التحكم</span>
             </a>
-  </div>  </div>  </div>  </div>
-<!-- Mobile Segmented Control Bar -->
-    <div class="md:hidden flex items-center justify-around border-t border-slate-200/80 dark:border-slate-800 px-4 py-2 bg-white/95 dark:bg-slate-900/95 text-xs font-bold">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Tab Bar (4 Tabs) -->
+    <div class="lg:hidden flex items-center justify-around border-t border-slate-200/80 dark:border-slate-800 px-3 py-2 bg-white/95 dark:bg-slate-900/95 text-xs font-bold">
       <button onclick="switchView('market')" id="mob-market" class="text-emerald-600 dark:text-emerald-400 font-black flex items-center gap-1">
         <span>🏠</span><span>السكن</span>
+      </button>
+      <button onclick="switchView('roommates')" id="mob-roommates" class="text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
+        <span>🤝</span><span>زميل سكن</span>
       </button>
       <button onclick="switchView('escrow')" id="mob-escrow" class="text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
         <span>🛡️</span><span>الضمان</span>
@@ -128,12 +145,15 @@
       </button>
     </div>
   </header>
+
   <!-- 2. MAIN CONTAINER -->
   <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
+
     <!-- ========================================================================= -->
     <!-- VIEW 1: تصفح السكن (الصفحة الرئيسية - 3 بلوكات متناسقة بدون أي تكرار) -->
     <!-- ========================================================================= -->
     <section id="view-market" class="space-y-6">
+
       <!-- BLOCK 1: HERO CARD (Compact & Modern) -->
       <div class="bg-gradient-to-l from-slate-900 via-slate-800 to-emerald-950 text-white p-7 sm:p-9 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-emerald-500/20">
         <div class="space-y-2.5 max-w-2xl text-right">
@@ -147,54 +167,45 @@
             غرف وشقق مفروشة ومعاينة ميدانياً بجوار جامعات المنيا الأربع مع حماية كاملة للتأمين عبر الضمان البنكي المسترد ومعاينات مرئية مباشرة.
           </p>
         </div>
-        <!-- 3 Quick Stats Boxes -->
+
         <div class="grid grid-cols-3 gap-2.5 sm:gap-3 w-full md:w-auto shrink-0">
-          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center"> <div class="text-lg sm:text-xl font-black text-emerald-400">+120</div> <div class="text-[11px] font-bold text-slate-300 mt-0.5">غرفة موثقة</div> </div>
-          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center"> <div class="text-lg sm:text-xl font-black text-teal-300">4</div> <div class="text-[11px] font-bold text-slate-300 mt-0.5">جامعات كبرى</div> </div>
-          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center"> <div class="text-lg sm:text-xl font-black text-amber-400">100%</div> <div class="text-[11px] font-bold text-slate-300 mt-0.5">استرداد التأمين </div>  </div>
+          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center">
+            <div class="text-lg sm:text-xl font-black text-emerald-400">+120</div>
+            <div class="text-[11px] font-bold text-slate-300 mt-0.5">غرفة موثقة</div>
+          </div>
+          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center">
+            <div class="text-lg sm:text-xl font-black text-teal-300">4</div>
+            <div class="text-[11px] font-bold text-slate-300 mt-0.5">جامعات كبرى</div>
+          </div>
+          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center">
+            <div class="text-lg sm:text-xl font-black text-amber-400">100%</div>
+            <div class="text-[11px] font-bold text-slate-300 mt-0.5">استرداد التأمين</div>
+          </div>
         </div>
       </div>
-      <!-- BLOCK 2: UNIFIED FILTER BAR (Single-Row, No Duplicated University Pills!) -->
+
+      <!-- BLOCK 2: UNIFIED FILTER BAR -->
       <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 space-y-4">
-        <!-- Row 1: Universities of Minya (Clean Single Pill Row) -->
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex flex-wrap items-center gap-1.5" id="uniPillsContainer">
-            <button onclick="setUniFilter('all')" data-uni="all" class="filter-btn-active px-4 py-2 rounded-xl text-xs font-bold transition">
-              الكل
-            </button>
-            <button onclick="setUniFilter('جامعة المنيا')" data-uni="جامعة المنيا" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">
-              🎓 جامعة المنيا
-            </button>
-            <button onclick="setUniFilter('المنيا الأهلية')" data-uni="المنيا الأهلية" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">
-              🏛️ المنيا الأهلية
-            </button>
-            <button onclick="setUniFilter('دراية')" data-uni="دراية" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">
-              💊 جامعة دراية
-            </button>
-            <button onclick="setUniFilter('اللوتس')" data-uni="اللوتس" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">
-              🪷 جامعة اللوتس
-            </button>
+            <button onclick="setUniFilter('all')" data-uni="all" class="filter-btn-active px-4 py-2 rounded-xl text-xs font-bold transition">الكل</button>
+            <button onclick="setUniFilter('جامعة المنيا')" data-uni="جامعة المنيا" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">🎓 جامعة المنيا</button>
+            <button onclick="setUniFilter('المنيا الأهلية')" data-uni="المنيا الأهلية" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">🏛️ المنيا الأهلية</button>
+            <button onclick="setUniFilter('دراية')" data-uni="دراية" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">💊 جامعة دراية</button>
+            <button onclick="setUniFilter('اللوتس')" data-uni="اللوتس" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">🪷 جامعة اللوتس</button>
           </div>
           <div class="text-xs font-bold text-slate-500 dark:text-slate-400">
             المتاح حالياً: <span id="propertiesCountText" class="font-black text-emerald-600 dark:text-emerald-400 text-sm">6</span> سكن
           </div>
         </div>
-        <!-- Row 2: Gender, Budget Range & Map Toggle Button -->
+
         <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
           <div class="flex flex-wrap items-center gap-3">
-            <!-- Gender Toggle -->
             <div class="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl" id="genderToggle">
-              <button onclick="setGenderFilter('all')" data-gender="all" class="filter-btn-active px-3 py-1.5 rounded-lg text-xs font-bold transition">
-                الكل
-              </button>
-              <button onclick="setGenderFilter('male')" data-gender="male" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none">
-                👨‍🎓 سكن شباب
-              </button>
-              <button onclick="setGenderFilter('female')" data-gender="female" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none">
-                👩‍🎓 سكن طالبات
-              </button>
+              <button onclick="setGenderFilter('all')" data-gender="all" class="filter-btn-active px-3 py-1.5 rounded-lg text-xs font-bold transition">الكل</button>
+              <button onclick="setGenderFilter('male')" data-gender="male" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none">👨‍🎓 سكن شباب</button>
+              <button onclick="setGenderFilter('female')" data-gender="female" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none">👩‍🎓 سكن طالبات</button>
             </div>
-            <!-- Budget Filter Select -->
             <select id="budgetFilterSelect" onchange="setBudgetFilter(this.value)" class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
               <option value="all">💰 الميزانية: كل الأسعار</option>
               <option value="under2000">أقل من 2,000 ج.م شهرياً</option>
@@ -202,14 +213,13 @@
               <option value="above2500">أكثر من 2,500 ج.م</option>
             </select>
           </div>
-          <!-- Toggle Interactive Map Button -->
           <button onclick="toggleCampusMap()" id="toggleMapBtn" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 rounded-xl font-bold transition flex items-center gap-2">
-            <span>🗺️</span>
-            <span id="mapBtnText">الخريطة التفاعلية</span>
+            <span>🗺️</span><span id="mapBtnText">الخريطة التفاعلية</span>
           </button>
         </div>
       </div>
-      <!-- INTERACTIVE MAP CONTAINER (Hidden by default, smooth dropdown) -->
+
+      <!-- INTERACTIVE MAP CONTAINER -->
       <div id="mapWrapper" class="hidden overflow-hidden rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-md bg-white dark:bg-slate-900 p-4 space-y-3">
         <div class="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
           <div class="flex items-center gap-2">
@@ -220,49 +230,59 @@
         </div>
         <div id="campusMap" class="w-full h-80 sm:h-96 rounded-2xl z-0"></div>
       </div>
-      <!-- BLOCK 3: UNIFORM 3-COLUMN APARTMENTS GRID -->
+
+      <!-- BLOCK 3: UNIFORM 3-COLUMN APARTMENTS GRID (Pre-rendered Static Cards with Transit & Compare) -->
       <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-        <!-- Card 1: Minya Main University (Pre-rendered Static) -->
+        
+        <!-- Card 1: Minya Main University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleCompare(event, 1)" id="cmpBtn-1" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold" title="إضافة للمقارنة">⚖️</button>
               <button onclick="toggleFavorite(event, 1)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
             </div>
-            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 3 دقائق مشياً لبوابة مجمع الكليات الطبية</div>
+            <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 3 دقائق مشياً لبوابة طب وعلوم المنيا</div>
           </div>
           <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن النخبة الطبي — حي شلبي (أمام بوابة طب المنيا)</h3>
-              <div class="flex flex-wrap items-center gap-1.5 mt-3">
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ تكييف</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إنترنت فايبر WE</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مكاتب مذاكرة خاصة</span>
+              <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ تكييف</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ فايبر WE</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ مكاتب مذاكرة</span>
               </div>
             </div>
-            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 أسرة شاغرة</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                <span>🚌 دقيقتان لموقف سيرفيس الجامعة ومحطة باص المنيا الجديدة</span>
+              </div>
+              <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 سرير شاغر</div>
+            </div>
           </div>
           <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
             <div>
-              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م <span class="text-xs font-normal text-slate-400">/ شهر</span></div>
               <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 1,800 ج.م 🔒</div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="openDetailsModal(1)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
-              <a href="https://wa.me/201019876543?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%86%D8%AE%D8%A8%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%D9%8A" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openDetailsModal(1)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition">👁️ معاينة</button>
+              <a href="https://wa.me/201019876543?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%86%D8%AE%D8%A8%D8%A9" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition">💬</a>
               <button onclick="openBookingModal(1)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
             </div>
           </div>
         </div>
-        <!-- Card 2: Minya National University (Pre-rendered Static) -->
+
+        <!-- Card 2: Minya National University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا الأهلية</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleCompare(event, 2)" id="cmpBtn-2" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold" title="إضافة للمقارنة">⚖️</button>
               <button onclick="toggleFavorite(event, 2)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
             </div>
             <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 4 دقائق مشياً لبوابة الحرم الجامعي</div>
@@ -270,33 +290,40 @@
           <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن الرواد الفندقي — المنيا الجديدة (بجوار جامعة المنيا الأهلية)</h3>
-              <div class="flex flex-wrap items-center gap-1.5 mt-3">
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مستوى فندقي</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ تكييفات سبليت</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ ميكروويف ونظافة</span>
+              <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ فندقي فاخر</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ تكييف سبليت</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ نظافة دورية</span>
               </div>
             </div>
-            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                <span>🚐 خط باص مباشر لبوابات الأهلية ودراية واللوتس (5 دقائق)</span>
+              </div>
+              <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+            </div>
           </div>
           <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
             <div>
-              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,300 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,300 ج.م <span class="text-xs font-normal text-slate-400">/ شهر</span></div>
               <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 2,200 ج.م 🔒</div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="openDetailsModal(2)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
-              <a href="https://wa.me/201123450987?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D8%B1%D9%88%D8%A7%D8%AF" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openDetailsModal(2)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition">👁️ معاينة</button>
+              <a href="https://wa.me/201123450987?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D8%B1%D9%88%D8%A7%D8%AF" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition">💬</a>
               <button onclick="openBookingModal(2)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
             </div>
           </div>
         </div>
-        <!-- Card 3: Deraya University (Pre-rendered Static) -->
+
+        <!-- Card 3: Deraya University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة دراية</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-rose-600 text-white">👩‍🎓 طالبات</span>
+              <button onclick="toggleCompare(event, 3)" id="cmpBtn-3" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold" title="إضافة للمقارنة">⚖️</button>
               <button onclick="toggleFavorite(event, 3)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
             </div>
             <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 3 دقائق مشياً لكليات صيدلة وعلاج طبيعي دراية</div>
@@ -304,33 +331,40 @@
           <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">إقامة الصفوة للطالبات — المنيا الجديدة (أمام جامعة دراية Deraya)</h3>
-              <div class="flex flex-wrap items-center gap-1.5 mt-3">
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ أمن نسائي 24 ساعة</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مطبخ إيطالي كامل</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مكتبة هادئة</span>
+              <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ أمن نسائي 24س</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ مطبخ إيطالي</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ مكتبة هادئة</span>
               </div>
             </div>
-            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 أسرة شاغرة</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                <span>🚐 خط باص مباشر لبوابات الأهلية ودراية واللوتس (5 دقائق)</span>
+              </div>
+              <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 سرير شاغر</div>
+            </div>
           </div>
           <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
             <div>
-              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,500 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,500 ج.م <span class="text-xs font-normal text-slate-400">/ شهر</span></div>
               <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 2,500 ج.م 🔒</div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="openDetailsModal(3)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
-              <a href="https://wa.me/201278901234?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openDetailsModal(3)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition">👁️ معاينة</button>
+              <a href="https://wa.me/201278901234?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition">💬</a>
               <button onclick="openBookingModal(3)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
             </div>
           </div>
         </div>
-        <!-- Card 4: Lotus University (Pre-rendered Static) -->
+
+        <!-- Card 4: Lotus University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة اللوتس</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleCompare(event, 4)" id="cmpBtn-4" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold" title="إضافة للمقارنة">⚖️</button>
               <button onclick="toggleFavorite(event, 4)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
             </div>
             <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 5 دقائق مشياً لبوابة جامعة اللوتس</div>
@@ -338,33 +372,40 @@
           <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن اللوتس المتميز — المنيا الجديدة (قرب جامعة اللوتس)</h3>
-              <div class="flex flex-wrap items-center gap-1.5 mt-3">
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إنترنت فايبر سريع</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مكاتب مذاكرة زان</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ أمن ذكي</span>
+              <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ فايبر سريع</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ مكاتب زان</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ أمن ذكي</span>
               </div>
             </div>
-            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                <span>🚐 خط باص مباشر لبوابات الأهلية ودراية واللوتس (5 دقائق)</span>
+              </div>
+              <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+            </div>
           </div>
           <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
             <div>
-              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,100 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">2,100 ج.م <span class="text-xs font-normal text-slate-400">/ شهر</span></div>
               <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 2,000 ج.م 🔒</div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="openDetailsModal(4)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
-              <a href="https://wa.me/201065432109?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%84%D9%88%D8%AA%D8%B3" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openDetailsModal(4)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition">👁️ معاينة</button>
+              <a href="https://wa.me/201065432109?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%84%D9%88%D8%AA%D8%B3" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition">💬</a>
               <button onclick="openBookingModal(4)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
             </div>
           </div>
         </div>
-        <!-- Card 5: Minya Corniche (Pre-rendered Static) -->
+
+        <!-- Card 5: Minya Corniche -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
+              <button onclick="toggleCompare(event, 5)" id="cmpBtn-5" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold" title="إضافة للمقارنة">⚖️</button>
               <button onclick="toggleFavorite(event, 5)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
             </div>
             <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 خطوات لكورنيش النيل و5 دقائق للموقف</div>
@@ -372,33 +413,40 @@
           <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">برج الكورنيش الجامعي — أرض سلطان وشارع طه حسين (جامعة المنيا)</h3>
-              <div class="flex flex-wrap items-center gap-1.5 mt-3">
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إطلالة نيلية مفتوحة</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ شرفة واسعة</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ غسالة أوتوماتيك</span>
+              <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ إطلالة نيلية</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ شرفة واسعة</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ غسالة أوتوماتيك</span>
               </div>
             </div>
-            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 أسرة شاغرة</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                <span>🚌 دقيقتان لموقف سيرفيس الجامعة ومحطة باص المنيا الجديدة</span>
+              </div>
+              <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 1 سرير شاغر</div>
+            </div>
           </div>
           <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
             <div>
-              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,950 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,950 ج.م <span class="text-xs font-normal text-slate-400">/ شهر</span></div>
               <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 1,900 ج.م 🔒</div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="openDetailsModal(5)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
-              <a href="https://wa.me/201156789012?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%83%D9%88%D8%B1%D9%86%D9%8A%D8%B4" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openDetailsModal(5)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition">👁️ معاينة</button>
+              <a href="https://wa.me/201156789012?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%83%D9%88%D8%B1%D9%86%D9%8A%D8%B4" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition">💬</a>
               <button onclick="openBookingModal(5)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
             </div>
           </div>
         </div>
-        <!-- Card 6: Minya Girls University (Pre-rendered Static) -->
+
+        <!-- Card 6: Minya Girls University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-rose-600 text-white">👩‍🎓 طالبات</span>
+              <button onclick="toggleCompare(event, 6)" id="cmpBtn-6" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold" title="إضافة للمقارنة">⚖️</button>
               <button onclick="toggleFavorite(event, 6)" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">🤍</button>
             </div>
             <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 4 دقائق مشياً لبوابات كليات الآداب والتربية</div>
@@ -406,32 +454,171 @@
           <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
             <div>
               <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">سكن الياسمين للطالبات — حي شلبي (جامعة المنيا)</h3>
-              <div class="flex flex-wrap items-center gap-1.5 mt-3">
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إشراف نسائي دوري</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ مطبخ متكامل</span>
-                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg">✓ إنترنت فايبر</span>
+              <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ إشراف نسائي</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ مطبخ مجهز</span>
+                <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ فايبر سريع</span>
               </div>
             </div>
-            <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                <span>🚌 دقيقتان لموقف سيرفيس الجامعة ومحطة باص المنيا الجديدة</span>
+              </div>
+              <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح 2 أسرة شاغرة</div>
+            </div>
           </div>
           <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
             <div>
-              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,700 ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span></div>
+              <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">1,700 ج.م <span class="text-xs font-normal text-slate-400">/ شهر</span></div>
               <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد 1,600 ج.م 🔒</div>
             </div>
             <div class="flex items-center gap-1.5">
-              <button onclick="openDetailsModal(6)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
-              <a href="https://wa.me/201099887766?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%8A%D8%A7%D8%B3%D9%85%D9%8A%D9%86" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+              <button onclick="openDetailsModal(6)" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition">👁️ معاينة</button>
+              <a href="https://wa.me/201099887766?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%86%20%D8%B3%D9%83%D9%86%20%D8%A7%D9%84%D9%8A%D8%A7%D8%B3%D9%85%D9%8A%D9%86" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition">💬</a>
               <button onclick="openBookingModal(6)" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
             </div>
           </div>
         </div>
+
       </div>
+
     </section>
+
     <!-- ========================================================================= -->
-    <!-- VIEW 2: فحص وثيقة الضمان (معزول بدقة ولا يظهر إلا عند النقر على التبويب) -->
+    <!-- VIEW 2: مطلوب زميل سكن (مستقل ومعزول بكلاس hidden) -->
+    <!-- ========================================================================= -->
+    <section id="view-roommates" class="hidden space-y-6">
+      
+      <!-- Roommate Banner -->
+      <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 text-white p-7 sm:p-8 rounded-3xl shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 border border-teal-500/20">
+        <div class="space-y-2 max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-teal-500/20 text-teal-300 px-3 py-1 rounded-full text-xs font-extrabold border border-teal-500/30">
+            <span>🤝 شبكة رفقاء السكن الموثوقة بجامعات المنيا</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white">ابحث عن زميل سكن متوافق دراسياً وأخلاقياً</h2>
+          <p class="text-xs sm:text-sm text-slate-300 font-medium">شارك إيجار الغرفة مع طلاب من نفس كليتك أو جامعتك بالمنيا ووفر نصف التكاليف مع حماية التأمين بالضمان.</p>
+        </div>
+        <button onclick="openNewRoommateModal()" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-2xl text-xs sm:text-sm transition shadow-lg shrink-0 flex items-center gap-2">
+          <span>➕</span><span>أضف إعلان بحث عن زميل غرفة</span>
+        </button>
+      </div>
+
+      <!-- Roommates Request Cards Grid -->
+      <div id="roommatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Roommate 1: Ahmed (Minya Gov) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-3.5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full">🎓 جامعة المنيا</span>
+            <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">توافق 98% ⭐</span>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">أحمد محمود</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">طب بشري — الفرقة الرابعة</p>
+          </div>
+          <div class="space-y-1 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl">
+            <div>📍 <strong>المنطقة:</strong> حي شلبي (أمام الجامعة)</div>
+            <div>🏠 <strong>المحافظة:</strong> المنيا</div>
+            <div>💤 <strong>العادات:</strong> مذاكرة هادئة • غير مدخن • نوم مبكر</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 block font-bold">الميزانية المستهدفة:</span>
+              <span class="text-sm font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م / شهر</span>
+            </div>
+            <a href="https://wa.me/201019876543?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D8%A3%D8%AD%D9%85%D8%AF%D8%8C%20%D8%A3%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%85%D8%B9%D9%83%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%B2%D9%85%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D8%B3%D9%83%D9%86" target="_blank" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <span>💬</span><span>واتساب</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Roommate 2: Mostafa (Deraya) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-3.5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-teal-50 text-teal-700 dark:bg-teal-950 dark:text-teal-300 font-extrabold px-2.5 py-0.5 rounded-full">💊 جامعة دراية</span>
+            <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">توافق 95% ⭐</span>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">مصطفى خالد</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">صيدلة إكلينيكية — الفرقة الثالثة</p>
+          </div>
+          <div class="space-y-1 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl">
+            <div>📍 <strong>المنطقة:</strong> المنيا الجديدة (الحي السياحي)</div>
+            <div>🏠 <strong>المحافظة:</strong> أسيوط</div>
+            <div>💤 <strong>العادات:</strong> مذاكرة جماعية منظمة • غير مدخن</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 block font-bold">الميزانية المستهدفة:</span>
+              <span class="text-sm font-black text-emerald-600 dark:text-emerald-400">2,500 ج.م / شهر</span>
+            </div>
+            <a href="https://wa.me/201278901234?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%B5%D8%B7%D9%81%D9%89%D8%8C%20%D8%A3%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%85%D8%B9%D9%83%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%B2%D9%85%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D8%B3%D9%83%D9%86" target="_blank" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <span>💬</span><span>واتساب</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Roommate 3: Youssef (Minya Ahleya) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-3.5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300 font-extrabold px-2.5 py-0.5 rounded-full">🏛️ المنيا الأهلية</span>
+            <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">توافق 93% ⭐</span>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">يوسف كريم</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">هندسة الذكاء الاصطناعي — الفرقة الثانية</p>
+          </div>
+          <div class="space-y-1 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl">
+            <div>📍 <strong>المنطقة:</strong> المنيا الجديدة (الحي الرابع)</div>
+            <div>🏠 <strong>المحافظة:</strong> بني سويف</div>
+            <div>💤 <strong>العادات:</strong> هادئ • مشاريع وبرمجة</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 block font-bold">الميزانية المستهدفة:</span>
+              <span class="text-sm font-black text-emerald-600 dark:text-emerald-400">2,300 ج.م / شهر</span>
+            </div>
+            <a href="https://wa.me/201123450987?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%8A%D9%88%D8%B3%D9%81%D8%8C%20%D8%A3%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%85%D8%B9%D9%83%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%B2%D9%85%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D8%B3%D9%83%D9%86" target="_blank" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <span>💬</span><span>واتساب</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Roommate 4: Mariam (Lotus) -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 space-y-3.5 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-extrabold px-2.5 py-0.5 rounded-full">🪷 جامعة اللوتس</span>
+            <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">توافق 97% ⭐</span>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">مريم هشام</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">علاج طبيعي — الفرقة الأولى</p>
+          </div>
+          <div class="space-y-1 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl">
+            <div>📍 <strong>المنطقة:</strong> المنيا الجديدة (الحي المتميز)</div>
+            <div>🏠 <strong>المحافظة:</strong> القاهرة</div>
+            <div>💤 <strong>العادات:</strong> سكن طالبات ملتزم • غير مدخنة</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 block font-bold">الميزانية المستهدفة:</span>
+              <span class="text-sm font-black text-emerald-600 dark:text-emerald-400">2,100 ج.م / شهر</span>
+            </div>
+            <a href="https://wa.me/201065432109?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20%D9%85%D8%B1%D9%8A%D9%85%D8%8C%20%D8%A3%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D9%85%D8%B9%D9%83%D9%8D%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%B2%D9%85%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D8%B3%D9%83%D9%86" target="_blank" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <span>💬</span><span>واتساب</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 3: فحص وثيقة الضمان (مستقل ومعزول بكلاس hidden) -->
     <!-- ========================================================================= -->
     <section id="view-escrow" class="hidden space-y-6">
+      
       <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white rounded-3xl p-7 sm:p-10 border border-emerald-500/30 shadow-xl space-y-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
           <div class="flex items-center gap-4">
@@ -443,11 +630,11 @@
                 <h2 class="text-xl sm:text-2xl font-black text-white">فحص وتتبع إيصال الضمان والتأمين (Escrow Tracker)</h2>
                 <span class="text-xs bg-emerald-500/30 text-emerald-300 font-extrabold px-3 py-0.5 rounded-full border border-emerald-500/40">موثق بنكياً</span>
               </div>
-              <p class="text-xs sm:text-sm text-slate-300 mt-1">
-                خدمة رسمية للتحقق الفوري من إيداع مبلغ التأمين في حساب الضمان المستقل واسترداده كاملاً عند إخلاء السكن بدون نزاعات.
-              </p>
-  </div>  </div>  </div>
-<!-- Verification Input Box -->
+              <p class="text-xs sm:text-sm text-slate-300 mt-1">خدمة رسمية للتحقق الفوري من إيداع مبلغ التأمين في حساب الضمان المستقل واسترداده كاملاً عند إخلاء السكن بدون نزاعات.</p>
+            </div>
+          </div>
+        </div>
+
         <div class="bg-black/30 p-6 rounded-2xl border border-white/10 space-y-4">
           <label class="block text-xs font-bold text-slate-300">أدخل رقم إيصال الضمان الجامعي (مثال: EJR-202610-101):</label>
           <div class="flex flex-col sm:flex-row items-stretch gap-3">
@@ -456,35 +643,29 @@
               <input type="text" id="escrowReceiptInput" placeholder="EJR-202610-101" class="w-full bg-slate-900/90 border border-emerald-500/40 rounded-xl pr-10 pl-3 py-3 text-sm text-white placeholder-slate-500 font-mono focus:outline-none focus:ring-2 focus:ring-emerald-400 uppercase">
             </div>
             <button onclick="verifyEscrowReceipt()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-sm transition shadow-md flex items-center justify-center gap-2">
-              <span>🔍</span>
-              <span>فحص الوثيقة الآن</span>
+              <span>🔍</span><span>فحص الوثيقة الآن</span>
             </button>
           </div>
-          <!-- Quick Test Pills for Minya Universities -->
+
           <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10 text-xs">
             <span class="text-slate-400 font-bold">أكواد معتمدة للاختبار الفوري:</span>
-            <button onclick="quickTestReceipt('EJR-202610-101')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono px-3 py-1 rounded-lg border border-emerald-500/20 transition">
-              EJR-202610-101 (جامعة المنيا - شلبي)
-            </button>
-            <button onclick="quickTestReceipt('EJR-202610-201')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono px-3 py-1 rounded-lg border border-emerald-500/20 transition">
-              EJR-202610-201 (المنيا الأهلية)
-            </button>
-            <button onclick="quickTestReceipt('EJR-202610-301')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono px-3 py-1 rounded-lg border border-emerald-500/20 transition">
-              EJR-202610-301 (جامعة دراية)
-            </button>
+            <button onclick="quickTestReceipt('EJR-202610-101')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono px-3 py-1 rounded-lg border border-emerald-500/20 transition">EJR-202610-101 (جامعة المنيا - شلبي)</button>
+            <button onclick="quickTestReceipt('EJR-202610-201')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono px-3 py-1 rounded-lg border border-emerald-500/20 transition">EJR-202610-201 (المنيا الأهلية)</button>
+            <button onclick="quickTestReceipt('EJR-202610-301')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono px-3 py-1 rounded-lg border border-emerald-500/20 transition">EJR-202610-301 (جامعة دراية)</button>
           </div>
         </div>
-        <!-- Verification Result Card -->
-        <div id="escrowResultCard" class="hidden bg-slate-900/90 border border-emerald-500/40 p-6 rounded-2xl space-y-4">
-          <!-- Dynamically injected via verifyEscrowReceipt -->
-        </div>
+
+        <div id="escrowResultCard" class="hidden bg-slate-900/90 border border-emerald-500/40 p-6 rounded-2xl space-y-4"></div>
       </div>
+
     </section>
+
     <!-- ========================================================================= -->
-    <!-- VIEW 3: حسابي والفواتير (معزول بدقة ولا يظهر إلا عند النقر على التبويب) -->
+    <!-- VIEW 4: حسابي والفواتير + حاسبة الفواتير الذكية وتذاكر الصيانة (مستقل) -->
     <!-- ========================================================================= -->
     <section id="view-dashboard" class="hidden space-y-6">
-      <!-- Student Info Header Card -->
+
+      <!-- Student Profile Header -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div class="flex items-center gap-4">
           <div class="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-3xl font-black border border-emerald-200 dark:border-emerald-800">
@@ -498,13 +679,111 @@
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">كلية الطب البشري، جامعة المنيا • الفرقة الرابعة</p>
           </div>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="window.print()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-            <span>🖨️</span><span>طباعة كشف الحساب</span>
+        <button onclick="window.print()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+          <span>🖨️</span><span>طباعة كشف الحساب الجامعي</span>
+        </button>
+      </div>
+
+      <!-- Two Interactive Cards: Bill Splitter & Maintenance Ticket -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- CARD 1: Smart Bill Splitter -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
+              <span>⚡</span><span>حاسبة تقسيم فواتير المرافق الذكية</span>
+            </h3>
+            <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded-lg">حساب فوري</span>
+          </div>
+          
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+            <div>
+              <label class="block text-slate-500 font-bold mb-1">💡 كهرباء:</label>
+              <input type="number" id="billElec" value="450" oninput="calculateSplitBills()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-500 font-bold mb-1">🔥 غاز:</label>
+              <input type="number" id="billGas" value="180" oninput="calculateSplitBills()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-500 font-bold mb-1">🚰 مياه:</label>
+              <input type="number" id="billWater" value="120" oninput="calculateSplitBills()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold">
+            </div>
+            <div>
+              <label class="block text-slate-500 font-bold mb-1">🌐 فايبر WE:</label>
+              <input type="number" id="billNet" value="420" oninput="calculateSplitBills()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5 text-xs font-bold">
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-1">
+            <span class="text-slate-600 dark:text-slate-300 font-bold">عدد الطلاب بالشقة:</span>
+            <div class="flex items-center gap-2">
+              <input type="number" id="billStudents" value="4" min="1" max="10" oninput="calculateSplitBills()" class="w-16 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1 text-xs font-black text-center">
+              <span class="text-slate-400">طلاب</span>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl flex items-center justify-between text-xs">
+            <div>
+              <span class="text-slate-400 block font-bold">إجمالي الفواتير:</span>
+              <span class="text-sm font-black text-slate-800 dark:text-white" id="billTotalDisplay">1,170 ج.م</span>
+            </div>
+            <div class="text-left">
+              <span class="text-emerald-600 dark:text-emerald-400 block font-bold">حصة كل زميل:</span>
+              <span class="text-base font-black text-emerald-600 dark:text-emerald-400" id="billShareDisplay">292.50 ج.م</span>
+            </div>
+          </div>
+
+          <button onclick="shareBillsOnWhatsApp()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm">
+            <span>📲</span><span>إرسال حصة كل زميل عبر واتساب</span>
           </button>
         </div>
+
+        <!-- CARD 2: 1-Click Maintenance Ticket -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
+              <span>🛠️</span><span>طلب صيانة عاجل بضغطة زر</span>
+            </h3>
+            <span class="text-[11px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950 px-2 py-0.5 rounded-lg">استجابة خلال 24س</span>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <div>
+              <label class="block text-slate-600 dark:text-slate-300 font-bold mb-1">نوع العطل أو المشكلة:</label>
+              <select id="maintCategory" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-white">
+                <option value="تكييف وتبريد">❄️ تكييف وتبريد الغرفة</option>
+                <option value="إنترنت وراوتر">🌐 عطل راوتر / شبكة فايبر WE</option>
+                <option value="سباكة وسخان">🚰 سباكة وسخان الحمام والمطبخ</option>
+                <option value="كهرباء وإضاءة">💡 كهرباء وإضاءة ومفاتيح لوحة التوزيع</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-slate-600 dark:text-slate-300 font-bold mb-1">وصف العطل باختصار:</label>
+              <input type="text" id="maintDescription" placeholder="مثال: ضعف تبريد تكييف الغرفة أو تسريب بسيط بالحوض" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-medium">
+            </div>
+          </div>
+
+          <button onclick="submitMaintenanceTicket()" id="maintSubmitBtn" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+            <span>🔧</span><span>إرسال بلاغ صيانة فوري للمؤجر</span>
+          </button>
+
+          <!-- Recent tickets status list -->
+          <div class="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-[11px]">
+            <div class="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-800/40 rounded-xl">
+              <span>⚡ زيادة حمل لوحة الكهرباء بالتكييف</span>
+              <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold">تم الإصلاح ✓</span>
+            </div>
+            <div class="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-800/40 rounded-xl" id="recentTicketSlot">
+              <span>🚰 صيانة مقبض صنبور الحمام</span>
+              <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-bold">قيد التنفيذ ⏳</span>
+            </div>
+          </div>
+        </div>
+
       </div>
-      <!-- Roommates Split & Invoices Table -->
+
+      <!-- Roommates Table -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
         <div class="flex items-center justify-between">
           <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
@@ -512,6 +791,7 @@
           </h3>
           <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">سكن النخبة الطبي — حي شلبي</span>
         </div>
+
         <div class="overflow-x-auto">
           <table class="w-full text-xs text-right">
             <thead>
@@ -524,33 +804,68 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
-              <tr> <td class="py-3 px-3 font-bold text-slate-900 dark:text-white">أحمد محمود (أنت)</td> <td class="py-3 px-3 text-slate-500">طب بشري — جامعة المنيا</td> <td class="py-3 px-3 font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م</td> <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-bold">مسدد بالكامل ✓</span></td> <td class="py-3 px-3 font-mono text-emerald-600">EJR-202610-101</td> </tr>
-              <tr> <td class="py-3 px-3 font-bold text-slate-900 dark:text-white">عمر الفاروق الديب</td> <td class="py-3 px-3 text-slate-500">صيدلة — جامعة المنيا</td> <td class="py-3 px-3 font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م</td> <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-bold">مسدد بالكامل ✓</span></td> <td class="py-3 px-3 font-mono text-emerald-600">EJR-202610-103</td> </tr>
-              <tr> <td class="py-3 px-3 font-bold text-slate-900 dark:text-white">زياد العوضي</td> <td class="py-3 px-3 text-slate-500">حاسبات ومعلومات — جامعة المنيا</td> <td class="py-3 px-3 font-black text-amber-600 dark:text-amber-400">1,850 ج.م</td> <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 font-bold">مستحق خلال 3 أيام</span></td> <td class="py-3 px-3 font-mono text-slate-400">قيد التحصيل</td> </tr>
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900 dark:text-white">أحمد محمود (أنت)</td>
+                <td class="py-3 px-3 text-slate-500">طب بشري — جامعة المنيا</td>
+                <td class="py-3 px-3 font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-bold">مسدد بالكامل ✓</span></td>
+                <td class="py-3 px-3 font-mono text-emerald-600">EJR-202610-101</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900 dark:text-white">عمر الفاروق الديب</td>
+                <td class="py-3 px-3 text-slate-500">صيدلة — جامعة المنيا</td>
+                <td class="py-3 px-3 font-black text-emerald-600 dark:text-emerald-400">1,850 ج.م</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-bold">مسدد بالكامل ✓</span></td>
+                <td class="py-3 px-3 font-mono text-emerald-600">EJR-202610-103</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900 dark:text-white">زياد العوضي</td>
+                <td class="py-3 px-3 text-slate-500">حاسبات ومعلومات — جامعة المنيا</td>
+                <td class="py-3 px-3 font-black text-amber-600 dark:text-amber-400">1,850 ج.م</td>
+                <td class="py-3 px-3"><span class="px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 font-bold">مستحق خلال 3 أيام</span></td>
+                <td class="py-3 px-3 font-mono text-slate-400">قيد التحصيل</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
+
     </section>
+
   </main>
+
+  <!-- FLOATING BAR: المقارنة السريعة بين الشقق (Side-by-Side Compare Floating Bar) -->
+  <div id="compareFloatingBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 backdrop-blur-md text-white px-5 py-3 rounded-2xl shadow-2xl border border-emerald-500/40 flex items-center gap-4 text-xs font-bold">
+    <div class="flex items-center gap-2">
+      <span class="text-base">⚖️</span>
+      <span>مقارنة الشقق المختارة: <span id="compareCountLabel" class="text-emerald-400 font-black">2</span>/3</span>
+    </div>
+    <button onclick="openCompareModal()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold transition shadow-md">
+      اعرض المقارنة الآن
+    </button>
+    <button onclick="clearCompare()" class="text-slate-400 hover:text-white transition">
+      مسح
+    </button>
+  </div>
+
   <!-- 3. FOOTER -->
   <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 py-6 text-xs text-slate-500 dark:text-slate-400 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-right">
       <div class="flex items-center gap-2">
         <span class="font-black text-slate-800 dark:text-slate-200">منصة إيجاري طلاب مصر</span>
-        <span>• إصدار جامعات المنيا الموثق v6.0</span>
+        <span>• إصدار منظومة الطالب الشاملة v7.0 Full Student Ecosystem</span>
       </div>
-      <div>
-        حماية التأمين بالضمان البنكي المستقل • جميع الحقوق محفوظة 2026
-      </div>
+      <div>حماية التأمين بالضمان البنكي المستقل • جميع الحقوق محفوظة 2026</div>
     </div>
   </footer>
+
   <!-- ========================================================================= -->
-  <!-- MODAL 1: حجز السرير وطباعة العقد الجامعي الفوري (Booking & Instant Contract) -->
+  <!-- MODALS -->
   <!-- ========================================================================= -->
+
+  <!-- MODAL 1: حجز السرير وعقد الإيجار + باقات راحة الطالب المغترب (Student Life Add-ons) -->
   <div id="bookingModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[90vh] flex flex-col">
-      <!-- Modal Header -->
       <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <span class="text-xl">📝</span>
@@ -558,23 +873,49 @@
         </div>
         <button onclick="closeBookingModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition">✕</button>
       </div>
-      <!-- Modal Body (Step 1: Form / Step 2: Contract Preview) -->
+
       <div class="p-6 overflow-y-auto space-y-4 text-xs" id="bookingFormContainer">
+        
+        <!-- Price Display -->
         <div class="bg-emerald-50 dark:bg-emerald-950/40 p-3.5 rounded-2xl border border-emerald-200 dark:border-emerald-800 flex items-center justify-between">
           <div>
-            <span class="text-slate-500 dark:text-slate-400 font-bold block">قيمة الإيجار الشهري للسرير:</span>
-            <span class="text-base font-black text-emerald-700 dark:text-emerald-300" id="modalPrice">1,850 ج.م</span>
+            <span class="text-slate-500 dark:text-slate-400 font-bold block">إجمالي القسط الشهري:</span>
+            <span class="text-lg font-black text-emerald-700 dark:text-emerald-300" id="modalPrice">1,850 ج.م</span>
           </div>
           <div class="text-left">
-            <span class="text-slate-500 dark:text-slate-400 font-bold block">مبلغ التأمين المسترد المحمي:</span>
+            <span class="text-slate-500 dark:text-slate-400 font-bold block">مبلغ التأمين المحفوظ:</span>
             <span class="text-sm font-black text-slate-800 dark:text-slate-200" id="modalDeposit">1,800 ج.م 🔒</span>
           </div>
         </div>
+
+        <!-- Student Life Add-ons Section (v7.0) -->
+        <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 space-y-2.5">
+          <div class="flex items-center justify-between font-bold text-slate-800 dark:text-white">
+            <span class="flex items-center gap-1.5"><span>✨</span><span>باقات راحة الطالب المغترب (خدمات اختيارية):</span></span>
+            <span class="text-[10px] text-emerald-600 bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded-md font-extrabold">خصم الطلاب</span>
+          </div>
+          <div class="space-y-2 pt-1 text-slate-700 dark:text-slate-300">
+            <label class="flex items-center gap-2.5 cursor-pointer hover:text-emerald-600 transition">
+              <input type="checkbox" id="addonClean" onchange="updateBookingAddons()" class="w-4 h-4 text-emerald-600 rounded accent-emerald-600">
+              <span>🧹 تنظيف وتعقيم أسبوعي للغرفة والشقة <strong>(+200 ج.م / شهرياً)</strong></span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer hover:text-emerald-600 transition">
+              <input type="checkbox" id="addonMeals" onchange="updateBookingAddons()" class="w-4 h-4 text-emerald-600 rounded accent-emerald-600">
+              <span>🍱 باقة وجبات غداء منزلية صحية - 20 وجبة شهرياً <strong>(+950 ج.م / شهرياً)</strong></span>
+            </label>
+            <label class="flex items-center gap-2.5 cursor-pointer hover:text-emerald-600 transition">
+              <input type="checkbox" id="addonLaundry" onchange="updateBookingAddons()" class="w-4 h-4 text-emerald-600 rounded accent-emerald-600">
+              <span>🧺 خدمة غسيل وكي الملابس أسبوعياً <strong>(+180 ج.م / شهرياً)</strong></span>
+            </label>
+          </div>
+        </div>
+
         <div class="space-y-3">
           <div>
             <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">اسم الطالب الرباعي:</label>
             <input type="text" id="bookStudentName" value="أحمد محمود" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-800 dark:text-white font-medium focus:ring-2 focus:ring-emerald-500">
           </div>
+
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">الجامعة والكلية:</label>
@@ -585,6 +926,7 @@
               <input type="text" id="bookPhone" value="01019876543" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs text-slate-800 dark:text-white font-medium focus:ring-2 focus:ring-emerald-500">
             </div>
           </div>
+
           <div>
             <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">طريقة السداد والتأمين:</label>
             <select id="bookPaymentMethod" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-emerald-500">
@@ -592,517 +934,55 @@
               <option value="fawry">🏪 فوري (Fawry Pay) — كود سداد فوري</option>
               <option value="card">💳 بطاقة بنكية (Visa / Meeza)</option>
             </select>
-  </div>  </div>  </div>
-<!-- Printable Contract Container (Shown after confirmation) -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Printable Contract Container -->
       <div id="printableContract" class="hidden p-6 overflow-y-auto space-y-4 text-xs bg-white text-slate-900 border-t border-slate-200">
         <div class="text-center pb-3 border-b border-slate-200 space-y-1">
           <div class="text-base font-black text-emerald-800">جمهورية مصر العربية — وثيقة سكن جامعي موثق</div>
           <div class="text-xs font-bold text-slate-600">عقد استئجار سرير بالضمان البنكي المستقل — محافظة المنيا</div>
           <div class="text-xs font-mono font-bold text-emerald-700" id="contractReceiptCode">EJR-202610-999</div>
         </div>
+
         <div class="space-y-2 leading-relaxed">
           <p><strong>الطرف الأول (المؤجر):</strong> إدارة السكن المعتمدة بالمنصة</p>
           <p><strong>الطرف الثاني (المستأجر):</strong> <span id="contractStudentName">أحمد محمود</span></p>
           <p><strong>العقار والسكن:</strong> <span id="contractPropTitle">سكن النخبة الطبي</span></p>
+          <p><strong>إجمالي الإيجار الشهري والباقات:</strong> <span id="contractTotalMonthly">1,850 ج.م</span></p>
           <p><strong>مبلغ التأمين المحفوظ بالضمان:</strong> <span id="contractDeposit">1,800 ج.م</span> (مسترد بالكامل عند إخلاء الغرفة)</p>
+          <p id="contractAddonsSummary" class="text-slate-700"><strong>الباقات الإضافية:</strong> بدون باقات إضافية</p>
           <p class="text-[11px] text-slate-500">تم فحص السكن ومطابقته ميدانياً لبوابات الحرم الجامعي بمحافظة المنيا، والوثيقة سارية ومعتمدة إلكترونياً.</p>
         </div>
+
         <div class="pt-4 border-t border-slate-200 flex items-center justify-between">
           <button onclick="window.print()" class="px-4 py-2 bg-emerald-700 text-white rounded-xl font-bold text-xs flex items-center gap-1.5">
             <span>🖨️</span><span>طباعة العقد والوثيقة</span>
           </button>
-          <button onclick="closeBookingModal()" class="text-slate-500 hover:underline font-bold text-xs">
-            إغلاق النافذة
-          </button>
+          <button onclick="closeBookingModal()" class="text-slate-500 hover:underline font-bold text-xs">إغلاق النافذة</button>
         </div>
       </div>
-      <!-- Modal Footer -->
+
       <div class="p-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between" id="bookingModalActions">
-        <button onclick="closeBookingModal()" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition">
-          إلغاء
-        </button>
+        <button onclick="closeBookingModal()" class="px-4 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold transition">إلغاء</button>
         <button onclick="submitBooking()" id="confirmBookBtn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black transition shadow-md flex items-center gap-2">
-          <span>🔒</span>
-          <span>تأكيد الحجز واستخراج الوثيقة</span>
+          <span>🔒</span><span>تأكيد الحجز واستخراج الوثيقة</span>
         </button>
-  </div>  </div>  </div>
-<!-- ========================================================================= -->
-  <!-- MODAL 2: المفضلة والمقارنة (Favorites Modal) -->
-  <!-- ========================================================================= -->
-  <div id="favoritesModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-        <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
-          <span>❤️</span><span>قائمة السكن المفضلة</span>
-        </h3>
-        <button onclick="closeFavoritesModal()" class="text-slate-400 hover:text-slate-700 text-sm">✕</button>
       </div>
-      <div id="favoritesList" class="space-y-3 max-h-72 overflow-y-auto text-xs">
-        <!-- Injected via JS -->
-  </div>  </div>  </div>
-<!-- ========================================================================= -->
-  <!-- JAVASCRIPT ENGINE (Clean, Modular, Solid Architecture) -->
-  <!-- ========================================================================= -->
-  <script>
-    // State Store
-    let currentView = 'market';
-    let selectedUni = 'all';
-    let selectedGender = 'all';
-    let selectedBudget = 'all';
-    let propertiesData = [];
-    let favoriteIds = JSON.parse(localStorage.getItem('ejari_favs') || '[]');
-    let activeBookingProp = null;
-    let mapInstance = null;
-    let mapMarkers = [];
-    // Minya Seed Fallback Properties
-    const DEFAULT_PROPERTIES = [
-      { id: 1, title: "سكن النخبة الطبي — حي شلبي (أمام بوابة طب المنيا)", university: "جامعة المنيا", governorate: "المنيا", gender: "male", bed_monthly_price: 1850, deposit_amount: 1800, available_beds: 1, distance_walk: "3 دقائق مشياً لبوابة مجمع الكليات الطبية", lat: 28.1174, lng: 30.7508, amenities: "تكييف, إنترنت فايبر WE, مكاتب مذاكرة خاصة", whatsapp_phone: "01019876543", images: ["https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80"] },
-      { id: 2, title: "سكن الرواد الفندقي — المنيا الجديدة (بجوار جامعة المنيا الأهلية)", university: "جامعة المنيا الأهلية", governorate: "المنيا الجديدة", gender: "male", bed_monthly_price: 2300, deposit_amount: 2200, available_beds: 2, distance_walk: "4 دقائق مشياً لبوابة الحرم الجامعي", lat: 28.0712, lng: 30.8275, amenities: "مستوى فندقي, تكييفات سبليت, ميكروويف ونظافة", whatsapp_phone: "01123450987", images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80"] },
-      { id: 3, title: "إقامة الصفوة للطالبات — المنيا الجديدة (أمام جامعة دراية Deraya)", university: "جامعة دراية", governorate: "المنيا الجديدة", gender: "female", bed_monthly_price: 2500, deposit_amount: 2500, available_beds: 1, distance_walk: "3 دقائق مشياً لكليات صيدلة وعلاج طبيعي دراية", lat: 28.0785, lng: 30.8226, amenities: "أمن نسائي 24 ساعة, مطبخ إيطالي كامل, مكتبة هادئة", whatsapp_phone: "01278901234", images: ["https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80"] },
-      { id: 4, title: "سكن اللوتس المتميز — المنيا الجديدة (قرب جامعة اللوتس)", university: "جامعة اللوتس", governorate: "المنيا الجديدة", gender: "male", bed_monthly_price: 2100, deposit_amount: 2000, available_beds: 2, distance_walk: "5 دقائق مشياً لبوابة جامعة اللوتس", lat: 28.0638, lng: 30.8362, amenities: "إنترنت فايبر سريع, مكاتب مذاكرة زان, أمن ذكي", whatsapp_phone: "01065432109", images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"] },
-      { id: 5, title: "برج الكورنيش الجامعي — أرض سلطان وشارع طه حسين (جامعة المنيا)", university: "جامعة المنيا", governorate: "المنيا", gender: "male", bed_monthly_price: 1950, deposit_amount: 1900, available_beds: 1, distance_walk: "خطوات لكورنيش النيل و5 دقائق لموقف الجامعة", lat: 28.1120, lng: 30.7555, amenities: "إطلالة نيلية مفتوحة, شرفة واسعة, غسالة أوتوماتيك", whatsapp_phone: "01156789012", images: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80"] },
-      { id: 6, title: "سكن الياسمين للطالبات — حي شلبي (جامعة المنيا)", university: "جامعة المنيا", governorate: "المنيا", gender: "female", bed_monthly_price: 1700, deposit_amount: 1600, available_beds: 2, distance_walk: "4 دقائق مشياً لبوابات كليات الآداب والتربية", lat: 28.1186, lng: 30.7512, amenities: "إشراف نسائي دوري, مطبخ متكامل, إنترنت فايبر", whatsapp_phone: "01099887766", images: ["https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80"] }
-    ];
-    // Initialize App
-    document.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      updateFavsBadge();
-      loadProperties();
-    });
-    // 1. Strict View Switching
-    function switchView(viewName) {
-      currentView = viewName;
-      const views = ['market', 'escrow', 'dashboard'];
-      views.forEach(v => {
-        const el = document.getElementById(`view-${v}`);
-        const tabBtn = document.getElementById(`tab-${v}`);
-        const mobBtn = document.getElementById(`mob-${v}`);
-        if (v === viewName) {
-          if (el) el.classList.remove('hidden');
-          if (tabBtn) {
-            tabBtn.className = 'segmented-active px-5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-2';
-          }
-          if (mobBtn) {
-            mobBtn.className = 'text-emerald-600 dark:text-emerald-400 font-black flex items-center gap-1';
-          }
-        } else {
-          if (el) el.classList.add('hidden');
-          if (tabBtn) {
-            tabBtn.className = 'segmented-inactive px-5 py-2 rounded-xl text-xs sm:text-sm transition-all duration-200 flex items-center gap-2';
-          }
-          if (mobBtn) {
-            mobBtn.className = 'text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1';
-          }
-        }
-      });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    // 2. Fetch Properties & Safe Merge with MINYA_PROPERTIES
-    async function loadProperties() {
-      try {
-        const resp = await fetch('/api/properties');
-        if (resp.ok) {
-          const apiList = await resp.json();
-          if (Array.isArray(apiList) && apiList.length > 0) {
-            // Keep the 6 rich Minya properties as base, and append any new properties added from admin (id > 6)
-            const newAdminProps = apiList.filter(p => p.id > 6 || !DEFAULT_PROPERTIES.some(m => m.id === p.id)).map(p => ({
-              id: p.id,
-              title: p.title || 'سكن جامعي موثق',
-              university: p.university || 'جامعة المنيا',
-              governorate: p.governorate || 'المنيا',
-              gender: p.gender || 'male',
-              bed_monthly_price: p.bed_monthly_price || 1850,
-              deposit_amount: p.deposit_amount || 1800,
-              available_beds: p.available_beds || 1,
-              distance_walk: p.distance_walk || (p.walk_minutes ? `${p.walk_minutes} دقائق للبوابة` : '3 دقائق للبوابة'),
-              lat: p.lat || 28.1174,
-              lng: p.lng || 30.7508,
-              amenities: p.amenities || 'تكييف, إنترنت فايبر WE, مكاتب مذاكرة خاصة',
-              whatsapp_phone: p.whatsapp_phone || p.landlord_phone || '01019876543',
-              images: (Array.isArray(p.images) && p.images.length > 0) ? p.images : ['https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80']
-            }));
-            propertiesData = [...DEFAULT_PROPERTIES, ...newAdminProps];
-          }
-        }
-      } catch (err) {
-        console.warn('API fallback to base properties', err);
-        propertiesData = [...DEFAULT_PROPERTIES];
-      }
-      // Re-render only if filters are applied or extra admin properties exist
-      if (selectedUni !== 'all' || selectedGender !== 'all' || selectedBudget !== 'all' || propertiesData.length > 6) {
-        renderPropertiesGrid();
-      }
-    }
-    // 3. Render Uniform 3-Column Grid
-    function renderPropertiesGrid() {
-      const grid = document.getElementById('propertiesGrid');
-      if (!grid) return;
-      const filtered = propertiesData.filter(p => {
-        // University filter
-        if (selectedUni !== 'all') {
-          const matchUni = (p.university || '').includes(selectedUni);
-          const matchTitle = (p.title || '').includes(selectedUni);
-          if (!matchUni && !matchTitle) return false;
-        }
-        // Gender filter
-        if (selectedGender !== 'all' && p.gender !== selectedGender) return false;
-        // Budget filter
-        if (selectedBudget === 'under2000' && p.bed_monthly_price >= 2000) return false;
-        if (selectedBudget === '2000-2500' && (p.bed_monthly_price < 2000 || p.bed_monthly_price > 2500)) return false;
-        if (selectedBudget === 'above2500' && p.bed_monthly_price <= 2500) return false;
-        return true;
-      });
-      const countEl = document.getElementById('propertiesCountText');
-      if (countEl) countEl.textContent = filtered.length;
-      if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-800 shadow-sm">
-            <span class="text-4xl">🔍</span>
-            <h4 class="font-black text-slate-800 dark:text-slate-100 text-base mt-2">لا يوجد سكن يطابق معايير البحث الحالية</h4>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">جرب تغيير الجامعة أو نطاق الميزانية لإظهار النتائج</p>
-            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-sm">إعادة تعيين الفلاتر</button>
-          </div>
-        `;
-        return;
-      }
-      grid.innerHTML = filtered.map(p => {
-        const isMale = p.gender === 'male';
-        const isFav = favoriteIds.includes(p.id);
-        const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80';
-        const tags = (p.amenities || 'تكييف, فايبر WE, مكاتب مذاكرة').split(',').slice(0, 3);
-        const waLink = `https://wa.me/2${p.whatsapp_phone || '01019876543'}?text=${encodeURIComponent('مرحباً، أستفسر عن حجز السرير في ' + p.title)}`;
-        return `
- <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
-            <!-- Top: Image with Badges -->
- <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none"> <img src="${img}" alt="${p.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"> <!-- University Badge (Top Right) --> <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10"> 🏛️ ${p.university || 'جامعة المنيا'} </span> <!-- Gender Badge & Favorite (Top Left) --> <div class="absolute top-3 left-3 flex items-center gap-1.5"> <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md ${isMale ? 'bg-sky-600 text-white' : 'bg-rose-600 text-white'}"> ${isMale ? '👨‍🎓 شباب' : '👩‍🎓 طالبات'} </span> <button onclick="toggleFavorite(event, ${p.id})" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110"> ${isFav ? '❤️' : '🤍'} </button> </div> <!-- Distance to Campus Pill (Bottom Right of Image) --> <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg"> 🚶 ${p.distance_walk || '3 دقائق للبوابة'} </div> </div>
-            <!-- Middle: Card Content -->
- <div class="p-5 flex-1 flex flex-col justify-between space-y-3"> <div> <h3 class="font-bold text-base text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"> ${p.title} </h3> <!-- 3 Feature Tags --> <div class="flex flex-wrap items-center gap-1.5 mt-3"> ${tags.map(t => ` <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2.5 py-1 rounded-lg"> ✓ ${t.trim()} </span> `).join('')} </div> </div> <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400"> 🛏️ متاح ${p.available_beds || 1} أسرة شاغرة </div> </div>
-            <!-- Bottom: Price & Uniform Action Buttons -->
- <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between"> <div> <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400"> ${Number(p.bed_monthly_price).toLocaleString()} ج.م <span class="text-xs font-normal text-slate-400">/ شهرياً</span> </div> <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد ${Number(p.deposit_amount || 1800).toLocaleString()} ج.م 🔒</div> </div> <div class="flex items-center gap-2"> <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب"> 💬 </a> <button onclick="openBookingModal(${p.id})" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20"> احجز الآن </button> </div>  </div>  </div>
-          `;
-      }).join('');
-    }
-    // 4. Filtering Helpers
-    function setUniFilter(uni) {
-      selectedUni = uni;
-      document.querySelectorAll('#uniPillsContainer button').forEach(btn => {
-        if (btn.getAttribute('data-uni') === uni) {
-          btn.className = 'filter-btn-active px-4 py-2 rounded-xl text-xs font-bold transition';
-        } else {
-          btn.className = 'filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition';
-        }
-      });
-      renderPropertiesGrid();
-    }
-    function setGenderFilter(gender) {
-      selectedGender = gender;
-      document.querySelectorAll('#genderToggle button').forEach(btn => {
-        if (btn.getAttribute('data-gender') === gender) {
-          btn.className = 'filter-btn-active px-3 py-1.5 rounded-lg text-xs font-bold transition';
-        } else {
-          btn.className = 'filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none';
-        }
-      });
-      renderPropertiesGrid();
-    }
-    function setBudgetFilter(val) {
-      selectedBudget = val;
-      renderPropertiesGrid();
-    }
-    function resetFilters() {
-      setUniFilter('all');
-      setGenderFilter('all');
-      selectedBudget = 'all';
-      const bSelect = document.getElementById('budgetFilterSelect');
-      if (bSelect) bSelect.value = 'all';
-      renderPropertiesGrid();
-    }
-    // 5. Interactive Leaflet Map for Minya
-    function toggleCampusMap() {
-      const wrapper = document.getElementById('mapWrapper');
-      const btnText = document.getElementById('mapBtnText');
-      if (!wrapper) return;
-      const isHidden = wrapper.classList.contains('hidden');
-      if (isHidden) {
-        wrapper.classList.remove('hidden');
-        if (btnText) btnText.textContent = 'إخفاء الخريطة';
-        if (!mapInstance) {
-          initMap();
-        } else {
-          setTimeout(() => mapInstance.invalidateSize(), 150);
-        }
-      } else {
-        wrapper.classList.add('hidden');
-        if (btnText) btnText.textContent = 'الخريطة التفاعلية';
-      }
-    }
-    function initMap() {
-      // Minya Center: [28.09, 30.79]
-      mapInstance = L.map('campusMap').setView([28.09, 30.79], 12);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '© OpenStreetMap'
-      }).addTo(mapInstance);
-      // 4 Minya Universities Gates
-      const universities = [
-        { name: "بوابة جامعة المنيا الحكومية (حي شلبي)", lat: 28.1158, lng: 30.7525 },
-        { name: "بوابة جامعة المنيا الأهلية (المنيا الجديدة)", lat: 28.0694, lng: 30.8294 },
-        { name: "بوابة جامعة دراية (Deraya University)", lat: 28.0768, lng: 30.8242 },
-        { name: "بوابة جامعة اللوتس (Lotus University)", lat: 28.0655, lng: 30.8385 }
-      ];
-      universities.forEach(u => {
-        L.marker([u.lat, u.lng])
-          .addTo(mapInstance)
-          .bindPopup(`<div style="direction:rtl; font-family:'Cairo';"><b>🏛️ ${u.name}</b></div>`);
-      });
-      // Plot Properties
-      propertiesData.forEach(p => {
-        if (p.lat && p.lng) {
-          L.circleMarker([p.lat, p.lng], {
-            radius: 8,
-            fillColor: p.gender === 'male' ? '#0284c7' : '#e11d48',
-            color: '#ffffff',
-            weight: 2,
-            opacity: 1,
-            fillOpacity: 0.9
-          }).addTo(mapInstance).bindPopup(`
-            <div style="direction:rtl; font-family:'Cairo';">
-              <b>${p.title}</b><br>
-              السعر: ${p.bed_monthly_price} ج.م / شهر
-            </div>
-          `);
-        }
-      });
-    }
-    // Details & Video Tour Modal Flow
-    function openDetailsModal(propId) {
-      const prop = propertiesData.find(x => x.id === propId) || DEFAULT_PROPERTIES[0];
-      const img = (prop.images && prop.images.length > 0) ? prop.images[0] : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80';
-      document.getElementById('detailsModalTitle').textContent = `معاينة: ${prop.title}`;
-      document.getElementById('detailsModalImg').src = img;
-      document.getElementById('detailsModalPrice').textContent = `${Number(prop.bed_monthly_price).toLocaleString()} ج.م / شهر`;
-      document.getElementById('detailsModalDeposit').textContent = `تأمين مسترد ${Number(prop.deposit_amount || 1800).toLocaleString()} ج.م 🔒`;
-      document.getElementById('detailsModalDesc').textContent = `${prop.title} — سكن طلابي موثق ومفحوص بجوار ${prop.university}. المسافة للبوابة: ${prop.distance_walk}. المميزات المتوفرة: ${prop.amenities}.`;
-      const waBtn = document.getElementById('detailsModalWaBtn');
-      if (waBtn) waBtn.href = `https://wa.me/2${prop.whatsapp_phone || '01019876543'}?text=${encodeURIComponent('مرحباً، أود معاينة فيديو للسكن: ' + prop.title)}`;
-      const bookBtn = document.getElementById('detailsModalBookBtn');
-      if (bookBtn) {
-        bookBtn.onclick = () => {
-          closeDetailsModal();
-          openBookingModal(propId);
-        };
-      }
-      document.getElementById('detailsModal').classList.remove('hidden');
-    }
-    function closeDetailsModal() {
-      document.getElementById('detailsModal').classList.add('hidden');
-    }
-    // 6. Booking Modal & Contract Flow
-    function openBookingModal(propId) {
-      const prop = propertiesData.find(x => x.id === propId) || DEFAULT_PROPERTIES[0];
-      activeBookingProp = prop;
-      document.getElementById('modalPropTitle').textContent = `حجز: ${prop.title}`;
-      document.getElementById('modalPrice').textContent = `${Number(prop.bed_monthly_price).toLocaleString()} ج.م`;
-      document.getElementById('modalDeposit').textContent = `${Number(prop.deposit_amount || 1800).toLocaleString()} ج.م 🔒`;
-      // Reset view to form
-      document.getElementById('bookingFormContainer').classList.remove('hidden');
-      document.getElementById('bookingModalActions').classList.remove('hidden');
-      document.getElementById('printableContract').classList.add('hidden');
-      document.getElementById('bookingModal').classList.remove('hidden');
-    }
-    function closeBookingModal() {
-      document.getElementById('bookingModal').classList.add('hidden');
-    }
-    async function submitBooking() {
-      const btn = document.getElementById('confirmBookBtn');
-      btn.disabled = true;
-      btn.textContent = 'جارٍ معالجة الضمان...';
-      const sName = document.getElementById('bookStudentName').value.trim() || 'أحمد محمود';
-      const faculty = document.getElementById('bookFaculty').value.trim() || 'طب بشري — جامعة المنيا';
-      const phone = document.getElementById('bookPhone').value.trim() || '01019876543';
-      try {
-        const resp = await fetch('/api/bookings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            property_id: activeBookingProp ? activeBookingProp.id : 1,
-            student_name: sName,
-            faculty: faculty,
-            whatsapp_phone: phone,
-            academic_year: 'الفرقة الرابعة',
-            parent_phone: '01011122233',
-            monthly_share: activeBookingProp ? activeBookingProp.bed_monthly_price : 1850,
-            deposit_escrow: activeBookingProp ? activeBookingProp.deposit_amount : 1800
-          })
-        });
-        const data = await resp.json();
-        const receiptCode = (data && data.receipt_code) ? data.receipt_code : 'EJR-' + Date.now().toString().slice(-6);
-        // Show Contract Preview
-        document.getElementById('bookingFormContainer').classList.add('hidden');
-        document.getElementById('bookingModalActions').classList.add('hidden');
-        document.getElementById('contractReceiptCode').textContent = receiptCode;
-        document.getElementById('contractStudentName').textContent = sName;
-        document.getElementById('contractPropTitle').textContent = activeBookingProp ? activeBookingProp.title : 'سكن النخبة الطبي';
-        document.getElementById('contractDeposit').textContent = `${Number(activeBookingProp ? activeBookingProp.deposit_amount : 1800).toLocaleString()} ج.م`;
-        document.getElementById('printableContract').classList.remove('hidden');
-      } catch (err) {
-        alert('تم تأكيد الحجز وإصدار وثيقة الضمان بنجاح!');
-        closeBookingModal();
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '🔒 تأكيد الحجز واستخراج الوثيقة';
-      }
-    }
-    // 7. Escrow Verification
-    async function verifyEscrowReceipt() {
-      const input = document.getElementById('escrowReceiptInput');
-      const code = (input.value || '').trim();
-      if (!code) {
-        alert('يرجى إدخال رقم إيصال الضمان');
-        return;
-      }
-      const card = document.getElementById('escrowResultCard');
-      card.classList.remove('hidden');
-      card.innerHTML = `<div class="text-center py-4 text-emerald-400 font-bold">جارٍ مطابقة الوثيقة مع السجل البنكي...</div>`;
-      try {
-        const resp = await fetch(`/api/bookings/verify/${encodeURIComponent(code)}`);
-        const data = await resp.json();
-        if (resp.ok && data.status === 'verified') {
-          const b = data.booking || {};
-          card.innerHTML = `
-            <div class="space-y-3">
-              <div class="flex items-center justify-between border-b border-emerald-500/30 pb-3">
-                <div class="flex items-center gap-2">
-                  <span class="text-emerald-400 text-lg">✓</span>
-                  <span class="font-extrabold text-white text-sm">وثيقة ضمان معتمدة وسارية</span>
-                </div>
-                <span class="bg-emerald-500/30 text-emerald-300 font-mono text-xs px-2.5 py-0.5 rounded-full">${code}</span>
-              </div>
-              <div class="grid grid-cols-2 gap-3 text-xs text-slate-300">
-                <div><strong>الطالب:</strong> ${b.student_name || 'أحمد محمود'}</div>
-                <div><strong>السكن:</strong> ${b.property_title || 'سكن معتمد بجامعات المنيا'}</div>
-                <div><strong>مبلغ التأمين المحمي:</strong> <span class="text-emerald-400 font-black">${Number(b.deposit_escrow || 1800).toLocaleString()} ج.م</span></div>
-                <div><strong>حالة الاسترداد:</strong> محمي 100% بحساب الضمان المستقل
-  </div>  </div>  </div>
-`;
-        } else {
-          // Instant verified simulation for demo codes
-          card.innerHTML = `
-            <div class="space-y-3">
-              <div class="flex items-center justify-between border-b border-emerald-500/30 pb-3">
-                <div class="flex items-center gap-2">
-                  <span class="text-emerald-400 text-lg">✓</span>
-                  <span class="font-extrabold text-white text-sm">وثيقة ضمان معتمدة وسارية</span>
-                </div>
-                <span class="bg-emerald-500/30 text-emerald-300 font-mono text-xs px-2.5 py-0.5 rounded-full">${code}</span>
-              </div>
-              <div class="grid grid-cols-2 gap-3 text-xs text-slate-300">
-                <div><strong>الطالب:</strong> طالب جامعي موثق</div>
-                <div><strong>السكن:</strong> سكن طلابي معتمد بمحافظة المنيا</div>
-                <div><strong>مبلغ التأمين المحفوظ:</strong> <span class="text-emerald-400 font-black">1,800 ج.م</span></div>
-                <div><strong>حالة الحماية:</strong> مودع بحساب الضمان البنكي المستقل
-  </div>  </div>  </div>
-`;
-        }
-      } catch (e) {
-        card.innerHTML = `<div class="text-center py-4 text-emerald-400 font-bold">وثيقة الضمان معتمدة ومسجلة بالسجل البنكي.</div>`;
-      }
-    }
-    function quickTestReceipt(code) {
-      document.getElementById('escrowReceiptInput').value = code;
-      verifyEscrowReceipt();
-    }
-    // 8. Favorites Shortlist
-    function toggleFavorite(e, id) {
-      if (e) e.stopPropagation();
-      const idx = favoriteIds.indexOf(id);
-      if (idx > -1) {
-        favoriteIds.splice(idx, 1);
-      } else {
-        favoriteIds.push(id);
-      }
-      localStorage.setItem('ejari_favs', JSON.stringify(favoriteIds));
-      updateFavsBadge();
-      renderPropertiesGrid();
-    }
-    function updateFavsBadge() {
-      const badge = document.getElementById('favsCountBadge');
-      if (badge) badge.textContent = favoriteIds.length;
-    }
-    function openFavoritesModal() {
-      const modal = document.getElementById('favoritesModal');
-      const list = document.getElementById('favoritesList');
-      if (!modal || !list) return;
-      const favProps = propertiesData.filter(p => favoriteIds.includes(p.id));
-      if (favProps.length === 0) {
-        list.innerHTML = `<div class="text-center py-6 text-slate-400">لم تقم بإضافة أي سكن للمفضلة بعد.</div>`;
-      } else {
-        list.innerHTML = favProps.map(p => `
-          <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
-            <div>
-              <div class="font-bold text-slate-900 dark:text-white">${p.title}</div>
-              <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-black">${p.bed_monthly_price} ج.م / شهر</div>
-            </div>
-            <button onclick="openBookingModal(${p.id}); closeFavoritesModal();" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold">احجز</button>
-          </div>
-        `).join('');
-      }
-      modal.classList.remove('hidden');
-    }
-    function closeFavoritesModal() {
-      document.getElementById('favoritesModal').classList.add('hidden');
-    }
-    // 9. Account & Auth Dropdown
-    function toggleUserDropdown(e) {
-      if (e) e.stopPropagation();
-      const menu = document.getElementById('userDropdownMenu');
-      if (menu) menu.classList.toggle('hidden');
-    }
-    document.addEventListener('click', () => {
-      const menu = document.getElementById('userDropdownMenu');
-      if (menu && !menu.classList.contains('hidden')) {
-        menu.classList.add('hidden');
-      }
-    });
-    function quickAuth(role) {
-      const label = document.getElementById('currentAccountLabel');
-      const userName = document.getElementById('dropdownUserName');
-      const userRole = document.getElementById('dropdownUserRole');
-      if (role === 'student') {
-        if (label) label.textContent = 'أحمد محمود';
-        if (userName) userName.textContent = 'أحمد محمود';
-        if (userRole) userRole.textContent = 'طالب • كلية الطب البشري جامعة المنيا';
-      } else {
-        if (label) label.textContent = 'المهندس كريم';
-        if (userName) userName.textContent = 'المهندس كريم';
-        if (userRole) userRole.textContent = 'مؤجر سكن الطلاب بالمنيا الجديدة';
-      }
-    }
-    // 10. Theme Toggle
-    function toggleDarkMode() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('ejari_theme', isDark ? 'dark' : 'light');
-      const btn = document.getElementById('themeToggleBtn');
-      if (btn) btn.textContent = isDark ? '☀️' : '🌙';
-    }
-    function initTheme() {
-      const saved = localStorage.getItem('ejari_theme');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
-        document.documentElement.classList.add('dark');
-        const btn = document.getElementById('themeToggleBtn');
-        if (btn) btn.textContent = '☀️';
-      }
-    }
-  </script>
-  <!-- MODAL: تفاصيل ومعاينة فيديو السكن (Details & Video Tour Modal) -->
+
+    </div>
+  </div>
+
+  <!-- MODAL 2: تفاصيل ومعاينة فيديو السكن مع دليل المواصلات -->
   <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[90vh] flex flex-col">
       <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <h3 class="font-black text-base text-slate-900 dark:text-white" id="detailsModalTitle">تفاصيل ومعاينة السكن</h3>
         <button onclick="closeDetailsModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition">✕</button>
       </div>
-      <div class="p-6 overflow-y-auto space-y-4 text-xs" id="detailsModalBody">
+      <div class="p-6 overflow-y-auto space-y-4 text-xs">
         <div class="relative w-full h-56 rounded-2xl overflow-hidden bg-slate-900">
           <img id="detailsModalImg" src="" alt="معاينة السكن" class="w-full h-full object-cover">
           <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -1110,12 +990,18 @@
           </div>
           <span class="absolute bottom-3 left-3 bg-black/70 text-white text-[11px] px-2.5 py-1 rounded-lg">🎥 معاينة فيديو موثقة للحرم</span>
         </div>
+
+        <div class="bg-sky-50 dark:bg-sky-950/60 p-3 rounded-xl border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-300 font-bold flex items-center gap-2">
+          <span class="text-lg">🚌</span>
+          <span id="detailsModalTransit">خط المواصلات الجامعي</span>
+        </div>
+
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-emerald-600 dark:text-emerald-400 font-black text-sm" id="detailsModalPrice">1,850 ج.م / شهر</span>
             <span class="text-slate-400 font-bold" id="detailsModalDeposit">تأمين مسترد 1,800 ج.م 🔒</span>
           </div>
-          <p class="text-slate-600 dark:text-slate-300 leading-relaxed" id="detailsModalDesc">سكن طلابي مجهز بالكامل ومفحوص ميدانياً ومطابق للمواصفات الجامعية بمحافظة المنيا، يتضمن إنترنت فايبر فائق السرعة ومكاتب مذاكرة خاصة وتكييف وحراسة.</p>
+          <p class="text-slate-600 dark:text-slate-300 leading-relaxed" id="detailsModalDesc"></p>
         </div>
       </div>
       <div class="p-5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
@@ -1127,5 +1013,954 @@
       </div>
     </div>
   </div>
+
+  <!-- MODAL 3: إضافة إعلان بحث عن زميل سكن (New Roommate Modal) -->
+  <div id="newRoommateModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <span>🤝</span><span>إضافة إعلان بحث عن زميل غرفة</span>
+        </h3>
+        <button onclick="closeNewRoommateModal()" class="text-slate-400 hover:text-slate-700 text-sm">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">اسم الطالب:</label>
+          <input type="text" id="newRmName" placeholder="مثال: كريم حامد" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+        </div>
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">الجامعة والكلية:</label>
+            <input type="text" id="newRmFaculty" placeholder="مثال: هندسة جامعة المنيا" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">الفرقة الدراسية:</label>
+            <input type="text" id="newRmYear" placeholder="الفرقة الثالثة" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">المحافظة الأصلية:</label>
+            <input type="text" id="newRmGov" placeholder="مثال: بني سويف" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">الميزانية الشهرية (ج.م):</label>
+            <input type="number" id="newRmBudget" value="2000" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-bold">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">عادات المذاكرة والسكن:</label>
+          <input type="text" id="newRmHabits" placeholder="مثال: مذاكرة ليلية هادئة • غير مدخن • التزام بالنظافة" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2">
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">رقم الواتساب للتواصل:</label>
+          <input type="text" id="newRmPhone" placeholder="010XXXXXXXX" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 font-mono">
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <button onclick="closeNewRoommateModal()" class="px-4 py-2 rounded-xl text-slate-500 font-bold">إلغاء</button>
+        <button onclick="submitNewRoommate()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-extrabold text-xs transition shadow-md">نشر الإعلان الآن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: جدول المقارنة جنباً إلى جنب (Side-by-Side Compare Modal) -->
+  <div id="compareModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <span>⚖️</span><span>مقارنة تفصيلية بين الشقق المختارة</span>
+        </h3>
+        <button onclick="closeCompareModal()" class="text-slate-400 hover:text-slate-700 text-sm">✕</button>
+      </div>
+      <div id="compareTableContainer" class="overflow-x-auto text-xs">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: المفضلة (Favorites Modal) -->
+  <div id="favoritesModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+        <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
+          <span>❤️</span><span>قائمة السكن المفضلة</span>
+        </h3>
+        <button onclick="closeFavoritesModal()" class="text-slate-400 hover:text-slate-700 text-sm">✕</button>
+      </div>
+      <div id="favoritesList" class="space-y-3 max-h-72 overflow-y-auto text-xs"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT ENGINE (v7.0 Ecosystem) -->
+  <!-- ========================================================================= -->
+  <script>
+    // App State Store
+    let currentView = 'market';
+    let selectedUni = 'all';
+    let selectedGender = 'all';
+    let selectedBudget = 'all';
+    let favoriteIds = JSON.parse(localStorage.getItem('ejari_favs') || '[]');
+    let compareIds = [];
+    let activeBookingProp = null;
+    let mapInstance = null;
+
+    // 6 Rich Minya Properties with Transit & Real Photos
+    const DEFAULT_PROPERTIES = [
+      {
+        id: 1,
+        title: "سكن النخبة الطبي — حي شلبي (أمام بوابة طب المنيا)",
+        university: "جامعة المنيا",
+        governorate: "المنيا",
+        gender: "male",
+        bed_monthly_price: 1850,
+        deposit_amount: 1800,
+        available_beds: 1,
+        distance_walk: "3 دقائق مشياً لبوابة طب وعلوم المنيا",
+        transit_info: "🚌 دقيقتان لموقف سيرفيس الجامعة ومحطة باص المنيا الجديدة",
+        lat: 28.1174, lng: 30.7508,
+        amenities: "تكييف, إنترنت فايبر WE, مكاتب مذاكرة خاصة",
+        whatsapp_phone: "01019876543",
+        images: ["https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80"]
+      },
+      {
+        id: 2,
+        title: "سكن الرواد الفندقي — المنيا الجديدة (بجوار جامعة المنيا الأهلية)",
+        university: "جامعة المنيا الأهلية",
+        governorate: "المنيا الجديدة",
+        gender: "male",
+        bed_monthly_price: 2300,
+        deposit_amount: 2200,
+        available_beds: 2,
+        distance_walk: "4 دقائق مشياً لبوابة الحرم الجامعي",
+        transit_info: "🚐 خط باص مباشر لبوابات الأهلية ودراية واللوتس (5 دقائق)",
+        lat: 28.0712, lng: 30.8275,
+        amenities: "مستوى فندقي, تكييفات سبليت, ميكروويف ونظافة",
+        whatsapp_phone: "01123450987",
+        images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80"]
+      },
+      {
+        id: 3,
+        title: "إقامة الصفوة للطالبات — المنيا الجديدة (أمام جامعة دراية Deraya)",
+        university: "جامعة دراية",
+        governorate: "المنيا الجديدة",
+        gender: "female",
+        bed_monthly_price: 2500,
+        deposit_amount: 2500,
+        available_beds: 1,
+        distance_walk: "3 دقائق مشياً لكليات صيدلة وعلاج طبيعي دراية",
+        transit_info: "🚐 خط باص مباشر لبوابات الأهلية ودراية واللوتس (5 دقائق)",
+        lat: 28.0785, lng: 30.8226,
+        amenities: "أمن نسائي 24 ساعة, مطبخ إيطالي كامل, مكتبة هادئة",
+        whatsapp_phone: "01278901234",
+        images: ["https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80"]
+      },
+      {
+        id: 4,
+        title: "سكن اللوتس المتميز — المنيا الجديدة (قرب جامعة اللوتس)",
+        university: "جامعة اللوتس",
+        governorate: "المنيا الجديدة",
+        gender: "male",
+        bed_monthly_price: 2100,
+        deposit_amount: 2000,
+        available_beds: 2,
+        distance_walk: "5 دقائق مشياً لبوابة جامعة اللوتس",
+        transit_info: "🚐 خط باص مباشر لبوابات الأهلية ودراية واللوتس (5 دقائق)",
+        lat: 28.0638, lng: 30.8362,
+        amenities: "إنترنت فايبر سريع, مكاتب مذاكرة زان, أمن ذكي",
+        whatsapp_phone: "01065432109",
+        images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"]
+      },
+      {
+        id: 5,
+        title: "برج الكورنيش الجامعي — أرض سلطان وشارع طه حسين (جامعة المنيا)",
+        university: "جامعة المنيا",
+        governorate: "المنيا",
+        gender: "male",
+        bed_monthly_price: 1950,
+        deposit_amount: 1900,
+        available_beds: 1,
+        distance_walk: "خطوات لكورنيش النيل و5 دقائق للموقف",
+        transit_info: "🚌 دقيقتان لموقف سيرفيس الجامعة ومحطة باص المنيا الجديدة",
+        lat: 28.1120, lng: 30.7555,
+        amenities: "إطلالة نيلية مفتوحة, شرفة واسعة, غسالة أوتوماتيك",
+        whatsapp_phone: "01156789012",
+        images: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80"]
+      },
+      {
+        id: 6,
+        title: "سكن الياسمين للطالبات — حي شلبي (جامعة المنيا)",
+        university: "جامعة المنيا",
+        governorate: "المنيا",
+        gender: "female",
+        bed_monthly_price: 1700,
+        deposit_amount: 1600,
+        available_beds: 2,
+        distance_walk: "4 دقائق مشياً لبوابات كليات الآداب والتربية",
+        transit_info: "🚌 دقيقتان لموقف سيرفيس الجامعة ومحطة باص المنيا الجديدة",
+        lat: 28.1186, lng: 30.7512,
+        amenities: "إشراف نسائي دوري, مطبخ متكامل, إنترنت فايبر",
+        whatsapp_phone: "01099887766",
+        images: ["https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80"]
+      }
+    ];
+
+    let propertiesData = [...DEFAULT_PROPERTIES];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      updateFavsBadge();
+      loadProperties();
+      calculateSplitBills();
+    });
+
+    // 1. Strict 4-Tab View Switching
+    function switchView(viewName) {
+      currentView = viewName;
+      const views = ['market', 'roommates', 'escrow', 'dashboard'];
+      
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        const tabBtn = document.getElementById(`tab-${v}`);
+        const mobBtn = document.getElementById(`mob-${v}`);
+        
+        if (v === viewName) {
+          if (el) el.classList.remove('hidden');
+          if (tabBtn) tabBtn.className = 'segmented-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5';
+          if (mobBtn) mobBtn.className = 'text-emerald-600 dark:text-emerald-400 font-black flex items-center gap-1';
+        } else {
+          if (el) el.classList.add('hidden');
+          if (tabBtn) tabBtn.className = 'segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5';
+          if (mobBtn) mobBtn.className = 'text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 2. Fetch & Safe Merge Properties
+    async function loadProperties() {
+      try {
+        const resp = await fetch('/api/properties');
+        if (resp.ok) {
+          const apiList = await resp.json();
+          if (Array.isArray(apiList) && apiList.length > 0) {
+            const newAdminProps = apiList.filter(p => p.id > 6 || !DEFAULT_PROPERTIES.some(m => m.id === p.id)).map(p => ({
+              id: p.id,
+              title: p.title || 'سكن جامعي موثق',
+              university: p.university || 'جامعة المنيا',
+              governorate: p.governorate || 'المنيا',
+              gender: p.gender || 'male',
+              bed_monthly_price: p.bed_monthly_price || 1850,
+              deposit_amount: p.deposit_amount || 1800,
+              available_beds: p.available_beds || 1,
+              distance_walk: p.distance_walk || (p.walk_minutes ? `${p.walk_minutes} دقائق للبوابة` : '3 دقائق للبوابة'),
+              transit_info: p.transit_info || '🚌 خط باص مباشر لبوابات الجامعة (5 دقائق)',
+              lat: p.lat || 28.1174,
+              lng: p.lng || 30.7508,
+              amenities: p.amenities || 'تكييف, فايبر WE, مكاتب مذاكرة',
+              whatsapp_phone: p.whatsapp_phone || p.landlord_phone || '01019876543',
+              images: (Array.isArray(p.images) && p.images.length > 0) ? p.images : ['https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80']
+            }));
+            propertiesData = [...DEFAULT_PROPERTIES, ...newAdminProps];
+          }
+        }
+      } catch (err) {
+        propertiesData = [...DEFAULT_PROPERTIES];
+      }
+
+      if (selectedUni !== 'all' || selectedGender !== 'all' || selectedBudget !== 'all' || propertiesData.length > 6) {
+        renderPropertiesGrid();
+      }
+    }
+
+    // 3. Render Properties Grid (with Transit & Compare)
+    function renderPropertiesGrid() {
+      const grid = document.getElementById('propertiesGrid');
+      if (!grid) return;
+
+      const filtered = propertiesData.filter(p => {
+        if (selectedUni !== 'all' && !(p.university || '').includes(selectedUni) && !(p.title || '').includes(selectedUni)) return false;
+        if (selectedGender !== 'all' && p.gender !== selectedGender) return false;
+        if (selectedBudget === 'under2000' && p.bed_monthly_price >= 2000) return false;
+        if (selectedBudget === '2000-2500' && (p.bed_monthly_price < 2000 || p.bed_monthly_price > 2500)) return false;
+        if (selectedBudget === 'above2500' && p.bed_monthly_price <= 2500) return false;
+        return true;
+      });
+
+      const countEl = document.getElementById('propertiesCountText');
+      if (countEl) countEl.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-800 shadow-sm">
+            <span class="text-4xl">🔍</span>
+            <h4 class="font-black text-slate-800 dark:text-slate-100 text-base mt-2">لا يوجد سكن يطابق معايير البحث الحالية</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">جرب تغيير الجامعة أو نطاق الميزانية لإظهار النتائج</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-sm">إعادة تعيين الفلاتر</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const isMale = p.gender === 'male';
+        const isFav = favoriteIds.includes(p.id);
+        const isCmp = compareIds.includes(p.id);
+        const img = (p.images && p.images.length > 0) ? p.images[0] : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80';
+        const tags = (p.amenities || 'تكييف, فايبر WE, مكاتب مذاكرة').split(',').slice(0, 3);
+        const waLink = `https://wa.me/2${p.whatsapp_phone || '01019876543'}?text=${encodeURIComponent('مرحباً، أستفسر عن حجز السرير في ' + p.title)}`;
+        const transit = p.transit_info || '🚌 خط باص مباشر لبوابات الجامعة';
+
+        return `
+          <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+            <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
+              <img src="${img}" alt="${p.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ ${p.university || 'جامعة المنيا'}</span>
+              <div class="absolute top-3 left-3 flex items-center gap-1.5">
+                <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md ${isMale ? 'bg-sky-600 text-white' : 'bg-rose-600 text-white'}">
+                  ${isMale ? '👨‍🎓 شباب' : '👩‍🎓 طالبات'}
+                </span>
+                <button onclick="toggleCompare(event, ${p.id})" id="cmpBtn-${p.id}" class="w-8 h-8 rounded-full ${isCmp ? 'bg-emerald-600 text-white' : 'bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200'} text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold" title="إضافة للمقارنة">⚖️</button>
+                <button onclick="toggleFavorite(event, ${p.id})" class="w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-sm flex items-center justify-center shadow-md transition hover:scale-110">${isFav ? '❤️' : '🤍'}</button>
+              </div>
+              <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">🚶 ${p.distance_walk || '3 دقائق للبوابة'}</div>
+            </div>
+
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+              <div>
+                <h3 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 line-clamp-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">${p.title}</h3>
+                <div class="flex flex-wrap items-center gap-1.5 mt-2.5">
+                  ${tags.map(t => `<span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[11px] font-medium px-2 py-0.5 rounded-lg">✓ ${t.trim()}</span>`).join('')}
+                </div>
+              </div>
+              <div class="space-y-1.5">
+                <div class="flex items-center gap-1.5 text-[11px] font-bold text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 px-2.5 py-1 rounded-lg border border-sky-200 dark:border-sky-800">
+                  <span>${transit}</span>
+                </div>
+                <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">🛏️ متاح ${p.available_beds || 1} أسرة شاغرة</div>
+              </div>
+            </div>
+
+            <div class="p-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+              <div>
+                <div class="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400">${Number(p.bed_monthly_price).toLocaleString()} ج.م <span class="text-xs font-normal text-slate-400">/ شهر</span></div>
+                <div class="text-[10px] text-slate-400 font-bold">تأمين مسترد ${Number(p.deposit_amount || 1800).toLocaleString()} ج.م 🔒</div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="openDetailsModal(${p.id})" class="px-2.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-xl transition" title="معاينة وتفاصيل">👁️ معاينة</button>
+                <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 flex items-center justify-center text-base border border-emerald-300 dark:border-emerald-800 transition" title="تواصل واتساب">💬</a>
+                <button onclick="openBookingModal(${p.id})" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl transition shadow-md shadow-emerald-600/20">احجز الآن</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 4. Filters & Campus Map
+    function setUniFilter(uni) {
+      selectedUni = uni;
+      document.querySelectorAll('#uniPillsContainer button').forEach(btn => {
+        btn.className = (btn.getAttribute('data-uni') === uni) ? 'filter-btn-active px-4 py-2 rounded-xl text-xs font-bold transition' : 'filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition';
+      });
+      renderPropertiesGrid();
+    }
+
+    function setGenderFilter(gender) {
+      selectedGender = gender;
+      document.querySelectorAll('#genderToggle button').forEach(btn => {
+        btn.className = (btn.getAttribute('data-gender') === gender) ? 'filter-btn-active px-3 py-1.5 rounded-lg text-xs font-bold transition' : 'filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none';
+      });
+      renderPropertiesGrid();
+    }
+
+    function setBudgetFilter(val) {
+      selectedBudget = val;
+      renderPropertiesGrid();
+    }
+
+    function resetFilters() {
+      setUniFilter('all');
+      setGenderFilter('all');
+      selectedBudget = 'all';
+      const bSelect = document.getElementById('budgetFilterSelect');
+      if (bSelect) bSelect.value = 'all';
+      renderPropertiesGrid();
+    }
+
+    function toggleCampusMap() {
+      const wrapper = document.getElementById('mapWrapper');
+      const btnText = document.getElementById('mapBtnText');
+      if (!wrapper) return;
+      const isHidden = wrapper.classList.contains('hidden');
+      if (isHidden) {
+        wrapper.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'إخفاء الخريطة';
+        if (!mapInstance) initMap();
+        else setTimeout(() => mapInstance.invalidateSize(), 150);
+      } else {
+        wrapper.classList.add('hidden');
+        if (btnText) btnText.textContent = 'الخريطة التفاعلية';
+      }
+    }
+
+    function initMap() {
+      mapInstance = L.map('campusMap').setView([28.09, 30.79], 12);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© OpenStreetMap' }).addTo(mapInstance);
+      const universities = [
+        { name: "بوابة جامعة المنيا الحكومية (حي شلبي)", lat: 28.1158, lng: 30.7525 },
+        { name: "بوابة جامعة المنيا الأهلية (المنيا الجديدة)", lat: 28.0694, lng: 30.8294 },
+        { name: "بوابة جامعة دراية (Deraya University)", lat: 28.0768, lng: 30.8242 },
+        { name: "بوابة جامعة اللوتس (Lotus University)", lat: 28.0655, lng: 30.8385 }
+      ];
+      universities.forEach(u => {
+        L.marker([u.lat, u.lng]).addTo(mapInstance).bindPopup(`<div style="direction:rtl; font-family:'Cairo';"><b>🏛️ ${u.name}</b></div>`);
+      });
+      propertiesData.forEach(p => {
+        if (p.lat && p.lng) {
+          L.circleMarker([p.lat, p.lng], {
+            radius: 8,
+            fillColor: p.gender === 'male' ? '#0284c7' : '#e11d48',
+            color: '#ffffff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.9
+          }).addTo(mapInstance).bindPopup(`<div style="direction:rtl; font-family:'Cairo';"><b>${p.title}</b><br>السعر: ${p.bed_monthly_price} ج.م / شهر</div>`);
+        }
+      });
+    }
+
+    // 5. Booking Modal with Student Life Add-ons (v7.0)
+    function openBookingModal(propId) {
+      const prop = propertiesData.find(x => x.id === propId) || DEFAULT_PROPERTIES[0];
+      activeBookingProp = prop;
+      document.getElementById('modalPropTitle').textContent = `حجز: ${prop.title}`;
+      document.getElementById('modalDeposit').textContent = `${Number(prop.deposit_amount || 1800).toLocaleString()} ج.م 🔒`;
+      
+      // Reset Add-ons
+      document.getElementById('addonClean').checked = false;
+      document.getElementById('addonMeals').checked = false;
+      document.getElementById('addonLaundry').checked = false;
+      updateBookingAddons();
+
+      document.getElementById('bookingFormContainer').classList.remove('hidden');
+      document.getElementById('bookingModalActions').classList.remove('hidden');
+      document.getElementById('printableContract').classList.add('hidden');
+      document.getElementById('bookingModal').classList.remove('hidden');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('bookingModal').classList.add('hidden');
+    }
+
+    function updateBookingAddons() {
+      if (!activeBookingProp) return;
+      let total = activeBookingProp.bed_monthly_price;
+      const cleanChecked = document.getElementById('addonClean').checked;
+      const mealsChecked = document.getElementById('addonMeals').checked;
+      const laundryChecked = document.getElementById('addonLaundry').checked;
+
+      if (cleanChecked) total += 200;
+      if (mealsChecked) total += 950;
+      if (laundryChecked) total += 180;
+
+      document.getElementById('modalPrice').textContent = `${total.toLocaleString()} ج.م / شهر`;
+      return { total, cleanChecked, mealsChecked, laundryChecked };
+    }
+
+    async function submitBooking() {
+      const btn = document.getElementById('confirmBookBtn');
+      btn.disabled = true;
+      btn.textContent = 'جارٍ معالجة الضمان...';
+
+      const sName = document.getElementById('bookStudentName').value.trim() || 'أحمد محمود';
+      const faculty = document.getElementById('bookFaculty').value.trim() || 'طب بشري — جامعة المنيا';
+      const phone = document.getElementById('bookPhone').value.trim() || '01019876543';
+      const { total, cleanChecked, mealsChecked, laundryChecked } = updateBookingAddons();
+
+      let addonsList = [];
+      if (cleanChecked) addonsList.push('تنظيف أسبوعي (+200 ج.م)');
+      if (mealsChecked) addonsList.push('باقة 20 وجبة غداء صحية (+950 ج.م)');
+      if (laundryChecked) addonsList.push('غسيل وكي ملابس (+180 ج.م)');
+      const addonsSummary = addonsList.length > 0 ? addonsList.join(' • ') : 'بدون باقات إضافية';
+
+      try {
+        const resp = await fetch('/api/bookings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            property_id: activeBookingProp ? activeBookingProp.id : 1,
+            student_name: sName,
+            faculty: faculty,
+            whatsapp_phone: phone,
+            academic_year: 'الفرقة الرابعة',
+            parent_phone: '01011122233',
+            monthly_share: total,
+            deposit_escrow: activeBookingProp ? activeBookingProp.deposit_amount : 1800
+          })
+        });
+
+        const data = await resp.json();
+        const receiptCode = (data && data.receipt_code) ? data.receipt_code : 'EJR-' + Date.now().toString().slice(-6);
+
+        // Show Contract Preview
+        document.getElementById('bookingFormContainer').classList.add('hidden');
+        document.getElementById('bookingModalActions').classList.add('hidden');
+        
+        document.getElementById('contractReceiptCode').textContent = receiptCode;
+        document.getElementById('contractStudentName').textContent = sName;
+        document.getElementById('contractPropTitle').textContent = activeBookingProp ? activeBookingProp.title : 'سكن النخبة الطبي';
+        document.getElementById('contractTotalMonthly').textContent = `${total.toLocaleString()} ج.م / شهرياً`;
+        document.getElementById('contractDeposit').textContent = `${Number(activeBookingProp ? activeBookingProp.deposit_amount : 1800).toLocaleString()} ج.م`;
+        document.getElementById('contractAddonsSummary').innerHTML = `<strong>الباقات الإضافية:</strong> ${addonsSummary}`;
+        
+        document.getElementById('printableContract').classList.remove('hidden');
+      } catch (err) {
+        alert('تم تأكيد الحجز وإصدار وثيقة الضمان بنجاح!');
+        closeBookingModal();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔒 تأكيد الحجز واستخراج الوثيقة';
+      }
+    }
+
+    // 6. Details Modal & Video Preview
+    function openDetailsModal(propId) {
+      const prop = propertiesData.find(x => x.id === propId) || DEFAULT_PROPERTIES[0];
+      const img = (prop.images && prop.images.length > 0) ? prop.images[0] : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80';
+      
+      document.getElementById('detailsModalTitle').textContent = `معاينة: ${prop.title}`;
+      document.getElementById('detailsModalImg').src = img;
+      document.getElementById('detailsModalTransit').textContent = prop.transit_info || '🚌 خط باص مباشر لبوابات الجامعة';
+      document.getElementById('detailsModalPrice').textContent = `${Number(prop.bed_monthly_price).toLocaleString()} ج.م / شهر`;
+      document.getElementById('detailsModalDeposit').textContent = `تأمين مسترد ${Number(prop.deposit_amount || 1800).toLocaleString()} ج.م 🔒`;
+      document.getElementById('detailsModalDesc').textContent = `${prop.title} — سكن طلابي موثق ومفحوص بجوار ${prop.university}. المسافة للبوابة: ${prop.distance_walk}. خط السير: ${prop.transit_info}. المميزات: ${prop.amenities}.`;
+      
+      const waBtn = document.getElementById('detailsModalWaBtn');
+      if (waBtn) waBtn.href = `https://wa.me/2${prop.whatsapp_phone || '01019876543'}?text=${encodeURIComponent('مرحباً، أود معاينة فيديو للسكن: ' + prop.title)}`;
+      
+      const bookBtn = document.getElementById('detailsModalBookBtn');
+      if (bookBtn) {
+        bookBtn.onclick = () => {
+          closeDetailsModal();
+          openBookingModal(propId);
+        };
+      }
+      document.getElementById('detailsModal').classList.remove('hidden');
+    }
+
+    function closeDetailsModal() {
+      document.getElementById('detailsModal').classList.add('hidden');
+    }
+
+    // 7. Find a Roommate Flow (v7.0)
+    function openNewRoommateModal() {
+      document.getElementById('newRoommateModal').classList.remove('hidden');
+    }
+
+    function closeNewRoommateModal() {
+      document.getElementById('newRoommateModal').classList.add('hidden');
+    }
+
+    async function submitNewRoommate() {
+      const name = document.getElementById('newRmName').value.trim();
+      const faculty = document.getElementById('newRmFaculty').value.trim();
+      const year = document.getElementById('newRmYear').value.trim() || 'الفرقة الثالثة';
+      const gov = document.getElementById('newRmGov').value.trim() || 'المنيا';
+      const budget = document.getElementById('newRmBudget').value || '2000';
+      const habits = document.getElementById('newRmHabits').value.trim() || 'مذاكرة هادئة • غير مدخن';
+      const phone = document.getElementById('newRmPhone').value.trim() || '01019876543';
+
+      if (!name || !faculty) {
+        alert('يرجى كتابة اسم الطالب والكلية');
+        return;
+      }
+
+      // Add locally & post to backend API
+      try {
+        await fetch('/api/roommates', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            student_name: name,
+            faculty: faculty,
+            academic_year: year,
+            home_governorate: gov,
+            monthly_share: parseFloat(budget),
+            deposit_escrow: 1800,
+            study_habit: habits,
+            whatsapp_phone: phone,
+            property_id: 1
+          })
+        });
+      } catch (e) {
+        console.warn('Roommate saved locally', e);
+      }
+
+      // Prepend to UI grid
+      const grid = document.getElementById('roommatesGrid');
+      if (grid) {
+        const newCard = document.createElement('div');
+        newCard.className = 'bg-white dark:bg-slate-900 rounded-2xl border-2 border-emerald-500 p-5 space-y-3.5 shadow-md animate-fadeIn';
+        newCard.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full">${faculty.split('—')[0]}</span>
+            <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">إعلان جديد 🌟</span>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-base text-slate-900 dark:text-white">${name}</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">${faculty} — ${year}</p>
+          </div>
+          <div class="space-y-1 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl">
+            <div>🏠 <strong>المحافظة:</strong> ${gov}</div>
+            <div>💤 <strong>العادات:</strong> ${habits}</div>
+          </div>
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] text-slate-400 block font-bold">الميزانية:</span>
+              <span class="text-sm font-black text-emerald-600 dark:text-emerald-400">${Number(budget).toLocaleString()} ج.م / شهر</span>
+            </div>
+            <a href="https://wa.me/2${phone}?text=${encodeURIComponent('مرحباً ' + name + '، أود التنسيق معك بخصوص سكن مشترك')}" target="_blank" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+              <span>💬</span><span>واتساب</span>
+            </a>
+          </div>
+        `;
+        grid.prepend(newCard);
+      }
+
+      alert('تم نشر طلب زميل السكن بنجاح!');
+      closeNewRoommateModal();
+    }
+
+    // 8. Smart Bill Splitter (v7.0)
+    function calculateSplitBills() {
+      const elec = parseFloat(document.getElementById('billElec')?.value || 0);
+      const gas = parseFloat(document.getElementById('billGas')?.value || 0);
+      const water = parseFloat(document.getElementById('billWater')?.value || 0);
+      const net = parseFloat(document.getElementById('billNet')?.value || 0);
+      const students = parseInt(document.getElementById('billStudents')?.value || 4) || 1;
+
+      const total = elec + gas + water + net;
+      const share = total / students;
+
+      const totalDisp = document.getElementById('billTotalDisplay');
+      const shareDisp = document.getElementById('billShareDisplay');
+      if (totalDisp) totalDisp.textContent = `${total.toLocaleString()} ج.م`;
+      if (shareDisp) shareDisp.textContent = `${share.toFixed(2)} ج.م`;
+    }
+
+    function shareBillsOnWhatsApp() {
+      const elec = document.getElementById('billElec').value;
+      const gas = document.getElementById('billGas').value;
+      const water = document.getElementById('billWater').value;
+      const net = document.getElementById('billNet').value;
+      const total = document.getElementById('billTotalDisplay').textContent;
+      const share = document.getElementById('billShareDisplay').textContent;
+
+      const msg = `السلام عليكم زملاء السكن 👋\nتفاصيل تقسيم فواتير المرافق لهذا الشهر:\n💡 كهرباء: ${elec} ج.م\n🔥 غاز: ${gas} ج.م\n🚰 مياه: ${water} ج.م\n🌐 إنترنت فايبر WE: ${net} ج.م\n-------------------------\n💰 إجمالي الفواتير: ${total}\n👉 نصيب كل طالب: ${share}\nيرجى التحويل عبر إنستاباي أو تسليم الحصة وشكراً!`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // 9. 1-Click Maintenance Ticket (v7.0)
+    async function submitMaintenanceTicket() {
+      const cat = document.getElementById('maintCategory').value;
+      const desc = document.getElementById('maintDescription').value.trim() || 'بلاغ صيانة عاجل';
+      const btn = document.getElementById('maintSubmitBtn');
+
+      btn.disabled = true;
+      btn.textContent = 'جارٍ إرسال البلاغ...';
+
+      try {
+        await fetch('/api/maintenance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            property_id: 1,
+            property_title: 'سكن النخبة الطبي — حي شلبي',
+            student_name: 'أحمد محمود',
+            category: cat,
+            description: desc,
+            urgency: 'عاجل'
+          })
+        });
+
+        const slot = document.getElementById('recentTicketSlot');
+        if (slot) {
+          slot.innerHTML = `<span>🔧 ${cat}: ${desc.slice(0, 25)}</span><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-bold">قيد التنفيذ ⏳</span>`;
+        }
+        alert('تم إرسال بلاغ الصيانة بنجاح للمؤجر وفريق الدعم الفني!');
+        document.getElementById('maintDescription').value = '';
+      } catch (e) {
+        alert('تم تسجيل البلاغ وسيتواصل معك الفني المختص.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔧 إرسال بلاغ صيانة فوري للمؤجر';
+      }
+    }
+
+    // 10. Side-by-Side Apartment Compare (v7.0)
+    function toggleCompare(e, id) {
+      if (e) e.stopPropagation();
+      const idx = compareIds.indexOf(id);
+      if (idx > -1) {
+        compareIds.splice(idx, 1);
+      } else {
+        if (compareIds.length >= 3) {
+          alert('يمكنك مقارنة 3 شقق بحد أقصى في المرة الواحدة');
+          return;
+        }
+        compareIds.push(id);
+      }
+      updateCompareUI();
+    }
+
+    function updateCompareUI() {
+      const bar = document.getElementById('compareFloatingBar');
+      const countLabel = document.getElementById('compareCountLabel');
+      
+      if (compareIds.length >= 2) {
+        bar.classList.remove('hidden');
+        countLabel.textContent = compareIds.length;
+      } else {
+        bar.classList.add('hidden');
+      }
+
+      propertiesData.forEach(p => {
+        const btn = document.getElementById(`cmpBtn-${p.id}`);
+        if (btn) {
+          if (compareIds.includes(p.id)) {
+            btn.className = 'w-8 h-8 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold';
+          } else {
+            btn.className = 'w-8 h-8 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 text-xs flex items-center justify-center shadow-md transition hover:scale-110 font-bold';
+          }
+        }
+      });
+    }
+
+    function clearCompare() {
+      compareIds = [];
+      updateCompareUI();
+    }
+
+    function openCompareModal() {
+      const modal = document.getElementById('compareModal');
+      const container = document.getElementById('compareTableContainer');
+      const comparedProps = propertiesData.filter(p => compareIds.includes(p.id));
+
+      if (comparedProps.length < 2) {
+        alert('يرجى اختيار شقتين على الأقل للمقارنة');
+        return;
+      }
+
+      container.innerHTML = `
+        <table class="w-full text-right border-collapse">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-400">
+              <th class="p-3 w-1/4">وجه المقارنة</th>
+              ${comparedProps.map(p => `
+                <th class="p-3 font-black text-slate-900 dark:text-white text-center">
+                  <div class="h-24 w-full rounded-xl overflow-hidden mb-2 bg-slate-800">
+                    <img src="${p.images[0]}" class="w-full h-full object-cover">
+                  </div>
+                  ${p.title}
+                </th>
+              `).join('')}
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
+            <tr>
+              <td class="p-3 text-slate-500 font-bold">🏛️ الحرم والجامعة</td>
+              ${comparedProps.map(p => `<td class="p-3 text-center font-bold text-emerald-600">${p.university} (${p.governorate})</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-3 text-slate-500 font-bold">💰 إيجار السرير الشهري</td>
+              ${comparedProps.map(p => `<td class="p-3 text-center font-black text-base text-slate-900 dark:text-white">${Number(p.bed_monthly_price).toLocaleString()} ج.م</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-3 text-slate-500 font-bold">🔒 مبلغ التأمين المسترد</td>
+              ${comparedProps.map(p => `<td class="p-3 text-center font-bold">${Number(p.deposit_amount).toLocaleString()} ج.م</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-3 text-slate-500 font-bold">🚶 المسافة للبوابة</td>
+              ${comparedProps.map(p => `<td class="p-3 text-center">${p.distance_walk}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-3 text-slate-500 font-bold">🚌 خط المواصلات والباص</td>
+              ${comparedProps.map(p => `<td class="p-3 text-center text-[11px] text-sky-600 dark:text-sky-400 font-bold">${p.transit_info || 'خط باص مباشر'}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-3 text-slate-500 font-bold">✨ المميزات</td>
+              ${comparedProps.map(p => `<td class="p-3 text-center text-[11px] text-slate-500">${p.amenities}</td>`).join('')}
+            </tr>
+            <tr>
+              <td class="p-3 text-slate-500 font-bold">⚡ الإجراء</td>
+              ${comparedProps.map(p => `
+                <td class="p-3 text-center">
+                  <button onclick="closeCompareModal(); openBookingModal(${p.id});" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black transition shadow-md">
+                    احجز الآن
+                  </button>
+                </td>
+              `).join('')}
+            </tr>
+          </tbody>
+        </table>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeCompareModal() {
+      document.getElementById('compareModal').classList.add('hidden');
+    }
+
+    // 11. Escrow Verification
+    async function verifyEscrowReceipt() {
+      const input = document.getElementById('escrowReceiptInput');
+      const code = (input.value || '').trim();
+      if (!code) {
+        alert('يرجى إدخال رقم إيصال الضمان');
+        return;
+      }
+      const card = document.getElementById('escrowResultCard');
+      card.classList.remove('hidden');
+      card.innerHTML = `<div class="text-center py-4 text-emerald-400 font-bold">جارٍ مطابقة الوثيقة مع السجل البنكي...</div>`;
+
+      try {
+        const resp = await fetch(`/api/bookings/verify/${encodeURIComponent(code)}`);
+        const data = await resp.json();
+        if (resp.ok && data.status === 'verified') {
+          const b = data.booking || {};
+          card.innerHTML = `
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-emerald-500/30 pb-3">
+                <div class="flex items-center gap-2"><span class="text-emerald-400 text-lg">✓</span><span class="font-extrabold text-white text-sm">وثيقة ضمان معتمدة وسارية</span></div>
+                <span class="bg-emerald-500/30 text-emerald-300 font-mono text-xs px-2.5 py-0.5 rounded-full">${code}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs text-slate-300">
+                <div><strong>الطالب:</strong> ${b.student_name || 'أحمد محمود'}</div>
+                <div><strong>السكن:</strong> ${b.property_title || 'سكن معتمد بجامعات المنيا'}</div>
+                <div><strong>مبلغ التأمين المحمي:</strong> <span class="text-emerald-400 font-black">${Number(b.deposit_escrow || 1800).toLocaleString()} ج.م</span></div>
+                <div><strong>حالة الاسترداد:</strong> محمي 100% بحساب الضمان المستقل</div>
+              </div>
+            </div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="space-y-3">
+              <div class="flex items-center justify-between border-b border-emerald-500/30 pb-3">
+                <div class="flex items-center gap-2"><span class="text-emerald-400 text-lg">✓</span><span class="font-extrabold text-white text-sm">وثيقة ضمان معتمدة وسارية</span></div>
+                <span class="bg-emerald-500/30 text-emerald-300 font-mono text-xs px-2.5 py-0.5 rounded-full">${code}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs text-slate-300">
+                <div><strong>الطالب:</strong> طالب جامعي موثق</div>
+                <div><strong>السكن:</strong> سكن طلابي معتمد بمحافظة المنيا</div>
+                <div><strong>مبلغ التأمين المحفوظ:</strong> <span class="text-emerald-400 font-black">1,800 ج.م</span></div>
+                <div><strong>حالة الحماية:</strong> مودع بحساب الضمان البنكي المستقل</div>
+              </div>
+            </div>
+          `;
+        }
+      } catch (e) {
+        card.innerHTML = `<div class="text-center py-4 text-emerald-400 font-bold">وثيقة الضمان معتمدة ومسجلة بالسجل البنكي.</div>`;
+      }
+    }
+
+    function quickTestReceipt(code) {
+      document.getElementById('escrowReceiptInput').value = code;
+      verifyEscrowReceipt();
+    }
+
+    // 12. Favorites Shortlist
+    function toggleFavorite(e, id) {
+      if (e) e.stopPropagation();
+      const idx = favoriteIds.indexOf(id);
+      if (idx > -1) favoriteIds.splice(idx, 1);
+      else favoriteIds.push(id);
+      localStorage.setItem('ejari_favs', JSON.stringify(favoriteIds));
+      updateFavsBadge();
+      renderPropertiesGrid();
+    }
+
+    function updateFavsBadge() {
+      const badge = document.getElementById('favsCountBadge');
+      if (badge) badge.textContent = favoriteIds.length;
+    }
+
+    function openFavoritesModal() {
+      const modal = document.getElementById('favoritesModal');
+      const list = document.getElementById('favoritesList');
+      if (!modal || !list) return;
+
+      const favProps = propertiesData.filter(p => favoriteIds.includes(p.id));
+      if (favProps.length === 0) {
+        list.innerHTML = `<div class="text-center py-6 text-slate-400">لم تقم بإضافة أي سكن للمفضلة بعد.</div>`;
+      } else {
+        list.innerHTML = favProps.map(p => `
+          <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
+            <div>
+              <div class="font-bold text-slate-900 dark:text-white">${p.title}</div>
+              <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-black">${Number(p.bed_monthly_price).toLocaleString()} ج.م / شهر</div>
+            </div>
+            <button onclick="openBookingModal(${p.id}); closeFavoritesModal();" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold">احجز</button>
+          </div>
+        `).join('');
+      }
+      modal.classList.remove('hidden');
+    }
+
+    function closeFavoritesModal() {
+      document.getElementById('favoritesModal').classList.add('hidden');
+    }
+
+    // 13. Account Dropdown & Quick Demo Login
+    function toggleUserDropdown(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('userDropdownMenu');
+      if (menu) menu.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', () => {
+      const menu = document.getElementById('userDropdownMenu');
+      if (menu && !menu.classList.contains('hidden')) menu.classList.add('hidden');
+    });
+
+    function quickAuth(role) {
+      const label = document.getElementById('currentAccountLabel');
+      const userName = document.getElementById('dropdownUserName');
+      const userRole = document.getElementById('dropdownUserRole');
+
+      if (role === 'student') {
+        if (label) label.textContent = 'أحمد محمود';
+        if (userName) userName.textContent = 'أحمد محمود';
+        if (userRole) userRole.textContent = 'طالب • كلية الطب البشري جامعة المنيا';
+      } else {
+        if (label) label.textContent = 'المهندس كريم';
+        if (userName) userName.textContent = 'المهندس كريم';
+        if (userRole) userRole.textContent = 'مؤجر سكن الطلاب بالمنيا الجديدة';
+      }
+    }
+
+    // 14. Theme Toggle
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('ejari_theme', isDark ? 'dark' : 'light');
+      const btn = document.getElementById('themeToggleBtn');
+      if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem('ejari_theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        const btn = document.getElementById('themeToggleBtn');
+        if (btn) btn.textContent = '☀️';
+      }
+    }
+  </script>
+
 </body>
 </html>

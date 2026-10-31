@@ -1,5 +1,6 @@
 import json
 import os
+import time
 import sqlite3
 import secrets
 import hashlib
@@ -1256,6 +1257,13 @@ def list_properties(governorate=None, gender=None, university=None, max_rent=Non
             prop['images'] = unsplash_presets[(pid - 1) % len(unsplash_presets)]
 
         prop['whatsapp_phone'] = prop.get('whatsapp_phone') or prop.get('landlord_phone') or '01019876543'
+        # Minya Transit & Shuttle Guide (v7.0)
+        p_title = (prop.get('title') or '').lower()
+        p_uni = (prop.get('university') or '').lower()
+        if 'أهلية' in p_title or 'أهلية' in p_uni or 'دراية' in p_title or 'دراية' in p_uni or 'لوتس' in p_title or 'لوتس' in p_uni or 'الجديدة' in p_title:
+            prop['transit_info'] = '🚐 خط باص مباشر لبوابات الأهلية ودراية واللوتس (5 دقائق)'
+        else:
+            prop['transit_info'] = '🚌 دقيقتان لموقف سيرفيس الجامعة ومحطة باص المنيا الجديدة'
         prop['compatibility_score'] = calculate_roommate_compatibility(prop['roommates'], target_faculty)
 
     conn.close()
@@ -2342,6 +2350,57 @@ def api_utilities():
     rows = [dict(r) for r in cur.fetchall()]
     conn.close()
     return jsonify(rows)
+
+
+@app.route('/api/roommates', methods=['GET', 'POST'])
+def api_roommates():
+    conn = get_db()
+    cur = conn.cursor()
+    if request.method == 'GET':
+        prop_id = request.args.get('property_id')
+        if prop_id:
+            cur.execute('SELECT * FROM roommates WHERE property_id = ? ORDER BY id DESC', (prop_id,))
+        else:
+            cur.execute('SELECT * FROM roommates ORDER BY id DESC LIMIT 50')
+        rows = [dict(r) for r in cur.fetchall()]
+        conn.close()
+        return jsonify(rows)
+
+    # POST (Add roommate request / announcement)
+    body = request.get_json(silent=True) or {}
+    student_name = body.get('student_name', 'طالب جديد')
+    faculty = body.get('faculty', 'جامعة المنيا')
+    academic_year = body.get('academic_year', 'الفرقة الثالثة')
+    home_governorate = body.get('home_governorate', 'المنيا')
+    whatsapp_phone = body.get('whatsapp_phone', '01019876543')
+    parent_phone = body.get('parent_phone', '01011223344')
+    study_habit = body.get('study_habit', 'مذاكرة هادئة - غير مدخن')
+    monthly_share = float(body.get('monthly_share', 1850.0))
+    deposit_escrow = float(body.get('deposit_escrow', 1800.0))
+    property_id = int(body.get('property_id', 1))
+    receipt_code = body.get('receipt_code') or f"EJR-RM-{int(time.time())}"
+
+    cur.execute('''
+        INSERT INTO roommates (
+            property_id, student_name, faculty, academic_year, home_governorate,
+            whatsapp_phone, parent_phone, study_habit, monthly_share, deposit_escrow,
+            deposit_status, payment_status, last_payment_date, receipt_code
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), ?)
+    ''', (
+        property_id, student_name, faculty, academic_year, home_governorate,
+        whatsapp_phone, parent_phone, study_habit, monthly_share, deposit_escrow,
+        'escrow_secured', 'due', receipt_code
+    ))
+    new_id = cur.lastrowid
+    conn.commit()
+    conn.close()
+    return jsonify({
+        'status': 'created',
+        'id': new_id,
+        'student_name': student_name,
+        'receipt_code': receipt_code,
+        'message': 'تم تسجيل طلب رفيق السكن بنجاح'
+    }), 201
 
 
 @app.route('/api/maintenance', methods=['GET', 'POST'])

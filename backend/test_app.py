@@ -402,5 +402,41 @@ class EjariStudentsV31TestCase(unittest.TestCase):
             self.assertLessEqual(p['bed_monthly_price'], 1800)
 
 
+    def test_v7_roommate_ecosystem_and_transit(self):
+        """Test v7.0 Full Student Ecosystem - Transit info and Roommates API."""
+        client = ejari_students_app.app.test_client()
+
+        # 1. Verify transit_info exists in listed properties
+        props = ejari_students_app.list_properties()
+        self.assertGreaterEqual(len(props), 1)
+        for p in props:
+            self.assertIn('transit_info', p)
+            self.assertTrue(p['transit_info'].startswith('🚌') or p['transit_info'].startswith('🚐'))
+
+        # 2. Test GET /api/roommates
+        res_get = client.get('/api/roommates')
+        self.assertEqual(res_get.status_code, 200)
+        roommates_list = res_get.get_json()
+        self.assertIsInstance(roommates_list, list)
+
+        # 3. Test POST /api/roommates
+        res_post = client.post('/api/roommates', json={
+            'student_name': 'حسام كمال',
+            'faculty': 'كلية الهندسة — جامعة المنيا',
+            'academic_year': 'الفرقة الثالثة',
+            'home_governorate': 'المنوفية',
+            'whatsapp_phone': '01044556677',
+            'study_habit': 'مذاكرة جماعية هادئة - غير مدخن',
+            'monthly_share': 1950.0,
+            'deposit_escrow': 1900.0,
+            'property_id': 1
+        })
+        self.assertEqual(res_post.status_code, 201)
+        data_post = res_post.get_json()
+        self.assertEqual(data_post['status'], 'created')
+        self.assertEqual(data_post['student_name'], 'حسام كمال')
+        self.assertTrue('receipt_code' in data_post)
+
+
 if __name__ == '__main__':
     unittest.main()
