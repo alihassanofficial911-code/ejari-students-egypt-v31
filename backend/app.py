@@ -349,6 +349,7 @@ def init_db():
             landlord_phone TEXT NOT NULL,
             status TEXT NOT NULL DEFAULT 'available',
             images_json TEXT NOT NULL DEFAULT '[]',
+            images TEXT NOT NULL DEFAULT '[]',
             landlord_user_id INTEGER DEFAULT 2,
             lat REAL DEFAULT 30.0,
             lng REAL DEFAULT 31.0,
@@ -462,6 +463,7 @@ def init_db():
         ('properties', 'study_environment', "TEXT NOT NULL DEFAULT 'هادئ للمذاكرة - غير مدخنين'"),
         ('properties', 'is_verified_campus', "INTEGER NOT NULL DEFAULT 1"),
         ('properties', 'images_json', "TEXT NOT NULL DEFAULT '[]'"),
+        ('properties', 'images', "TEXT NOT NULL DEFAULT '[]'"),
         ('properties', 'landlord_user_id', "INTEGER DEFAULT 2"),
         ('properties', 'lat', "REAL DEFAULT 30.0"),
         ('properties', 'lng', "REAL DEFAULT 31.0"),
@@ -1059,6 +1061,24 @@ def update_property(property_id, data):
         lat, lng, gate_lat, gate_lng, gate_name, walk_minutes,
         property_id
     ))
+
+    # Update images if provided
+    raw_images = data.get('images') if 'images' in data else (data.get('images_json') if 'images_json' in data else None)
+    if raw_images is not None:
+        if isinstance(raw_images, str):
+            try:
+                images_list = json.loads(raw_images)
+            except Exception:
+                images_list = [s.strip() for s in raw_images.split(',') if s.strip()]
+        elif isinstance(raw_images, list):
+            images_list = raw_images
+        else:
+            images_list = []
+        images_json = json.dumps(images_list, ensure_ascii=False)
+        try:
+            cur.execute('UPDATE properties SET images_json = ?, images = ? WHERE id = ?', (images_json, images_json, property_id))
+        except Exception:
+            cur.execute('UPDATE properties SET images_json = ? WHERE id = ?', (images_json, property_id))
     conn.commit()
     conn.close()
     return {'status': 'updated', 'id': property_id, 'title': title, 'lat': lat, 'lng': lng}
@@ -1118,10 +1138,18 @@ def list_properties(governorate=None, gender=None, university=None, max_rent=Non
         cur.execute('SELECT * FROM utilities WHERE property_id = ?', (pid,))
         prop['utilities'] = [dict(u) for u in cur.fetchall()]
 
-        try:
-            prop['images'] = json.loads(prop.get('images_json') or '[]')
-        except Exception:
+        raw_imgs = prop.get('images') or prop.get('images_json') or '[]'
+        if isinstance(raw_imgs, list):
+            prop['images'] = raw_imgs
+        elif isinstance(raw_imgs, str):
+            try:
+                prop['images'] = json.loads(raw_imgs)
+            except Exception:
+                prop['images'] = [s.strip() for s in raw_imgs.split(',') if s.strip()]
+        else:
             prop['images'] = []
+        if not isinstance(prop['images'], list):
+            prop['images'] = [str(prop['images'])]
 
         prop['compatibility_score'] = calculate_roommate_compatibility(prop['roommates'], target_faculty)
 
@@ -1287,15 +1315,15 @@ def create_property(data, landlord_user_id=2):
             total_beds, available_beds, bed_monthly_price, total_monthly_rent,
             deposit_amount, study_environment, is_verified_campus,
             lease_duration, amenities, landlord_name, landlord_phone, status,
-            images_json, landlord_user_id,
+            images_json, images, landlord_user_id,
             lat, lng, gate_lat, gate_lng, gate_name, walk_minutes, rating_avg, reviews_count
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 4.9, 5)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 4.9, 5)
     ''', (
         title, governorate, university, region, distance_walk, gender,
         total_beds, available_beds, bed_price, total_rent,
         deposit, study_env, is_verified,
         lease_duration, amenities, landlord_name, landlord_phone, status,
-        images_json, landlord_user_id,
+        images_json, images_json, landlord_user_id,
         lat, lng, gate_lat, gate_lng, gate_name, walk_minutes
     ))
     new_id = cur.lastrowid
@@ -1851,7 +1879,18 @@ def api_property_single(property_id):
         conn.close()
         if not row:
             return jsonify({'status': 'error', 'message': 'غير موجود'}), 404
-        return jsonify(dict(row))
+        prop = dict(row)
+        raw_imgs = prop.get('images') or prop.get('images_json') or '[]'
+        if isinstance(raw_imgs, str):
+            try:
+                prop['images'] = json.loads(raw_imgs)
+            except Exception:
+                prop['images'] = [s.strip() for s in raw_imgs.split(',') if s.strip()]
+        elif isinstance(raw_imgs, list):
+            prop['images'] = raw_imgs
+        else:
+            prop['images'] = []
+        return jsonify(prop)
 
     if request.method == 'PUT':
         body = request.get_json(silent=True) or {}
@@ -1877,6 +1916,56 @@ def api_admin_login():
             'user': {'full_name': 'مدير منصة إيجاري المنيا', 'role': 'admin'}
         })
     return jsonify({'status': 'unauthorized', 'message': 'كلمة المرور غير صحيحة'}), 401
+
+
+# 3.4 Vercel-Compatible Image Upload API (v4.0)
+@app.route('/api/upload', methods=['POST'])
+def api_upload_image():
+    """
+    Accepts:
+    1. multipart/form-data with 'file' or 'image'
+    2. application/json with {"image": "data:image/... or base64...", "filename": "room.jpg"}
+    Returns a standardized base64 Data URI or URL suitable for SQLite persistence.
+    """
+    try:
+        # Check JSON Base64 payload
+        if request.is_json:
+            body = request.get_json(silent=True) or {}
+            raw_data = body.get('image') or body.get('data') or ''
+            if not raw_data:
+                return jsonify({'status': 'error', 'message': 'بيانات الصورة فارغة'}), 400
+            if raw_data.startswith('data:image'):
+                data_uri = raw_data
+            else:
+                data_uri = f"data:image/jpeg;base64,{raw_data}"
+            return jsonify({
+                'status': 'uploaded',
+                'url': data_uri,
+                'size_kb': round(len(data_uri) / 1024, 1)
+            })
+
+        # Check multipart upload
+        file = request.files.get('file') or request.files.get('image')
+        if not file or file.filename == '':
+            return jsonify({'status': 'error', 'message': 'لم يتم اختيار ملف'}), 400
+
+        file_bytes = file.read()
+        if len(file_bytes) > 6 * 1024 * 1024:
+            return jsonify({'status': 'error', 'message': 'حجم الملف يتجاوز الحد المسموح (6MB)'}), 400
+
+        import base64
+        mtype = file.mimetype or 'image/jpeg'
+        encoded = base64.b64encode(file_bytes).decode('ascii')
+        data_uri = f"data:{mtype};base64,{encoded}"
+
+        return jsonify({
+            'status': 'uploaded',
+            'url': data_uri,
+            'filename': file.filename,
+            'size_kb': round(len(file_bytes) / 1024, 1)
+        })
+    except Exception as exc:
+        return jsonify({'status': 'error', 'message': str(exc)}), 500
 
 # 3.3 Admin Dashboard Serving
 @app.route('/admin')

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة إيجاري لطلاب جامعات المنيا | سكن الطلاب المغتربين والوافدين — إصدار جامعات المنيا v3.5 - Map Fixes</title>
+  <title>منصة إيجاري لطلاب جامعات المنيا | سكن الطلاب المغتربين والوافدين — إصدار المنيا الشامل v4.0 - Advanced Filters & Image Upload</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -97,6 +97,22 @@
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
+    .filter-pill-active {
+      background-color: #0F4C5C !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .filter-pill-inactive {
+      color: #475569 !important;
+      background-color: transparent !important;
+    }
+    .dark .filter-pill-active {
+      background-color: #0D9488 !important;
+      color: #FFFFFF !important;
+    }
+    .dark .filter-pill-inactive {
+      color: #94A3B8 !important;
+    }
     .leaflet-popup-content-wrapper {
       border-radius: 16px;
       font-family: 'Cairo', sans-serif;
@@ -209,7 +225,7 @@
   <!-- Top Announcement Bar with Fast Demo Auth & Dark Mode -->
   <div class="bg-gradient-to-r from-[#0F4C5C] via-[#0D9488] to-[#0F4C5C] text-white text-xs py-2 px-4 shadow-sm flex flex-wrap items-center justify-between gap-2">
     <div class="flex items-center gap-2">
-      <span class="bg-[#E36414] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">🎓 إصدار جامعات المنيا v3.5 - Map Fixes</span>
+      <span class="bg-[#E36414] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">🎓 إصدار المنيا الشامل v4.0 - Advanced Filters & Image Upload</span>
       <span class="hidden sm:inline">سكن طلاب المنيا الموثق • جامعة المنيا • جامعة المنيا الأهلية • جامعة دراية • جامعة اللوتس • حماية التأمين بالضمان</span>
     </div>
 
@@ -248,7 +264,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-black text-[#0F4C5C] dark:text-emerald-400 tracking-tight">إيجاري طلاب المنيا</h1>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20">إصدار جامعات المنيا v3.5 - Map Fixes</span>
+            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20">إصدار المنيا الشامل v4.0 - Advanced Filters & Image Upload</span>
           </div>
           <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سكن الطلاب بجامعات المنيا الأربع (الحكومية، الأهلية، دراية، اللوتس) • فحص الحرم الجامعي • الضمان البنكي</p>
         </div>
@@ -352,7 +368,7 @@
           <div class="inline-flex flex-wrap items-center gap-2 bg-white/15 px-3.5 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20">
             <span>🇪🇬 سكن جامعي آمن وموثق 100% بمحافظة المنيا</span>
             <span>•</span>
-            <span>إصدار جامعات المنيا الكبرى v3.5 - Map Fixes</span>
+            <span>إصدار المنيا الشامل v4.0 — فلاتر متقدمة ورفع الصور الحقيقية</span>
           </div>
           
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black leading-snug">
@@ -440,9 +456,10 @@
       </div>
 
       <!-- STREAMLINED SMART FILTER BAR -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3.5">
+      <!-- ADVANCED SMART FILTER BAR (v4.0) -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         
-        <!-- Row 1: Governorate Pills -->
+        <!-- Row 1: Universities of Minya Pills -->
         <div class="space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
@@ -450,7 +467,7 @@
               <span>جامعات ومناطق محافظة المنيا:</span>
             </span>
             <button onclick="resetFilters()" class="text-xs text-[#0F4C5C] dark:text-emerald-400 hover:underline font-bold">
-              إعادة تعيين الفلاتر
+              إعادة تعيين جميع الفلاتر
             </button>
           </div>
           <div class="flex flex-wrap items-center gap-1.5" id="govPillsContainer">
@@ -472,54 +489,96 @@
           </div>
         </div>
 
-        <!-- Row 2: Secondary Controls (Gender, Study Env, Slider, Map Toggle) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+        <!-- Row 2: Housing Type & Room Type & Budget Controls (v4.0 Advanced Filters) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs items-center">
           
-          <!-- Gender Allocation (3 cols) -->
-          <div class="lg:col-span-3">
-            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">نوع السكن</label>
-            <select id="filterGender" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
-              <option value="all">الكل (شباب + طالبات)</option>
-              <option value="male">👨‍🎓 سكن طلاب ذكور (شباب)</option>
-              <option value="female">👩‍🎓 سكن طالبات إناث (مغتربات)</option>
-            </select>
+          <!-- Housing Type Pills (4 cols) -->
+          <div class="md:col-span-4 space-y-1">
+            <label class="block font-bold text-slate-700 dark:text-slate-300">نوع السكن:</label>
+            <div class="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl" id="genderPillsContainer">
+              <button type="button" onclick="selectGenderFilter('all')" data-gender="all" class="filter-pill-active flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-xs transition">
+                الكل
+              </button>
+              <button type="button" onclick="selectGenderFilter('male')" data-gender="male" class="filter-pill-inactive flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-xs transition">
+                👨‍🎓 سكن شباب
+              </button>
+              <button type="button" onclick="selectGenderFilter('female')" data-gender="female" class="filter-pill-inactive flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-xs transition">
+                👩‍🎓 سكن طالبات
+              </button>
+            </div>
           </div>
 
-          <!-- Study Environment (3 cols) -->
-          <div class="lg:col-span-3">
-            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">بيئة المذاكرة</label>
-            <select id="filterStudyEnv" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
-              <option value="all">كل البيئات</option>
-              <option value="هادئ">مذاكرة هادئة (كليات عليا)</option>
-              <option value="غير مدخنين">سكن غير مدخنين</option>
-              <option value="فندقي">مستوى فندقي فاخر</option>
-            </select>
+          <!-- Room Type Pills (4 cols) -->
+          <div class="md:col-span-4 space-y-1">
+            <label class="block font-bold text-slate-700 dark:text-slate-300">نوع الغرفة:</label>
+            <div class="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl" id="roomTypePillsContainer">
+              <button type="button" onclick="selectRoomTypeFilter('all')" data-room="all" class="filter-pill-active flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                الكل
+              </button>
+              <button type="button" onclick="selectRoomTypeFilter('1')" data-room="1" class="filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                فردي
+              </button>
+              <button type="button" onclick="selectRoomTypeFilter('2')" data-room="2" class="filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                زوجي
+              </button>
+              <button type="button" onclick="selectRoomTypeFilter('3')" data-room="3" class="filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                ثلاثي
+              </button>
+              <button type="button" onclick="selectRoomTypeFilter('4+')" data-room="4+" class="filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                4+ أسرة
+              </button>
+            </div>
           </div>
 
-          <!-- Max Price Slider (4 cols) -->
-          <div class="lg:col-span-4 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 space-y-1">
+          <!-- Quick Budget Range (4 cols) -->
+          <div class="md:col-span-4 space-y-1">
+            <label class="block font-bold text-slate-700 dark:text-slate-300">نطاق الميزانية:</label>
+            <div class="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl" id="budgetPillsContainer">
+              <button type="button" onclick="selectBudgetFilter('all')" data-budget="all" class="filter-pill-active flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                الكل
+              </button>
+              <button type="button" onclick="selectBudgetFilter('under1500')" data-budget="under1500" class="filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                &lt; 1500
+              </button>
+              <button type="button" onclick="selectBudgetFilter('1500-2500')" data-budget="1500-2500" class="filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                1500-2500
+              </button>
+              <button type="button" onclick="selectBudgetFilter('above2500')" data-budget="above2500" class="filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition">
+                &gt; 2500
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Row 3: Max Price Slider & Toggle Map -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+          
+          <!-- Max Price Slider (9 cols) -->
+          <div class="sm:col-span-9 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 space-y-1">
             <div class="flex items-center justify-between text-[11px] font-bold">
-              <span class="text-slate-600 dark:text-slate-400">الحد الأقصى لسعر السرير:</span>
+              <span class="text-slate-600 dark:text-slate-400">الحد الأقصى الدقيق لسعر السرير:</span>
               <span id="priceSliderValueLabel" class="font-black text-[#0F4C5C] dark:text-emerald-400">
-                حتى 4,000 ج.م / شهرياً
+                حتى 4,500 ج.م / شهرياً
               </span>
             </div>
             <div class="flex items-center gap-2">
               <span class="text-[10px] text-slate-400 font-bold">1,000</span>
-              <input type="range" id="filterPriceSlider" min="1000" max="4000" step="100" value="4000" oninput="onPriceSliderChange(this.value)" class="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#0F4C5C] dark:accent-emerald-500">
-              <span class="text-[10px] text-slate-400 font-bold">4,000</span>
+              <input type="range" id="filterPriceSlider" min="1000" max="4500" step="100" value="4500" oninput="onPriceSliderChange(this.value)" class="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#0F4C5C] dark:accent-emerald-500">
+              <span class="text-[10px] text-slate-400 font-bold">4,500+</span>
             </div>
           </div>
 
-          <!-- Toggle Map Button (2 cols) -->
-          <div class="lg:col-span-2 flex items-end">
-            <button id="toggleMapBtn" onclick="toggleMapVisibility()" class="w-full py-2 px-3 rounded-xl font-bold bg-[#0F4C5C]/10 hover:bg-[#0F4C5C]/20 text-[#0F4C5C] dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 dark:text-emerald-300 border border-[#0F4C5C]/20 dark:border-emerald-500/30 transition flex items-center justify-center gap-1.5">
+          <!-- Toggle Map Button (3 cols) -->
+          <div class="sm:col-span-3 flex items-end">
+            <button id="toggleMapBtn" onclick="toggleMapVisibility()" class="w-full py-2.5 px-3 rounded-xl font-bold bg-[#0F4C5C]/10 hover:bg-[#0F4C5C]/20 text-[#0F4C5C] dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 dark:text-emerald-300 border border-[#0F4C5C]/20 dark:border-emerald-500/30 transition flex items-center justify-center gap-1.5">
               <span>🗺️</span>
-              <span id="toggleMapBtnText">الخريطة</span>
+              <span id="toggleMapBtnText">الخريطة التفاعلية</span>
             </button>
           </div>
 
         </div>
+
       </div>
 
       <!-- APARTMENTS-FIRST SPLIT-VIEW WITH STICKY MAP (v3.3) -->
@@ -2777,6 +2836,83 @@ git push -u origin main</pre>
     // Interactive Governorate Pills & Slider Filters (v3.2)
     // =========================================================================
     let selectedGovernoratePill = 'all';
+    let selectedGenderPill = 'all';
+    let selectedBudgetPill = 'all';
+    let selectedRoomTypePill = 'all';
+
+    function renderSkeleton() {
+      const grid = document.getElementById('propertiesGrid');
+      if (!grid) return;
+      grid.innerHTML = Array(4).fill(0).map(() => `
+        <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-5 space-y-4 animate-pulse">
+          <div class="w-full h-48 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+          <div class="space-y-2">
+            <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+            <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+          </div>
+          <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div class="h-5 bg-slate-200 dark:bg-slate-800 rounded w-20"></div>
+            <div class="h-8 bg-slate-200 dark:bg-slate-800 rounded w-24"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function selectGenderFilter(gender) {
+      selectedGenderPill = gender;
+      updateFilterPillsUI();
+      applyFilters();
+    }
+
+    function selectRoomTypeFilter(room) {
+      selectedRoomTypePill = room;
+      updateFilterPillsUI();
+      applyFilters();
+    }
+
+    function selectBudgetFilter(budget) {
+      selectedBudgetPill = budget;
+      updateFilterPillsUI();
+      applyFilters();
+    }
+
+    function updateFilterPillsUI() {
+      // Gender pills
+      document.querySelectorAll('#genderPillsContainer button').forEach(b => {
+        b.className = (b.getAttribute('data-gender') === selectedGenderPill)
+          ? 'filter-pill-active flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-xs transition shadow-xs'
+          : 'filter-pill-inactive flex-1 py-1.5 px-2 rounded-lg font-bold text-center text-xs transition';
+      });
+
+      // Room type pills
+      document.querySelectorAll('#roomTypePillsContainer button').forEach(b => {
+        b.className = (b.getAttribute('data-room') === selectedRoomTypePill)
+          ? 'filter-pill-active flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition shadow-xs'
+          : 'filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition';
+      });
+
+      // Budget pills
+      document.querySelectorAll('#budgetPillsContainer button').forEach(b => {
+        b.className = (b.getAttribute('data-budget') === selectedBudgetPill)
+          ? 'filter-pill-active flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition shadow-xs'
+          : 'filter-pill-inactive flex-1 py-1.5 px-1.5 rounded-lg font-bold text-center text-[11px] transition';
+      });
+    }
+
+    function scrollToPropertiesList() {
+      const el = document.getElementById('propertiesGrid');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function scrollToMap() {
+      const el = document.getElementById('mainLeafletMap') || document.getElementById('stickyMapContainer');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        if (typeof isMapHidden !== 'undefined' && isMapHidden) {
+          toggleMapVisibility();
+        }
+      }
+    }
 
     function selectGovPill(gov) {
       selectedGovernoratePill = gov;
@@ -3067,6 +3203,7 @@ git push -u origin main</pre>
 
     // Live Data Fetch (v3.1)
     async function fetchInitialData() {
+      renderSkeleton();
       try {
         const [propsRes, statsRes, maintRes, utilRes, toursRes, revRes, notifRes] = await Promise.all([
           apiFetch('/api/properties?_t=' + Date.now()).then(r => r.json()),
@@ -3145,6 +3282,8 @@ git push -u origin main</pre>
       const grid = document.getElementById('propertiesGrid');
       const filtered = getFilteredProperties();
       document.getElementById('marketCount').textContent = filtered.length;
+      const mobBadge = document.getElementById('mobileCountBadge');
+      if (mobBadge) mobBadge.textContent = filtered.length;
 
       if (filtered.length === 0) {
         grid.innerHTML = `
@@ -3174,12 +3313,12 @@ git push -u origin main</pre>
         return `
           <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-md transition overflow-hidden flex flex-col justify-between">
             
-            <!-- Photo Gallery Switcher Area -->
-            <div class="relative w-full h-48 bg-slate-800 overflow-hidden group cursor-pointer" onclick="openLightbox('${activePhoto}', '${p.title}')">
-              <img id="propImg-${p.id}" src="${activePhoto}" alt="${p.title}" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
+            <!-- Photo Gallery Carousel Area (v4.0) -->
+            <div class="relative w-full h-52 bg-slate-900 overflow-hidden select-none group">
+              <img id="propImg-${p.id}" src="${activePhoto}" alt="${p.title}" class="w-full h-full object-cover transition-all duration-300 cursor-pointer" onclick="openLightbox('${activePhoto}', '${p.title}')">
               
               <!-- Badges over photo -->
-              <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+              <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 pointer-events-none">
                 <span class="text-[11px] font-extrabold px-3 py-1 rounded-full ${genderBadgeClass} shadow-md backdrop-blur-sm">
                   ${genderLabel}
                 </span>
@@ -3193,19 +3332,27 @@ git push -u origin main</pre>
                 ${isFav ? '❤️' : '🤍'}
               </button>
 
-              <!-- Gallery Nav Arrows if multi photos -->
+              <!-- Gallery Nav Arrows & Dots if multiple photos -->
               ${photos.length > 1 ? `
-                <button onclick="prevPhoto(event, ${p.id}, ${photos.length})" class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition z-20">
+                <button type="button" onclick="prevPhoto(event, ${p.id}, ${photos.length})" class="absolute right-2 top-1/2 -translate-y-1/2 bg-slate-900/70 hover:bg-slate-900 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs transition z-20 shadow-md backdrop-blur-xs">
                   ❮
                 </button>
-                <button onclick="nextPhoto(event, ${p.id}, ${photos.length})" class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/75 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition z-20">
+                <button type="button" onclick="nextPhoto(event, ${p.id}, ${photos.length})" class="absolute left-2 top-1/2 -translate-y-1/2 bg-slate-900/70 hover:bg-slate-900 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs transition z-20 shadow-md backdrop-blur-xs">
                   ❯
                 </button>
-                <div class="absolute bottom-2 left-3 bg-black/60 text-white text-[10px] font-mono px-2 py-0.5 rounded-full z-10 backdrop-blur-sm" id="propCounter-${p.id}">
+
+                <!-- Dot Indicators -->
+                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20 bg-slate-900/60 px-2 py-0.5 rounded-full backdrop-blur-xs pointer-events-none">
+                  ${photos.map((_, dotIdx) => `
+                    <span class="${dotIdx === currentIdx ? 'w-2 h-2 bg-white' : 'w-1.5 h-1.5 bg-white/40'} rounded-full transition-all"></span>
+                  `).join('')}
+                </div>
+
+                <div class="absolute bottom-2 left-3 bg-slate-900/70 text-white text-[10px] font-mono px-2 py-0.5 rounded-full z-10 backdrop-blur-sm" id="propCounter-${p.id}">
                   ${currentIdx + 1} / ${photos.length} 📸
                 </div>
               ` : `
-                <div class="absolute bottom-2 left-3 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full z-10 backdrop-blur-sm">
+                <div class="absolute bottom-2 left-3 bg-slate-900/70 text-white text-[10px] px-2 py-0.5 rounded-full z-10 backdrop-blur-sm">
                   صورة موثقة 📸
                 </div>
               `}
@@ -3324,8 +3471,6 @@ git push -u origin main</pre>
 
     function getFilteredProperties() {
       const uniFilter = document.getElementById('filterUniversity')?.value || 'all';
-      const genderFilter = document.getElementById('filterGender')?.value || 'all';
-      const rentFilter = document.getElementById('filterMaxRent')?.value || 'all';
       const envFilter = document.getElementById('filterStudyEnv')?.value || 'all';
       const availFilter = document.getElementById('filterAvailability')?.value || 'all';
       const sliderPrice = document.getElementById('filterPriceSlider')?.value;
@@ -3335,7 +3480,6 @@ git push -u origin main</pre>
       return sourceList.filter(p => {
         if (!p) return false;
 
-        // 1. Quick Governorate Pill Filter
         // 1. Minya Universities Pill Filter
         if (selectedGovernoratePill && selectedGovernoratePill !== 'all') {
           const matchGov = (p.governorate || '').includes(selectedGovernoratePill);
@@ -3345,29 +3489,41 @@ git push -u origin main</pre>
           if (!matchGov && !matchUni && !matchTitle && !matchAddr) return false;
         }
 
-        // 2. University Dropdown Filter (Null-safe)
+        // 2. University Dropdown Filter
         if (uniFilter !== 'all') {
           const uni = p.university || '';
           const gov = p.governorate || '';
           if (!uni.includes(uniFilter) && !gov.includes(uniFilter)) return false;
         }
 
-        // 3. Gender Filter
-        if (genderFilter !== 'all' && p.gender !== genderFilter) return false;
+        // 3. Housing Type / Gender Filter (v4.0)
+        if (selectedGenderPill !== 'all' && p.gender !== selectedGenderPill) return false;
 
-        // 4. Study Environment (Null-safe)
+        // 4. Room Type Filter (v4.0)
+        if (selectedRoomTypePill !== 'all') {
+          const beds = Number(p.total_beds || 4);
+          if (selectedRoomTypePill === '1' && beds !== 1) return false;
+          if (selectedRoomTypePill === '2' && beds !== 2) return false;
+          if (selectedRoomTypePill === '3' && beds !== 3) return false;
+          if (selectedRoomTypePill === '4+' && beds < 4) return false;
+        }
+
+        // 5. Budget Range Filter (v4.0)
+        const price = Number(p.bed_monthly_price || 0);
+        if (selectedBudgetPill === 'under1500' && price >= 1500) return false;
+        if (selectedBudgetPill === '1500-2500' && (price < 1500 || price > 2500)) return false;
+        if (selectedBudgetPill === 'above2500' && price <= 2500) return false;
+
+        // 6. Max Price Slider (Null-safe)
+        if (sliderPrice && price > Number(sliderPrice)) return false;
+
+        // 7. Study Environment (Null-safe)
         if (envFilter !== 'all') {
           const env = p.study_environment || '';
           if (!env.includes(envFilter)) return false;
         }
 
-        // 5. Max Rent Dropdown (Null-safe)
-        if (rentFilter !== 'all' && Number(p.bed_monthly_price || 0) > Number(rentFilter)) return false;
-
-        // 6. Max Price Slider (Null-safe)
-        if (sliderPrice && Number(p.bed_monthly_price || 0) > Number(sliderPrice)) return false;
-
-        // 7. Instant Availability (Null-safe)
+        // 8. Instant Availability (Null-safe)
         if (availFilter === 'available' && Number(p.available_beds || 0) <= 0) return false;
 
         return true;
@@ -3381,6 +3537,15 @@ git push -u origin main</pre>
 
     function resetFilters() {
       selectedGovernoratePill = 'all';
+      selectedGenderPill = 'all';
+      selectedBudgetPill = 'all';
+      selectedRoomTypePill = 'all';
+      const slider = document.getElementById('filterPriceSlider');
+      if (slider) {
+        slider.value = 4500;
+        document.getElementById('priceSliderValueLabel').textContent = 'حتى 4,500 ج.م / شهرياً';
+      }
+      updateFilterPillsUI();
       const pills = document.querySelectorAll('#govPillsContainer button');
       pills.forEach(btn => {
         if (btn.getAttribute('data-gov') === 'all') {
@@ -4644,6 +4809,20 @@ git push -u origin main</pre>
       <span>حسابي</span>
     </button>
   </nav>
+
+
+  <!-- Floating Mobile Bar for Quick Map & List Switching (v4.0) -->
+  <div class="sm:hidden fixed bottom-4 left-4 right-4 z-40 bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-2 shadow-2xl flex items-center justify-around text-xs font-bold border border-slate-700/60">
+    <button onclick="scrollToPropertiesList()" class="flex items-center gap-1.5 py-1.5 px-3 bg-white/10 hover:bg-white/20 rounded-xl transition">
+      <span>📋</span>
+      <span>عرض السكن</span>
+      <span id="mobileCountBadge" class="bg-[#E36414] text-white text-[10px] px-1.5 rounded-full font-black">0</span>
+    </button>
+    <button onclick="scrollToMap()" class="flex items-center gap-1.5 py-1.5 px-3 bg-[#0F4C5C] hover:bg-[#135f73] text-white rounded-xl transition shadow-md">
+      <span>🗺️</span>
+      <span>الخريطة التفاعلية</span>
+    </button>
+  </div>
 
 </body>
 </html>
