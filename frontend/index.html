@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة إيجاري لطلاب جامعات المنيا | سكن الطلاب المغتربين والوافدين — إصدار جامعات المنيا v3.4</title>
+  <title>منصة إيجاري لطلاب جامعات المنيا | سكن الطلاب المغتربين والوافدين — إصدار جامعات المنيا v3.5 - Map Fixes</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -209,7 +209,7 @@
   <!-- Top Announcement Bar with Fast Demo Auth & Dark Mode -->
   <div class="bg-gradient-to-r from-[#0F4C5C] via-[#0D9488] to-[#0F4C5C] text-white text-xs py-2 px-4 shadow-sm flex flex-wrap items-center justify-between gap-2">
     <div class="flex items-center gap-2">
-      <span class="bg-[#E36414] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">🎓 إصدار جامعات المنيا v3.4</span>
+      <span class="bg-[#E36414] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">🎓 إصدار جامعات المنيا v3.5 - Map Fixes</span>
       <span class="hidden sm:inline">سكن طلاب المنيا الموثق • جامعة المنيا • جامعة المنيا الأهلية • جامعة دراية • جامعة اللوتس • حماية التأمين بالضمان</span>
     </div>
 
@@ -248,7 +248,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-black text-[#0F4C5C] dark:text-emerald-400 tracking-tight">إيجاري طلاب المنيا</h1>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20">إصدار جامعات المنيا v3.4</span>
+            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20">إصدار جامعات المنيا v3.5 - Map Fixes</span>
           </div>
           <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سكن الطلاب بجامعات المنيا الأربع (الحكومية، الأهلية، دراية، اللوتس) • فحص الحرم الجامعي • الضمان البنكي</p>
         </div>
@@ -346,7 +346,7 @@
           <div class="inline-flex flex-wrap items-center gap-2 bg-white/15 px-3.5 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20">
             <span>🇪🇬 سكن جامعي آمن وموثق 100% بمحافظة المنيا</span>
             <span>•</span>
-            <span>إصدار جامعات المنيا الكبرى v3.4</span>
+            <span>إصدار جامعات المنيا الكبرى v3.5 - Map Fixes</span>
           </div>
           
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black leading-snug">
@@ -2143,6 +2143,7 @@ git push -u origin main</pre>
     // State management
         // Fast Fallback Seed Data (<100ms instant load for cold starts)
     // Fast Fallback Seed Data (<100ms instant load for Minya Universities)
+    // Fast Fallback Seed Data (<100ms instant load for Minya Universities v3.5)
     const DEFAULT_PROPERTIES_SEED = [
       {
         id: 1,
@@ -2166,11 +2167,11 @@ git push -u origin main</pre>
         status: "available",
         images: ["/uploads/minya_main_1.svg", "/uploads/minya_main_2.svg"],
         landlord_user_id: 2,
-        lat: 28.1120,
-        lng: 30.7485,
-        gate_lat: 28.1105,
-        gate_lng: 30.7495,
-        gate_name: "بوابة مجمع الكليات الطبية والعلوم — جامعة المنيا",
+        lat: 28.1174,
+        lng: 30.7508,
+        gate_lat: 28.1158,
+        gate_lng: 30.7525,
+        gate_name: "بوابة الجامعة الرئيسية ومجمع الكليات الطبية — جامعة المنيا",
         walk_minutes: 3,
         rating_avg: 4.9,
         reviews_count: 12,
@@ -2198,11 +2199,11 @@ git push -u origin main</pre>
         status: "available",
         images: ["/uploads/minya_ahleya_1.svg", "/uploads/minya_ahleya_2.svg"],
         landlord_user_id: 2,
-        lat: 28.0775,
-        lng: 30.8235,
-        gate_lat: 28.0755,
-        gate_lng: 30.8255,
-        gate_name: "بوابة الحرم الرئيسي — جامعة المنيا الأهلية",
+        lat: 28.0712,
+        lng: 30.8275,
+        gate_lat: 28.0694,
+        gate_lng: 30.8294,
+        gate_name: "بوابة الحرم الجامعي — جامعة المنيا الأهلية",
         walk_minutes: 4,
         rating_avg: 4.8,
         reviews_count: 9,
@@ -2230,10 +2231,10 @@ git push -u origin main</pre>
         status: "available",
         images: ["/uploads/deraya_1.svg", "/uploads/deraya_2.svg"],
         landlord_user_id: 2,
-        lat: 28.0815,
-        lng: 30.8190,
-        gate_lat: 28.0830,
-        gate_lng: 30.8210,
+        lat: 28.0785,
+        lng: 30.8226,
+        gate_lat: 28.0768,
+        gate_lng: 30.8242,
         gate_name: "بوابة كليات الصيدلة والعلاج الطبيعي — جامعة دراية Deraya",
         walk_minutes: 3,
         rating_avg: 5.0,
@@ -2262,10 +2263,10 @@ git push -u origin main</pre>
         status: "available",
         images: ["/uploads/lotus_1.svg", "/uploads/lotus_2.svg"],
         landlord_user_id: 2,
-        lat: 28.0690,
-        lng: 30.8320,
-        gate_lat: 28.0715,
-        gate_lng: 30.8350,
+        lat: 28.0638,
+        lng: 30.8362,
+        gate_lat: 28.0655,
+        gate_lng: 30.8385,
         gate_name: "بوابة الحرم الجامعي — جامعة اللوتس Lotus University",
         walk_minutes: 5,
         rating_avg: 4.8,
@@ -2294,10 +2295,10 @@ git push -u origin main</pre>
         status: "available",
         images: ["/uploads/minya_corniche_1.svg", "/uploads/minya_corniche_2.svg"],
         landlord_user_id: 2,
-        lat: 28.0980,
-        lng: 30.7550,
-        gate_lat: 28.1040,
-        gate_lng: 30.7510,
+        lat: 28.1120,
+        lng: 30.7555,
+        gate_lat: 28.1158,
+        gate_lng: 30.7525,
         gate_name: "بوابة الجامعة الرئيسية وكورنيش النيل — جامعة المنيا",
         walk_minutes: 5,
         rating_avg: 4.9,
@@ -2326,10 +2327,10 @@ git push -u origin main</pre>
         status: "available",
         images: ["/uploads/minya_girls_1.svg", "/uploads/minya_girls_2.svg"],
         landlord_user_id: 2,
-        lat: 28.1145,
-        lng: 30.7470,
-        gate_lat: 28.1110,
-        gate_lng: 30.7490,
+        lat: 28.1186,
+        lng: 30.7512,
+        gate_lat: 28.1158,
+        gate_lng: 30.7525,
         gate_name: "بوابة كليات الآداب والتربية — جامعة المنيا",
         walk_minutes: 4,
         rating_avg: 4.9,
@@ -2369,7 +2370,7 @@ git push -u origin main</pre>
         if (btnText) btnText.textContent = 'إخفاء الخريطة';
         setTimeout(() => {
           if (mapInstance) {
-            mapInstance.invalidateSize();
+            mapInstance.invalidateSize(); updateMapMarkers();
             updateMapMarkers();
           }
         }, 150);
@@ -2392,7 +2393,7 @@ git push -u origin main</pre>
           mapCol.scrollIntoView({ behavior: 'smooth' });
           setTimeout(() => {
             if (mapInstance) {
-              mapInstance.invalidateSize();
+              mapInstance.invalidateSize(); updateMapMarkers();
               updateMapMarkers();
             }
           }, 200);
@@ -2493,7 +2494,7 @@ git push -u origin main</pre>
 
       if (viewId === 'market') {
         setTimeout(() => {
-          if (mapInstance) mapInstance.invalidateSize();
+          if (mapInstance) mapInstance.invalidateSize(); updateMapMarkers();
         }, 200);
       }
       if (viewId === 'notifications') {
@@ -2784,15 +2785,24 @@ git push -u origin main</pre>
 
       applyFilters();
 
-      // Smooth FlyTo for Minya University Campuses
+      // Precision FlyTo for Minya Universities (v3.5)
       if (mapInstance) {
+        mapInstance.invalidateSize(); updateMapMarkers();
         const campusCoords = {
-          'جامعة المنيا': [28.1080, 30.7500],
-          'المنيا الأهلية': [28.0755, 30.8255],
-          'دراية': [28.0830, 30.8210],
-          'اللوتس': [28.0715, 30.8350],
-          'all': [28.0950, 30.7850]
+          'جامعة المنيا': [28.1158, 30.7525],
+          'المنيا الأهلية': [28.0694, 30.8294],
+          'دراية': [28.0768, 30.8242],
+          'اللوتس': [28.0655, 30.8385],
+          'all': [28.0900, 30.7900]
         };
+        const target = campusCoords[gov] || [28.0900, 30.7900];
+        const zoomLvl = (gov === 'all') ? 12 : 15;
+        mapInstance.flyTo(target, zoomLvl, {
+          duration: 1.5,
+          easeLinearity: 0.25
+        });
+      }
+    };
         const target = campusCoords[gov] || [28.0950, 30.7850];
         const zoomLvl = gov === 'all' ? 12 : 14;
         mapInstance.flyTo(target, zoomLvl, {
@@ -4241,12 +4251,12 @@ git push -u origin main</pre>
       const mapContainer = document.getElementById('campusMap');
       if (!mapContainer) return;
       if (mapInstance) {
-        mapInstance.invalidateSize();
+        mapInstance.invalidateSize(); updateMapMarkers();
         updateMapMarkers();
         return;
       }
 
-      mapInstance = L.map('campusMap').setView([28.0950, 30.7850], 12);
+      mapInstance = L.map('campusMap').setView([28.0900, 30.7900], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors | إيجاري طلاب مصر'
@@ -4349,9 +4359,12 @@ git push -u origin main</pre>
     }
 
     function resetMapView() {
-      if (mapInstance && propertiesData.length > 0) {
-        const bounds = propertiesData.map(p => [p.lat || 30.0, p.lng || 31.0]);
-        mapInstance.fitBounds(bounds, { padding: [40, 40] });
+      if (!mapInstance) return;
+      mapInstance.flyTo([28.0900, 30.7900], 12, { duration: 1.5 });
+      setTimeout(() => {
+        if (mapInstance) mapInstance.invalidateSize(); updateMapMarkers();
+      }, 200);
+    });
       }
     }
 

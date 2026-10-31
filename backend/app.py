@@ -536,8 +536,12 @@ def init_db():
         cur.execute("UPDATE users SET password_hash = ? WHERE phone = '01234567890'", (hash_password('admin123'),))
 
     # Seed Properties
-    cur.execute('SELECT COUNT(*) as cnt FROM properties')
-    if cur.fetchone()['cnt'] == 0:
+    cur.execute("SELECT COUNT(*) as cnt FROM properties WHERE gate_name LIKE '%المنيا%' OR gate_name LIKE '%دراية%' OR gate_name LIKE '%اللوتس%'")
+    minya_stat = cur.fetchone()
+    if minya_stat['cnt'] < 6:
+        cur.execute('DELETE FROM properties')
+        cur.execute('DELETE FROM reviews')
+        cur.execute('DELETE FROM video_tours')
         sample_properties = [
             (
                 'سكن النخبة الطبي — حي شلبي (أمام بوابة جامعة المنيا الحكومية)',
@@ -560,7 +564,7 @@ def init_db():
                 'available',
                 json.dumps(['/uploads/minya_main_1.svg', '/uploads/minya_main_2.svg'], ensure_ascii=False),
                 2,
-                28.1120, 30.7485, 28.1105, 30.7495, 'بوابة مجمع الكليات الطبية والعلوم — جامعة المنيا', 3, 4.9, 12
+                28.1174, 30.7508, 28.1158, 30.7525, 'بوابة الجامعة الرئيسية ومجمع الكليات الطبية — جامعة المنيا', 3, 4.9, 12
             ),
             (
                 'سكن الرواد الفندقي — المنيا الجديدة (بجوار جامعة المنيا الأهلية)',
@@ -583,7 +587,7 @@ def init_db():
                 'available',
                 json.dumps(['/uploads/minya_ahleya_1.svg', '/uploads/minya_ahleya_2.svg'], ensure_ascii=False),
                 2,
-                28.0775, 30.8235, 28.0755, 30.8255, 'بوابة الحرم الرئيسي — جامعة المنيا الأهلية', 4, 4.8, 9
+                28.0712, 30.8275, 28.0694, 30.8294, 'بوابة الحرم الجامعي — جامعة المنيا الأهلية', 4, 4.8, 9
             ),
             (
                 'إقامة الصفوة للطالبات — المنيا الجديدة (أمام جامعة دراية Deraya)',
@@ -606,7 +610,7 @@ def init_db():
                 'available',
                 json.dumps(['/uploads/deraya_1.svg', '/uploads/deraya_2.svg'], ensure_ascii=False),
                 2,
-                28.0815, 30.8190, 28.0830, 30.8210, 'بوابة كليات الصيدلة والعلاج الطبيعي — جامعة دراية Deraya', 3, 5.0, 14
+                28.0785, 30.8226, 28.0768, 30.8242, 'بوابة كليات الصيدلة والعلاج الطبيعي — جامعة دراية Deraya', 3, 5.0, 14
             ),
             (
                 'سكن اللوتس المتميز — المنيا الجديدة (قرب جامعة اللوتس Lotus University)',
@@ -629,7 +633,7 @@ def init_db():
                 'available',
                 json.dumps(['/uploads/lotus_1.svg', '/uploads/lotus_2.svg'], ensure_ascii=False),
                 2,
-                28.0690, 30.8320, 28.0715, 30.8350, 'بوابة الحرم الجامعي — جامعة اللوتس Lotus University', 5, 4.8, 7
+                28.0638, 30.8362, 28.0655, 30.8385, 'بوابة الحرم الجامعي — جامعة اللوتس Lotus University', 5, 4.8, 7
             ),
             (
                 'برج الكورنيش الجامعي — أرض سلطان وشارع طه حسين (جامعة المنيا)',
@@ -652,7 +656,7 @@ def init_db():
                 'available',
                 json.dumps(['/uploads/minya_corniche_1.svg', '/uploads/minya_corniche_2.svg'], ensure_ascii=False),
                 2,
-                28.0980, 30.7550, 28.1040, 30.7510, 'بوابة الجامعة الرئيسية وكورنيش النيل — جامعة المنيا', 5, 4.9, 11
+                28.1120, 30.7555, 28.1158, 30.7525, 'بوابة الجامعة الرئيسية وكورنيش النيل — جامعة المنيا', 5, 4.9, 11
             ),
             (
                 'سكن الياسمين للطالبات المغتربات — حي شلبي (جامعة المنيا)',
@@ -675,10 +679,9 @@ def init_db():
                 'available',
                 json.dumps(['/uploads/minya_girls_1.svg', '/uploads/minya_girls_2.svg'], ensure_ascii=False),
                 2,
-                28.1145, 30.7470, 28.1110, 30.7490, 'بوابة كليات الآداب والتربية — جامعة المنيا', 4, 4.9, 10
+                28.1186, 30.7512, 28.1158, 30.7525, 'بوابة كليات الآداب والتربية — جامعة المنيا', 4, 4.9, 10
             )
         ]
-
         cur.executemany('''
             INSERT INTO properties (
                 title, governorate, university, region, distance_walk, gender,
