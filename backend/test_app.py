@@ -357,7 +357,7 @@ class EjariStudentsV31TestCase(unittest.TestCase):
         self.assertEqual(data['escrow_status'], 'HELD_IN_ESCROW')
         self.assertEqual(data['receipt_code'], 'EJR-202610-101')
         self.assertEqual(data['student_name'], 'أحمد الشريف')
-        self.assertIn('الدقهلية', data['governorate'])
+        self.assertIn('المنيا', data['governorate'])
         self.assertIn('حساب الضمان البنكي', data['bank_escrow_guarantee'])
 
         # 2. Book a new student bed and verify its newly generated receipt code
@@ -391,10 +391,10 @@ class EjariStudentsV31TestCase(unittest.TestCase):
         self.assertFalse(data_inv['verified'])
 
         # 4. Filter properties by governorate and max_rent
-        gov_filtered = ejari_students_app.list_properties(governorate='الدقهلية')
+        gov_filtered = ejari_students_app.list_properties(governorate='المنيا')
         self.assertGreaterEqual(len(gov_filtered), 1)
         for p in gov_filtered:
-            self.assertIn('الدقهلية', p['governorate'])
+            self.assertIn('المنيا', p['governorate'])
 
         budget_filtered = ejari_students_app.list_properties(max_rent='1800')
         self.assertGreaterEqual(len(budget_filtered), 1)

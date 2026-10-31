@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <linearGradient id="grad_lotus_" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C2410C" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#431407" stop-opacity="0.98" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#grad_lotus_)" />
+  <circle cx="400" cy="210" r="130" fill="white" fill-opacity="0.05" />
+  <circle cx="680" cy="100" r="70" fill="white" fill-opacity="0.03" />
+  <rect x="50" y="50" width="700" height="400" rx="28" fill="none" stroke="white" stroke-opacity="0.18" stroke-width="2" />
+  <rect x="270" y="90" width="260" height="34" rx="17" fill="white" fill-opacity="0.15" stroke="white" stroke-opacity="0.25" />
+  <text x="400" y="113" font-family="Cairo, Arial, sans-serif" font-size="14" font-weight="bold" fill="#F8FAFC" text-anchor="middle">سكن شباب كليات طب وهندسة</text>
+  <text x="400" y="215" font-family="Cairo, Arial, sans-serif" font-size="26" font-weight="bold" fill="#FFFFFF" text-anchor="middle">سكن اللوتس المتميز — المنيا الجديدة</text>
+  <text x="400" y="265" font-family="Cairo, Arial, sans-serif" font-size="17" fill="#CBD5E1" text-anchor="middle">جامعة اللوتس Lotus University • هدوء للمذاكرة</text>
+  <rect x="300" y="320" width="200" height="42" rx="14" fill="#0D9488" />
+  <text x="400" y="347" font-family="Cairo, Arial, sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF" text-anchor="middle">منصة إيجاري طلاب المنيا v3.4</text>
+</svg>

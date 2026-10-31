@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة إيجاري طلاب مصر | Ejari Students Egypt — سكن الطلاب المغتربين والوافدين بالجامعات المصرية</title>
+  <title>منصة إيجاري لطلاب جامعات المنيا | سكن الطلاب المغتربين والوافدين — إصدار جامعات المنيا v3.4</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -25,13 +25,78 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Cairo', 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
       overflow-x: hidden;
       transition: background-color 0.25s ease, color 0.25s ease;
     }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(22px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(15, 76, 92, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(13, 148, 136, 0.45);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-float {
+      animation: floatSlow 6s ease-in-out infinite;
+    }
+
+    .stagger-1 { animation-delay: 0.04s; }
+    .stagger-2 { animation-delay: 0.08s; }
+    .stagger-3 { animation-delay: 0.12s; }
+    .stagger-4 { animation-delay: 0.16s; }
+    .stagger-5 { animation-delay: 0.20s; }
+    .stagger-6 { animation-delay: 0.24s; }
+
+    .property-card-interactive {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+      will-change: transform, box-shadow;
+    }
+    .property-card-interactive:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 16px 32px -8px rgba(15, 76, 92, 0.18), 0 4px 12px rgba(13, 148, 136, 0.12);
+      border-color: rgba(13, 148, 136, 0.45);
+    }
+    .dark .property-card-interactive:hover {
+      box-shadow: 0 16px 32px -8px rgba(16, 185, 129, 0.25);
+      border-color: rgba(16, 185, 129, 0.45);
+    }
+    .property-card-interactive:hover .prop-image {
+      transform: scale(1.06);
+    }
+    .prop-image {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     .leaflet-popup-content-wrapper {
       border-radius: 16px;
       font-family: 'Cairo', sans-serif;
@@ -144,8 +209,8 @@
   <!-- Top Announcement Bar with Fast Demo Auth & Dark Mode -->
   <div class="bg-gradient-to-r from-[#0F4C5C] via-[#0D9488] to-[#0F4C5C] text-white text-xs py-2 px-4 shadow-sm flex flex-wrap items-center justify-between gap-2">
     <div class="flex items-center gap-2">
-      <span class="bg-[#E36414] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">سكن موثق</span>
-      <span class="hidden sm:inline">سكن الطلاب المغتربين والوافدين • بوابات الجامعات المصرية • حماية التأمين بالضمان • إشعارات أولياء الأمور WhatsApp</span>
+      <span class="bg-[#E36414] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">🎓 إصدار جامعات المنيا v3.4</span>
+      <span class="hidden sm:inline">سكن طلاب المنيا الموثق • جامعة المنيا • جامعة المنيا الأهلية • جامعة دراية • جامعة اللوتس • حماية التأمين بالضمان</span>
     </div>
 
     <div class="flex items-center gap-2">
@@ -182,10 +247,10 @@
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-black text-[#0F4C5C] dark:text-emerald-400 tracking-tight">إيجاري طلاب مصر</h1>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/20">منصة سكن الطلاب المعتمدة</span>
+            <h1 class="text-xl font-black text-[#0F4C5C] dark:text-emerald-400 tracking-tight">إيجاري طلاب المنيا</h1>
+            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20">إصدار جامعات المنيا v3.4</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سوق وحجز سكن الطلاب المغتربين والوافدين • حماية التأمين بالضمان • معاينات فيديو مباشرة</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سكن الطلاب بجامعات المنيا الأربع (الحكومية، الأهلية، دراية، اللوتس) • فحص الحرم الجامعي • الضمان البنكي</p>
         </div>
       </div>
 
@@ -275,25 +340,48 @@
     <!-- VIEW 1: MARKETPLACE (v3.3 Streamlined UX & Split-Map) -->
     <section id="view-market" class="space-y-5">
       
-      <!-- Marketplace Banner -->
-      <div class="bg-gradient-to-br from-[#0F4C5C] to-[#1E6B7B] dark:from-[#064E3B] dark:to-[#0F172A] rounded-3xl p-6 sm:p-7 text-white shadow-lg relative overflow-hidden">
-        <div class="relative z-10 max-w-3xl space-y-2.5">
-          <div class="inline-flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
-            <span>🇪🇬 سكن جامعي آمن وموثق 100%</span>
+      <!-- Marketplace Banner (Minya Universities Edition v3.4) -->
+      <div class="bg-gradient-to-br from-[#0F4C5C] via-[#125868] to-[#1E6B7B] dark:from-[#064E3B] dark:via-[#0c2f38] dark:to-[#0F172A] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden animate-fadeInUp">
+        <div class="relative z-10 max-w-3xl space-y-3">
+          <div class="inline-flex flex-wrap items-center gap-2 bg-white/15 px-3.5 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20">
+            <span>🇪🇬 سكن جامعي آمن وموثق 100% بمحافظة المنيا</span>
             <span>•</span>
-            <span>المنصورة، القاهرة، الإسكندرية، أسيوط، طنطا، 6 أكتوبر</span>
+            <span>إصدار جامعات المنيا الكبرى v3.4</span>
           </div>
-          <h2 class="text-2xl sm:text-3xl font-black leading-snug">ابحث عن سكن طلاب مفحوص بمندوب الجامعة مع معاينة فيديو مباشر</h2>
-          <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
-            احجز سريرك المستقل مع زملاء متوافقين دراسياً. تأمينك المالي محفوظ في حساب ضمان المنصة (Escrow) ويسترد بنهاية الإقامة. احجز معاينة فيديو مباشر قبل السفر من محافظتك.
+          
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black leading-snug">
+            منصة إيجاري لطلاب جامعات المنيا — سكن جامعي آمن وموثق 100%
+          </h2>
+          
+          <p class="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-2xl">
+            سكن الطلاب والطالبات المغتربين بالقرب من الحرم الجامعي: حي شلبي، أرض سلطان، والمنيا الجديدة. تأمينك المالي محفوظ في حساب ضمان المنصة (Escrow)، مع معاينات فيديو مرئية مباشرة عبر واتساب قبل السفر من محافظتك.
           </p>
-          <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-semibold">
-            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🛡️ توثيق وفحص ميداني معتمد</span>
-            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🔒 حماية مبلغ التأمين بالضمان البنكي</span>
-            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🎥 معاينة فيديو مباشر WhatsApp & Zoom</span>
+
+          <!-- 4 Universities Glowing Badges -->
+          <div class="flex flex-wrap items-center gap-2 pt-1 text-xs font-extrabold">
+            <span class="inline-flex items-center gap-1.5 bg-black/30 hover:bg-black/40 px-3 py-1.5 rounded-xl border border-white/15 backdrop-blur-sm transition">
+              <span>🎓</span> جامعة المنيا الحكومية
+            </span>
+            <span class="inline-flex items-center gap-1.5 bg-black/30 hover:bg-black/40 px-3 py-1.5 rounded-xl border border-white/15 backdrop-blur-sm transition">
+              <span>🏛️</span> جامعة المنيا الأهلية
+            </span>
+            <span class="inline-flex items-center gap-1.5 bg-black/30 hover:bg-black/40 px-3 py-1.5 rounded-xl border border-white/15 backdrop-blur-sm transition">
+              <span>💊</span> جامعة دراية Deraya
+            </span>
+            <span class="inline-flex items-center gap-1.5 bg-black/30 hover:bg-black/40 px-3 py-1.5 rounded-xl border border-white/15 backdrop-blur-sm transition">
+              <span>🪷</span> جامعة اللوتس Lotus
+            </span>
+          </div>
+
+          <!-- Key Guarantees -->
+          <div class="flex flex-wrap items-center gap-2.5 pt-1 text-[11px] font-semibold text-slate-200">
+            <span class="flex items-center gap-1 bg-white/10 px-2.5 py-1 rounded-lg">🛡️ فحص وتوثيق ميداني معتمد</span>
+            <span class="flex items-center gap-1 bg-white/10 px-2.5 py-1 rounded-lg">🔒 حماية مبلغ التأمين بالضمان البنكي</span>
+            <span class="flex items-center gap-1 bg-white/10 px-2.5 py-1 rounded-lg">🎥 معاينة فيديو مباشر مدتها 10 دقائق</span>
           </div>
         </div>
-        <div class="absolute -left-10 -bottom-10 opacity-10 text-9xl pointer-events-none select-none">
+
+        <div class="absolute -left-8 -bottom-8 opacity-15 text-9xl pointer-events-none select-none animate-float">
           🏛️
         </div>
       </div>
@@ -353,33 +441,27 @@
           <div class="flex items-center justify-between">
             <span class="text-xs font-black text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
               <span>🏛️</span>
-              <span>المحافظة والجامعة:</span>
+              <span>جامعات ومناطق محافظة المنيا:</span>
             </span>
             <button onclick="resetFilters()" class="text-xs text-[#0F4C5C] dark:text-emerald-400 hover:underline font-bold">
               إعادة تعيين الفلاتر
             </button>
           </div>
           <div class="flex flex-wrap items-center gap-1.5" id="govPillsContainer">
-            <button onclick="selectGovPill('all')" data-gov="all" class="gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition">
-              🏛️ كل المحافظات
+            <button onclick="selectGovPill('all')" data-gov="all" class="gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition shadow-sm">
+              🏛️ الكل (جامعات المنيا)
             </button>
-            <button onclick="selectGovPill('المنصورة')" data-gov="المنصورة" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              الدقهلية (جامعة المنصورة)
+            <button onclick="selectGovPill('جامعة المنيا')" data-gov="جامعة المنيا" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              🎓 جامعة المنيا (حي شلبي وأرض سلطان)
             </button>
-            <button onclick="selectGovPill('القاهرة')" data-gov="القاهرة" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              الجيزة والقاهرة (جامعة القاهرة وعين شمس)
+            <button onclick="selectGovPill('المنيا الأهلية')" data-gov="المنيا الأهلية" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              🏛️ جامعة المنيا الأهلية (المنيا الجديدة)
             </button>
-            <button onclick="selectGovPill('الإسكندرية')" data-gov="الإسكندرية" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              الإسكندرية (المجمع النظري)
+            <button onclick="selectGovPill('دراية')" data-gov="دراية" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              💊 جامعة دراية Deraya
             </button>
-            <button onclick="selectGovPill('أسيوط')" data-gov="أسيوط" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              أسيوط والمنيا
-            </button>
-            <button onclick="selectGovPill('طنطا')" data-gov="طنطا" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              الغربية (جامعة طنطا)
-            </button>
-            <button onclick="selectGovPill('أكتوبر')" data-gov="أكتوبر" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              6 أكتوبر وزايد (MUST & AUC)
+            <button onclick="selectGovPill('اللوتس')" data-gov="اللوتس" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
+              🪷 جامعة اللوتس Lotus
             </button>
           </div>
         </div>
@@ -452,9 +534,9 @@
 
           <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <!-- Card 1 (Pre-rendered Static) -->
-            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-md transition overflow-hidden flex flex-col justify-between">
+            <div class="property-card-interactive animate-fadeInUp stagger-${(idx % 6) + 1} bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
               <div class="relative w-full h-48 bg-slate-800 overflow-hidden group cursor-pointer" onclick="openLightbox('/uploads/mansoura_1.svg', 'سكن الفردوس للطلاب — خطوات من بوابة توشكى ومجمع الكليات الطبية')">
-                <img id="propImg-1" src="/uploads/mansoura_1.svg" alt="سكن الفردوس للطلاب" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
+                <img id="propImg-1" src="/uploads/mansoura_1.svg" alt="سكن الفردوس للطلاب" class="prop-image w-full h-full object-cover">
                 <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5">
                   <span class="text-[11px] font-extrabold px-3 py-1 rounded-full badge-male shadow-md backdrop-blur-sm">👨‍🎓 سكن طلاب ذكور</span>
                   <span class="text-[10px] font-black px-2.5 py-1 rounded-full bg-emerald-600 text-white shadow-md">✓ موثق بالحرم</span>
@@ -2060,198 +2142,199 @@ git push -u origin main</pre>
   <script>
     // State management
         // Fast Fallback Seed Data (<100ms instant load for cold starts)
+    // Fast Fallback Seed Data (<100ms instant load for Minya Universities)
     const DEFAULT_PROPERTIES_SEED = [
       {
         id: 1,
-        title: "سكن الفردوس للطلاب — خطوات من بوابة توشكى ومجمع الكليات الطبية",
-        governorate: "الدقهلية",
-        university: "جامعة المنصورة",
-        address_detail: "شارع جيهان، حي الجامعة",
-        distance_walk: "4 دقائق مشياً لبوابة توشكى وكلية الطب",
+        title: "سكن النخبة الطبي — حي شلبي (أمام بوابة جامعة المنيا الحكومية)",
+        governorate: "المنيا",
+        university: "جامعة المنيا",
+        address_detail: "حي شلبي، أمام مجمع الكليات الطبية",
+        distance_walk: "3 دقائق مشياً لبوابة طب وعلوم المنيا",
         gender: "male",
         total_beds: 4,
         available_beds: 1,
-        bed_monthly_price: 2200.0,
-        full_apt_monthly_price: 8800.0,
-        deposit_amount: 2000.0,
-        study_environment: "هادئ للمذاكرة - غير مدخنين",
+        bed_monthly_price: 1850.0,
+        full_apt_monthly_price: 7400.0,
+        deposit_amount: 1800.0,
+        study_environment: "هادئ للمذاكرة - كليات طب وعلوم",
         is_verified_campus: 1,
         lease_duration_type: "عام دراسي (9 شهور)",
-        amenities: "إنترنت فايبر WE Space فائق السرعة,مكاتب مذاكرة خاصة لكل طالب,غسالة أوتوماتيك,ميكروويف,تكييف صالة,سخان غاز,أمن ودخول ذكي",
-        landlord_name: "الحاج إبراهيم الدسوقي",
+        amenities: "إنترنت فايبر WE Space فائق السرعة,مكاتب مذاكرة خاصة لكل طالب,غسالة أوتوماتيك,تكييف,سخان غاز,أمن ودخول ذكي",
+        landlord_name: "الحاج محمود المنياوي",
         landlord_phone: "01019876543",
         status: "available",
-        images: ["/uploads/mansoura_1.svg", "/uploads/mansoura_2.svg"],
+        images: ["/uploads/minya_main_1.svg", "/uploads/minya_main_2.svg"],
         landlord_user_id: 2,
-        lat: 31.0421,
-        lng: 31.3582,
-        gate_lat: 31.0442,
-        gate_lng: 31.3540,
-        gate_name: "بوابة توشكى - مجمع الكليات الطبية بالمنصورة",
-        walk_minutes: 4,
+        lat: 28.1120,
+        lng: 30.7485,
+        gate_lat: 28.1105,
+        gate_lng: 30.7495,
+        gate_name: "بوابة مجمع الكليات الطبية والعلوم — جامعة المنيا",
+        walk_minutes: 3,
         rating_avg: 4.9,
-        reviews_count: 8,
-        compatibility_score: 96
+        reviews_count: 12,
+        compatibility_score: 97
       },
       {
         id: 2,
-        title: "سكن النيل للطالبات المغتربات — برج الأطباء بالدقي قرب المترو",
-        governorate: "الجيزة",
-        university: "جامعة القاهرة",
-        address_detail: "الدقي وبين السرايات",
-        distance_walk: "6 دقائق مشياً لمترو الدقي وبوابة تجارة جامعة القاهرة",
-        gender: "female",
-        total_beds: 3,
-        available_beds: 0,
-        bed_monthly_price: 2800.0,
-        full_apt_monthly_price: 8400.0,
-        deposit_amount: 2500.0,
-        study_environment: "هادئ للمذاكرة - طالبات كليات عليا",
-        is_verified_campus: 1,
-        lease_duration_type: "عام دراسي (9 شهور)",
-        amenities: "إنترنت منزلي فايبر غير محدود,مكاتب مذاكرة وإضاءة LED مريحة,أمن وحراسة نسائية 24 ساعة,غسالة أوتوماتيك,تكييف,شاشة سمارت",
-        landlord_name: "أستاذة ماجدة الشافعي",
-        landlord_phone: "01123450987",
-        status: "fully_booked",
-        images: ["/uploads/cairo_1.svg", "/uploads/cairo_2.svg"],
-        landlord_user_id: 2,
-        lat: 30.0385,
-        lng: 31.2115,
-        gate_lat: 30.0263,
-        gate_lng: 31.2090,
-        gate_name: "بوابة كلية التجارة ومترو جامعة القاهرة",
-        walk_minutes: 6,
-        rating_avg: 4.8,
-        reviews_count: 5,
-        compatibility_score: 94
-      },
-      {
-        id: 3,
-        title: "سكن إطلالة البحر للطالبات — بجوار المجمع النظري بسوتر والشاطبي",
-        governorate: "الإسكندرية",
-        university: "جامعة الإسكندرية",
-        address_detail: "سوتر والشاطبي، المجمع النظري",
-        distance_walk: "3 دقائق مشياً لكليات الآداب والحقوق والتجارة بسوتر",
-        gender: "female",
-        total_beds: 4,
-        available_beds: 2,
-        bed_monthly_price: 2400.0,
-        full_apt_monthly_price: 9600.0,
-        deposit_amount: 2000.0,
-        study_environment: "هادئ للمذاكرة - غير مدخنين",
-        is_verified_campus: 1,
-        lease_duration_type: "فصل دراسي (5 شهور)",
-        amenities: "موقع بحري هادئ,مكاتب مذاكرة ومكتبة مراجع,إنترنت فايبر سريع,غسالة أوتوماتيك,سخان غاز,مطبخ كامل مجهز",
-        landlord_name: "المهندس وليد السكندري",
-        landlord_phone: "01278901234",
-        status: "available",
-        images: ["/uploads/alex_1.svg", "/uploads/alex_2.svg"],
-        landlord_user_id: 2,
-        lat: 31.2085,
-        lng: 29.9142,
-        gate_lat: 31.2062,
-        gate_lng: 29.9180,
-        gate_name: "بوابة المجمع النظري بسوتر - جامعة الإسكندرية",
-        walk_minutes: 3,
-        rating_avg: 4.9,
-        reviews_count: 6,
-        compatibility_score: 98
-      },
-      {
-        id: 4,
-        title: "سكن الأكاديميين للطلاب — شارع المكتبات وحي فريال الهادئ",
-        governorate: "أسيوط",
-        university: "جامعة أسيوط",
-        address_detail: "حي فريال، شارع المكتبات",
-        distance_walk: "5 دقائق مشياً للبوابة البحرية لجامعة أسيوط",
-        gender: "male",
-        total_beds: 4,
-        available_beds: 1,
-        bed_monthly_price: 1600.0,
-        full_apt_monthly_price: 6400.0,
-        deposit_amount: 1500.0,
-        study_environment: "هادئ للمذاكرة - كليات طب وهندسة",
-        is_verified_campus: 1,
-        lease_duration_type: "عام دراسي (9 شهور)",
-        amenities: "جو هادئ مخصص لطلبة كليات القمة,إنترنت فايبر عالي السرعة,مكاتب خشب زان,غسالة فل أوتوماتيك,موزع مياه بارد وساخن",
-        landlord_name: "الدكتور رأفت الأسيوطي",
-        landlord_phone: "01065432109",
-        status: "available",
-        images: ["/uploads/assiut_1.svg", "/uploads/assiut_2.svg"],
-        landlord_user_id: 2,
-        lat: 27.1852,
-        lng: 31.1785,
-        gate_lat: 27.1895,
-        gate_lng: 31.1712,
-        gate_name: "البوابة البحرية - جامعة أسيوط",
-        walk_minutes: 5,
-        rating_avg: 4.7,
-        reviews_count: 4,
-        compatibility_score: 92
-      },
-      {
-        id: 5,
-        title: "سكن مجمع الكليات بسبرباي للطلاب — أمام البوابة الرئيسية",
-        governorate: "الغربية",
-        university: "جامعة طنطا",
-        address_detail: "سبرباي، شارع الكليات",
-        distance_walk: "4 دقائق مشياً لبوابة مجمع كليات سبرباي (هندسة وطب أسنان)",
+        title: "سكن الرواد الفندقي — المنيا الجديدة (بجوار جامعة المنيا الأهلية)",
+        governorate: "المنيا - المنيا الجديدة",
+        university: "جامعة المنيا الأهلية",
+        address_detail: "المنيا الجديدة، الحي الرابع أمام الجهاز",
+        distance_walk: "4 دقائق مشياً لبوابة جامعة المنيا الأهلية",
         gender: "male",
         total_beds: 4,
         available_beds: 2,
-        bed_monthly_price: 1800.0,
-        full_apt_monthly_price: 7200.0,
-        deposit_amount: 1800.0,
-        study_environment: "هادئ للمذاكرة - غير مدخنين",
-        is_verified_campus: 1,
-        lease_duration_type: "عقد سنوي (12 شهراً)",
-        amenities: "إنترنت WE Space فايبر,غرفة معيشة مزودة بشاشة,مكاتب للمذاكرة,غسالة أوتوماتيك,سخان غاز فوري,شرفة تهوية واسعة",
-        landlord_name: "الأستاذ كمال الطنطاوي",
-        landlord_phone: "01156789012",
-        status: "available",
-        images: ["/uploads/tanta_1.svg", "/uploads/tanta_2.svg"],
-        landlord_user_id: 2,
-        lat: 30.7682,
-        lng: 31.0125,
-        gate_lat: 30.7645,
-        gate_lng: 31.0090,
-        gate_name: "بوابة مجمع كليات سبرباي - جامعة طنطا",
-        walk_minutes: 4,
-        rating_avg: 4.8,
-        reviews_count: 7,
-        compatibility_score: 95
-      },
-      {
-        id: 6,
-        title: "فيلا سكن طالبات النخبة — الحي المتميز قرب MUST وجامعة 6 أكتوبر",
-        governorate: "الجيزة - 6 أكتوبر",
-        university: "جامعة 6 أكتوبر وMUST",
-        address_detail: "الحي المتميز، قرب محور 26 يوليو",
-        distance_walk: "7 دقائق مشياً لبوابة جامعة مصر للعلوم والتكنولوجيا (MUST)",
-        gender: "female",
-        total_beds: 4,
-        available_beds: 1,
-        bed_monthly_price: 3500.0,
-        full_apt_monthly_price: 14000.0,
-        deposit_amount: 3000.0,
+        bed_monthly_price: 2300.0,
+        full_apt_monthly_price: 9200.0,
+        deposit_amount: 2200.0,
         study_environment: "مستوى فندقي فاخر - بيئة هادئة",
         is_verified_campus: 1,
         lease_duration_type: "عام دراسي (9 شهور)",
-        amenities: "مستوى فندقي فاخر,تكييفات بكل الغرف,إنترنت فايبر فائق السرعة,مكتبات دراسية,غسالة وميكروويف,كاميرات مراقبة وأمن خاص",
-        landlord_name: "الدكتورة سناء المرشدي",
+        amenities: "غرف فندقية مجهزة,تكييفات سبليت,إنترنت فايبر عالي السرعة,مكاتب دراسية مضيئة,غسالة وميكروويف,خدمة نظافة دورية",
+        landlord_name: "المهندس كريم الشريف",
+        landlord_phone: "01123450987",
+        status: "available",
+        images: ["/uploads/minya_ahleya_1.svg", "/uploads/minya_ahleya_2.svg"],
+        landlord_user_id: 2,
+        lat: 28.0775,
+        lng: 30.8235,
+        gate_lat: 28.0755,
+        gate_lng: 30.8255,
+        gate_name: "بوابة الحرم الرئيسي — جامعة المنيا الأهلية",
+        walk_minutes: 4,
+        rating_avg: 4.8,
+        reviews_count: 9,
+        compatibility_score: 95
+      },
+      {
+        id: 3,
+        title: "إقامة الصفوة للطالبات — المنيا الجديدة (أمام جامعة دراية Deraya)",
+        governorate: "المنيا - المنيا الجديدة",
+        university: "جامعة دراية",
+        address_detail: "المنيا الجديدة، الحي السياحي، بجوار دراية",
+        distance_walk: "3 دقائق مشياً لبوابة صيدلة وعلاج طبيعي دراية",
+        gender: "female",
+        total_beds: 3,
+        available_beds: 1,
+        bed_monthly_price: 2500.0,
+        full_apt_monthly_price: 7500.0,
+        deposit_amount: 2500.0,
+        study_environment: "أمن 24 ساعة - هادئ جداً لطالبات الصيدلة",
+        is_verified_campus: 1,
+        lease_duration_type: "عام دراسي (9 شهور)",
+        amenities: "حراسة نسائية وكاميرات مراقبة 24 ساعة,مطبخ إيطالي كامل,تكييفات وإنترنت سريع,مكتبة دراسية خاصة,غسالة أوتوماتيك,سخان فوري",
+        landlord_name: "الدكتورة مرفت الصاوي",
+        landlord_phone: "01278901234",
+        status: "available",
+        images: ["/uploads/deraya_1.svg", "/uploads/deraya_2.svg"],
+        landlord_user_id: 2,
+        lat: 28.0815,
+        lng: 30.8190,
+        gate_lat: 28.0830,
+        gate_lng: 30.8210,
+        gate_name: "بوابة كليات الصيدلة والعلاج الطبيعي — جامعة دراية Deraya",
+        walk_minutes: 3,
+        rating_avg: 5.0,
+        reviews_count: 14,
+        compatibility_score: 99
+      },
+      {
+        id: 4,
+        title: "سكن اللوتس المتميز — المنيا الجديدة (قرب جامعة اللوتس Lotus University)",
+        governorate: "المنيا - المنيا الجديدة",
+        university: "جامعة اللوتس",
+        address_detail: "المنيا الجديدة، امتداد الحي المتميز",
+        distance_walk: "5 دقائق مشياً لبوابة جامعة اللوتس",
+        gender: "male",
+        total_beds: 4,
+        available_beds: 2,
+        bed_monthly_price: 2100.0,
+        full_apt_monthly_price: 8400.0,
+        deposit_amount: 2000.0,
+        study_environment: "هادئ للمذاكرة - كليات طب أسنان وهندسة",
+        is_verified_campus: 1,
+        lease_duration_type: "عام دراسي (9 شهور)",
+        amenities: "إنترنت فايبر غير محدود,مكاتب مذاكرة زان,شاشة سمارت بالصالة,تكييف,غسالة أوتوماتيك,أمن ودخول إلكتروني",
+        landlord_name: "الأستاذ حسام فتحي",
+        landlord_phone: "01065432109",
+        status: "available",
+        images: ["/uploads/lotus_1.svg", "/uploads/lotus_2.svg"],
+        landlord_user_id: 2,
+        lat: 28.0690,
+        lng: 30.8320,
+        gate_lat: 28.0715,
+        gate_lng: 30.8350,
+        gate_name: "بوابة الحرم الجامعي — جامعة اللوتس Lotus University",
+        walk_minutes: 5,
+        rating_avg: 4.8,
+        reviews_count: 7,
+        compatibility_score: 94
+      },
+      {
+        id: 5,
+        title: "برج الكورنيش الجامعي — أرض سلطان وشارع طه حسين (جامعة المنيا)",
+        governorate: "المنيا",
+        university: "جامعة المنيا",
+        address_detail: "أرض سلطان، تقاطع شارع طه حسين مع الكورنيش",
+        distance_walk: "خطوات لكورنيش النيل و5 دقائق لموقف الجامعة والتربية",
+        gender: "male",
+        total_beds: 4,
+        available_beds: 1,
+        bed_monthly_price: 1950.0,
+        full_apt_monthly_price: 7800.0,
+        deposit_amount: 1900.0,
+        study_environment: "إطلالة نيلية مفتوحة - غير مدخنين",
+        is_verified_campus: 1,
+        lease_duration_type: "فصل دراسي (5 شهور)",
+        amenities: "إطلالة على كورنيش النيل,إنترنت سريع,مكاتب دراسية مريحة,شرفة واسعة,سخان غاز,غسالة فول أوتوماتيك",
+        landlord_name: "المستشار عادل رضوان",
+        landlord_phone: "01156789012",
+        status: "available",
+        images: ["/uploads/minya_corniche_1.svg", "/uploads/minya_corniche_2.svg"],
+        landlord_user_id: 2,
+        lat: 28.0980,
+        lng: 30.7550,
+        gate_lat: 28.1040,
+        gate_lng: 30.7510,
+        gate_name: "بوابة الجامعة الرئيسية وكورنيش النيل — جامعة المنيا",
+        walk_minutes: 5,
+        rating_avg: 4.9,
+        reviews_count: 11,
+        compatibility_score: 96
+      },
+      {
+        id: 6,
+        title: "سكن الياسمين للطالبات المغتربات — حي شلبي (جامعة المنيا)",
+        governorate: "المنيا",
+        university: "جامعة المنيا",
+        address_detail: "حي شلبي، شارع المدارس الهادئ",
+        distance_walk: "4 دقائق مشياً لبوابة الآداب والتربية بالمنيا",
+        gender: "female",
+        total_beds: 4,
+        available_beds: 2,
+        bed_monthly_price: 1700.0,
+        full_apt_monthly_price: 6800.0,
+        deposit_amount: 1600.0,
+        study_environment: "سكن طالبات هادئ وموثق - إشراف نسائي",
+        is_verified_campus: 1,
+        lease_duration_type: "عقد سنوي (12 شهراً)",
+        amenities: "إشراف نسائي يومي,إنترنت فايبر,مطبخ متكامل مجهز,مكاتب إضاءة دافئة,غسالة ملابس,سخان غاز فوري",
+        landlord_name: "الحاجة أم أحمد البهنساوي",
         landlord_phone: "01099887766",
         status: "available",
-        images: ["/uploads/october_1.svg", "/uploads/october_2.svg"],
+        images: ["/uploads/minya_girls_1.svg", "/uploads/minya_girls_2.svg"],
         landlord_user_id: 2,
-        lat: 29.9740,
-        lng: 30.9520,
-        gate_lat: 29.9715,
-        gate_lng: 30.9565,
-        gate_name: "بوابة جامعة مصر للعلوم والتكنولوجيا (MUST)",
-        walk_minutes: 7,
-        rating_avg: 5.0,
-        reviews_count: 9,
-        compatibility_score: 99
+        lat: 28.1145,
+        lng: 30.7470,
+        gate_lat: 28.1110,
+        gate_lng: 30.7490,
+        gate_name: "بوابة كليات الآداب والتربية — جامعة المنيا",
+        walk_minutes: 4,
+        rating_avg: 4.9,
+        reviews_count: 10,
+        compatibility_score: 98
       }
     ];
 
@@ -2693,27 +2776,30 @@ git push -u origin main</pre>
       const pills = document.querySelectorAll('#govPillsContainer button');
       pills.forEach(btn => {
         if (btn.getAttribute('data-gov') === gov) {
-          btn.className = 'gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition';
+          btn.className = 'gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition shadow-md';
         } else {
           btn.className = 'gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition';
         }
       });
 
-      const uniSelect = document.getElementById('filterUniversity');
-      if (uniSelect) {
-        if (gov === 'all') {
-          uniSelect.value = 'all';
-        } else {
-          for (let opt of uniSelect.options) {
-            if (opt.value.includes(gov) || opt.text.includes(gov)) {
-              uniSelect.value = opt.value;
-              break;
-            }
-          }
-        }
-      }
-
       applyFilters();
+
+      // Smooth FlyTo for Minya University Campuses
+      if (mapInstance) {
+        const campusCoords = {
+          'جامعة المنيا': [28.1080, 30.7500],
+          'المنيا الأهلية': [28.0755, 30.8255],
+          'دراية': [28.0830, 30.8210],
+          'اللوتس': [28.0715, 30.8350],
+          'all': [28.0950, 30.7850]
+        };
+        const target = campusCoords[gov] || [28.0950, 30.7850];
+        const zoomLvl = gov === 'all' ? 12 : 14;
+        mapInstance.flyTo(target, zoomLvl, {
+          duration: 1.2,
+          easeLinearity: 0.25
+        });
+      }
     }
 
     function onPriceSliderChange(val) {
@@ -3056,7 +3142,7 @@ git push -u origin main</pre>
         return;
       }
 
-      grid.innerHTML = filtered.map(p => {
+      grid.innerHTML = filtered.map((p, idx) => {
         const isMale = p.gender === 'male';
         const genderBadgeClass = isMale ? 'badge-male' : 'badge-female';
         const genderLabel = isMale ? '👨‍🎓 سكن طلاب ذكور' : '👩‍🎓 سكن طالبات إناث';
@@ -3234,10 +3320,13 @@ git push -u origin main</pre>
         if (!p) return false;
 
         // 1. Quick Governorate Pill Filter
+        // 1. Minya Universities Pill Filter
         if (selectedGovernoratePill && selectedGovernoratePill !== 'all') {
           const matchGov = (p.governorate || '').includes(selectedGovernoratePill);
           const matchUni = (p.university || '').includes(selectedGovernoratePill);
-          if (!matchGov && !matchUni) return false;
+          const matchTitle = (p.title || '').includes(selectedGovernoratePill);
+          const matchAddr = (p.address_detail || '').includes(selectedGovernoratePill);
+          if (!matchGov && !matchUni && !matchTitle && !matchAddr) return false;
         }
 
         // 2. University Dropdown Filter (Null-safe)
@@ -4157,7 +4246,7 @@ git push -u origin main</pre>
         return;
       }
 
-      mapInstance = L.map('campusMap').setView([30.5, 31.2], 8);
+      mapInstance = L.map('campusMap').setView([28.0950, 30.7850], 12);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors | إيجاري طلاب مصر'
