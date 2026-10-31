@@ -1939,7 +1939,11 @@ def serve_uploads(filename):
 
 @app.route('/')
 def serve_index():
-    return send_from_directory(FRONTEND_DIR, 'index.html')
+    res = make_response(send_from_directory(FRONTEND_DIR, 'index.html'))
+    res.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
+    res.headers['Pragma'] = 'no-cache'
+    res.headers['Expires'] = '0'
+    return res
 
 
 @app.route('/<path:path>')
