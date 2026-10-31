@@ -464,6 +464,7 @@ def init_db():
         ('properties', 'is_verified_campus', "INTEGER NOT NULL DEFAULT 1"),
         ('properties', 'images_json', "TEXT NOT NULL DEFAULT '[]'"),
         ('properties', 'images', "TEXT NOT NULL DEFAULT '[]'"),
+        ('properties', 'whatsapp_phone', "TEXT DEFAULT ''"),
         ('properties', 'landlord_user_id', "INTEGER DEFAULT 2"),
         ('properties', 'lat', "REAL DEFAULT 30.0"),
         ('properties', 'lng', "REAL DEFAULT 31.0"),
@@ -1151,6 +1152,7 @@ def list_properties(governorate=None, gender=None, university=None, max_rent=Non
         if not isinstance(prop['images'], list):
             prop['images'] = [str(prop['images'])]
 
+        prop['whatsapp_phone'] = prop.get('whatsapp_phone') or prop.get('landlord_phone') or '01019876543'
         prop['compatibility_score'] = calculate_roommate_compatibility(prop['roommates'], target_faculty)
 
     conn.close()
@@ -2294,7 +2296,7 @@ def serve_static(path):
 def run_server(port=PORT):
     init_db()
     print(f'Ejari Students Egypt v3.2 Platform running on http://127.0.0.1:{port}')
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=True)
 
 
 if __name__ == '__main__':

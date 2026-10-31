@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة تحكم المشرف v4.0 — منصة إيجاري لطلاب جامعات المنيا</title>
+  <title>لوحة تحكم المشرف v4.1 — منصة إيجاري لطلاب جامعات المنيا</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -62,7 +62,7 @@
       <div class="w-16 h-16 bg-teal-50 text-teal-700 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-teal-200 text-3xl shadow-inner">
         🔒
       </div>
-      <h2 class="text-2xl font-black text-slate-900 mb-2">لوحة المشرف والإدارة v4.0</h2>
+      <h2 class="text-2xl font-black text-slate-900 mb-2">لوحة المشرف والإدارة v4.1</h2>
       <p class="text-sm text-slate-500 mb-6 leading-relaxed">
         يرجى إدخال كلمة مرور المشرف للوصول إلى أدوات إدارة سكن طلاب جامعات المنيا ورفع الصور وتعديل الخرائط.
       </p>
@@ -99,7 +99,7 @@
         <a href="/" class="hover:text-teal-700 font-bold flex items-center gap-1">
           <span>🏠 العودة للمنصة الرئيسية</span>
         </a>
-        <span class="text-slate-400">إيجاري المنيا v4.0</span>
+        <span class="text-slate-400">إيجاري المنيا v4.1</span>
       </div>
     </div>
   </div>
@@ -120,7 +120,7 @@
             <div class="flex items-center gap-2">
               <h1 class="text-lg font-black text-slate-900 leading-tight">لوحة تحكم المشرف — منصة إيجاري</h1>
               <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200">
-                إصدار v4.0 الشامل
+                إصدار v4.1 الشامل
               </span>
             </div>
             <p class="text-xs text-slate-500">رفع الصور الحقيقية، إدارة السكن، روابط خرائط جوجل، ومزامنة الإحداثيات</p>
@@ -222,7 +222,7 @@
           <div>
             <h2 id="formTitle" class="text-xl font-black flex items-center gap-2">
               <span>➕</span>
-              <span>إضافة سكن طلاب جديد بالمنيا (v4.0)</span>
+              <span>إضافة سكن طلاب جديد بالمنيا (v4.1)</span>
             </h2>
             <p id="formSubtitle" class="text-xs text-teal-200/80 mt-1">
               مقسم إلى خطوات منظمة: البيانات الأساسية، الموقع والخرائط، ورفع الصور الحقيقية
@@ -430,8 +430,9 @@
               </div>
 
               <div>
-                <label class="block text-xs font-black text-slate-700 mb-2">
-                  هاتف المالك / إشراف السكن (واتساب)
+                <label class="block text-xs font-black text-slate-700 mb-2 flex items-center gap-1.5">
+                  <span>هاتف المالك ورقم الواتساب للتواصل مع الطلاب (WhatsApp)</span>
+                  <span class="text-emerald-600 font-bold">💬 *</span>
                 </label>
                 <input 
                   type="text" 
@@ -543,7 +544,7 @@
             </div>
           </div>
 
-          <!-- ================= TAB 3: REAL PROPERTY IMAGES UPLOAD (v4.0) ================= -->
+          <!-- ================= TAB 3: REAL PROPERTY IMAGES UPLOAD (v4.1) ================= -->
           <div id="tabContent-images" class="hidden space-y-6">
             
             <!-- Upload Box (Drag and Drop / File Picker) -->
@@ -741,7 +742,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 mt-12">
       <div class="max-w-7xl mx-auto px-4 flex items-center justify-between flex-wrap gap-2">
-        <span>منصة إيجاري لطلاب جامعات مصر — الإصدار v4.0 الشامل</span>
+        <span>منصة إيجاري لطلاب جامعات مصر — الإصدار v4.1 الشامل</span>
         <span>نظام الإدارة السحابي المتكامل</span>
       </div>
     </footer>
@@ -835,7 +836,7 @@
           adminToken = data.token;
           localStorage.setItem('ejari_admin_token', adminToken);
           checkAuth();
-          showToast('تم تسجيل الدخول بنجاح! مرحباً بك في لوحة المشرف v4.0', 'success');
+          showToast('تم تسجيل الدخول بنجاح! مرحباً بك في لوحة المشرف v4.1', 'success');
         } else {
           errorMsg.textContent = data.message || 'كلمة المرور غير صحيحة';
           errorMsg.classList.remove('hidden');
@@ -975,7 +976,7 @@
       showToast('الرابط صالح، سيقوم السيرفر بتحليله واستخراج الإحداثيات عند الحفظ', 'info');
     }
 
-    // ================= IMAGE UPLOAD & GALLERY MANAGEMENT (v4.0) =================
+    // ================= IMAGE UPLOAD & GALLERY MANAGEMENT (v4.1) =================
     function handleDragOver(e) {
       e.preventDefault();
       document.getElementById('imageDropzone').classList.add('border-teal-600', 'bg-teal-100/60');
@@ -1280,6 +1281,7 @@
         deposit_amount: parseFloat(document.getElementById('propDeposit').value) || 2000,
         study_environment: document.getElementById('propStudyEnv').value.trim(),
         landlord_phone: document.getElementById('propPhone').value.trim(),
+        whatsapp_phone: document.getElementById('propPhone').value.trim(),
         maps_url: document.getElementById('propMapsUrl').value.trim(),
         images: currentUploadedImages
       };
@@ -1351,7 +1353,7 @@
         document.getElementById('propAvailableBeds').value = p.available_beds;
         document.getElementById('propDeposit').value = p.deposit_amount || 2000;
         document.getElementById('propStudyEnv').value = p.study_environment || '';
-        document.getElementById('propPhone').value = p.landlord_phone || '';
+        document.getElementById('propPhone').value = p.whatsapp_phone || p.landlord_phone || '';
         document.getElementById('propMapsUrl').value = `${p.lat}, ${p.lng}`;
 
         currentUploadedImages = Array.isArray(p.images) ? [...p.images] : [];
@@ -1383,7 +1385,7 @@
       document.getElementById('propId').value = '';
       currentUploadedImages = [];
       renderImageGallery();
-      document.getElementById('formTitle').innerHTML = '<span>➕</span><span>إضافة سكن طلاب جديد بالمنيا (v4.0)</span>';
+      document.getElementById('formTitle').innerHTML = '<span>➕</span><span>إضافة سكن طلاب جديد بالمنيا (v4.1)</span>';
       document.getElementById('formSubtitle').textContent = 'مقسم إلى خطوات منظمة: البيانات الأساسية، الموقع والخرائط، ورفع الصور الحقيقية';
       document.getElementById('editModeIndicator').classList.add('hidden');
       document.getElementById('editModeIndicator').classList.remove('flex');

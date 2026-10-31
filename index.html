@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة إيجاري لطلاب جامعات المنيا | سكن الطلاب المغتربين والوافدين — إصدار المنيا الشامل v4.0 - Advanced Filters & Image Upload</title>
+  <title>منصة إيجاري لطلاب جامعات المنيا | سكن الطلاب المغتربين والوافدين — إصدار المنيا الشامل v4.1 - Advanced Filters & Image Upload</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -225,7 +225,7 @@
   <!-- Top Announcement Bar with Fast Demo Auth & Dark Mode -->
   <div class="bg-gradient-to-r from-[#0F4C5C] via-[#0D9488] to-[#0F4C5C] text-white text-xs py-2 px-4 shadow-sm flex flex-wrap items-center justify-between gap-2">
     <div class="flex items-center gap-2">
-      <span class="bg-[#E36414] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">🎓 إصدار المنيا الشامل v4.0 - Advanced Filters & Image Upload</span>
+      <span class="bg-[#E36414] text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-sm">🎓 إصدار المنيا الشامل v4.1 - Advanced Filters & Image Upload</span>
       <span class="hidden sm:inline">سكن طلاب المنيا الموثق • جامعة المنيا • جامعة المنيا الأهلية • جامعة دراية • جامعة اللوتس • حماية التأمين بالضمان</span>
     </div>
 
@@ -264,7 +264,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-black text-[#0F4C5C] dark:text-emerald-400 tracking-tight">إيجاري طلاب المنيا</h1>
-            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20">إصدار المنيا الشامل v4.0 - Advanced Filters & Image Upload</span>
+            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/20">إصدار المنيا الشامل v4.1 - Advanced Filters & Image Upload</span>
           </div>
           <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سكن الطلاب بجامعات المنيا الأربع (الحكومية، الأهلية، دراية، اللوتس) • فحص الحرم الجامعي • الضمان البنكي</p>
         </div>
@@ -304,6 +304,12 @@
         <button id="adminDeployBtn" onclick="openCloudDeployModal()" class="hidden inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-black px-3.5 py-2 rounded-xl transition shadow-md shadow-emerald-600/30 border border-emerald-400/40">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-200 animate-pulse"></span>
           <span>🌐 مركز النشر السحابي (Admin)</span>
+        </button>
+
+        <!-- Prominent Dark Mode Toggle in Header (v4.1) -->
+        <button onclick="toggleDarkMode()" id="headerThemeToggleBtn" title="تبديل الوضع الليلي / النهاري" class="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-xl transition border border-slate-200 dark:border-slate-700 font-bold text-xs">
+          <span id="headerThemeIcon">🌙</span>
+          <span id="headerThemeText" class="hidden sm:inline">الوضع الليلي</span>
         </button>
 
         <!-- Admin Dashboard Direct Shortcut -->
@@ -368,7 +374,7 @@
           <div class="inline-flex flex-wrap items-center gap-2 bg-white/15 px-3.5 py-1.5 rounded-full text-xs font-bold backdrop-blur-md border border-white/20">
             <span>🇪🇬 سكن جامعي آمن وموثق 100% بمحافظة المنيا</span>
             <span>•</span>
-            <span>إصدار المنيا الشامل v4.0 — فلاتر متقدمة ورفع الصور الحقيقية</span>
+            <span>إصدار المنيا الشامل v4.1 — فلاتر متقدمة ورفع الصور الحقيقية</span>
           </div>
           
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black leading-snug">
@@ -456,7 +462,7 @@
       </div>
 
       <!-- STREAMLINED SMART FILTER BAR -->
-      <!-- ADVANCED SMART FILTER BAR (v4.0) -->
+      <!-- ADVANCED SMART FILTER BAR (v4.1) -->
       <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         
         <!-- Row 1: Universities of Minya Pills -->
@@ -489,7 +495,7 @@
           </div>
         </div>
 
-        <!-- Row 2: Housing Type & Room Type & Budget Controls (v4.0 Advanced Filters) -->
+        <!-- Row 2: Housing Type & Room Type & Budget Controls (v4.1 Advanced Filters) -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs items-center">
           
           <!-- Housing Type Pills (4 cols) -->
@@ -643,7 +649,7 @@
             </div>
 
             <!-- Card 2 (Pre-rendered Static) -->
-            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-md transition overflow-hidden flex flex-col justify-between">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden flex flex-col justify-between">
               <div class="relative w-full h-48 bg-slate-800 overflow-hidden group cursor-pointer" onclick="openLightbox('/uploads/cairo_1.svg', 'سكن النيل للطالبات المغتربات — برج الأطباء بالدقي قرب المترو')">
                 <img id="propImg-2" src="/uploads/cairo_1.svg" alt="سكن النيل للطالبات" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
                 <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5">
@@ -2497,17 +2503,15 @@ git push -u origin main</pre>
     // Dark Mode Toggle & Initialization
     function initTheme() {
       const savedTheme = localStorage.getItem('ejari_theme') || 'light';
-      if (savedTheme === 'dark') {
+      const isDark = (savedTheme === 'dark');
+      if (isDark) {
         document.documentElement.classList.add('dark');
         document.documentElement.classList.remove('light');
-        document.getElementById('themeToggleIcon').textContent = '☀️';
-        document.getElementById('themeToggleText').textContent = 'الوضع النهاري';
       } else {
         document.documentElement.classList.remove('dark');
         document.documentElement.classList.add('light');
-        document.getElementById('themeToggleIcon').textContent = '🌙';
-        document.getElementById('themeToggleText').textContent = 'الوضع الليلي';
       }
+      updateThemeButtonsUI(isDark);
     }
 
     function toggleDarkMode() {
@@ -2515,16 +2519,38 @@ git push -u origin main</pre>
       if (isDark) {
         document.documentElement.classList.remove('light');
         localStorage.setItem('ejari_theme', 'dark');
-        document.getElementById('themeToggleIcon').textContent = '☀️';
-        document.getElementById('themeToggleText').textContent = 'الوضع النهاري';
         showToast('تم تفعيل الوضع الليلي 🌙');
       } else {
         document.documentElement.classList.add('light');
         localStorage.setItem('ejari_theme', 'light');
-        document.getElementById('themeToggleIcon').textContent = '🌙';
-        document.getElementById('themeToggleText').textContent = 'الوضع الليلي';
         showToast('تم تفعيل الوضع النهاري ☀️');
       }
+      updateThemeButtonsUI(isDark);
+    }
+
+    function updateThemeButtonsUI(isDark) {
+      const icon1 = document.getElementById('themeToggleIcon');
+      const text1 = document.getElementById('themeToggleText');
+      const icon2 = document.getElementById('headerThemeIcon');
+      const text2 = document.getElementById('headerThemeText');
+
+      if (icon1) icon1.textContent = isDark ? '☀️' : '🌙';
+      if (text1) text1.textContent = isDark ? 'الوضع النهاري' : 'الوضع الليلي';
+      if (icon2) icon2.textContent = isDark ? '☀️' : '🌙';
+      if (text2) text2.textContent = isDark ? 'الوضع النهاري' : 'الوضع الليلي';
+    }
+
+    function getWhatsAppLink(p) {
+      let phone = (p.whatsapp_phone || p.landlord_phone || '01019876543').replace(/[^0-9]/g, '');
+      if (phone.startsWith('0')) {
+        phone = '2' + phone;
+      } else if (!phone.startsWith('20') && phone.length === 10) {
+        phone = '20' + phone;
+      }
+      const title = p.title || 'سكن طلاب';
+      const uni = p.university || 'جامعة المنيا';
+      const msg = encodeURIComponent('مرحباً، أستفسر عن حجز سرير في سكن: ' + title + ' (' + uni + ') المعروض على منصة إيجاري طلاب مصر.');
+      return 'https://wa.me/' + phone + '?text=' + msg;
     }
 
     function showToast(msg, icon = '✓') {
@@ -3313,9 +3339,9 @@ git push -u origin main</pre>
         return `
           <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-md transition overflow-hidden flex flex-col justify-between">
             
-            <!-- Photo Gallery Carousel Area (v4.0) -->
+            <!-- Photo Gallery Carousel Area (v4.1) -->
             <div class="relative w-full h-52 bg-slate-900 overflow-hidden select-none group">
-              <img id="propImg-${p.id}" src="${activePhoto}" alt="${p.title}" class="w-full h-full object-cover transition-all duration-300 cursor-pointer" onclick="openLightbox('${activePhoto}', '${p.title}')">
+              <img id="propImg-${p.id}" src="${activePhoto}" alt="${p.title}" loading="lazy" class="w-full h-full object-cover transition-all duration-300 cursor-pointer" onclick="openLightbox('${activePhoto}', '${p.title}')">
               
               <!-- Badges over photo -->
               <div class="absolute top-3 right-3 z-10 flex items-center gap-1.5 pointer-events-none">
@@ -3449,20 +3475,28 @@ git push -u origin main</pre>
               </div>
             </div>
 
-            <!-- Card Footer & Action Buttons -->
-            <div class="p-5 pt-0 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 mt-2">
-              <button onclick="openBookingModal(${p.id})" ${!isAvailable ? 'disabled' : ''} class="flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition ${isAvailable ? 'bg-[#0F4C5C] hover:bg-[#0c3c49] text-white shadow-sm' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}">
-                ${isAvailable ? '🛏️ احجز سريرك' : 'مكتمل العدد'}
-              </button>
-              <button onclick="flyToMapApartment(${p.lat || 30.0}, ${p.lng || 31.0}, ${p.id})" class="px-2.5 py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-900 dark:bg-sky-950/60 dark:text-sky-200 rounded-xl font-bold text-xs transition border border-sky-200 dark:border-sky-800" title="تحديد السكن ورسم المسار على الخريطة">
-                📍 الخريطة
-              </button>
-              <button onclick="openVideoTourModal(${p.id})" class="px-3 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-200 rounded-xl font-bold text-xs transition border border-amber-200 dark:border-amber-800" title="معاينة فيديو مباشر 10 دقائق">
-                🎥 معاينة فيديو
-              </button>
-              <button onclick="viewApartmentRoommates(${p.id})" class="px-2.5 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-bold text-xs transition" title="عرض الزملاء بالتقسيم">
-                👥
-              </button>
+            <!-- Card Footer & Action Buttons (v4.1) -->
+            <div class="p-5 pt-0 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2 mt-2">
+              <div class="flex items-center gap-2">
+                <button onclick="openBookingModal(${p.id})" ${!isAvailable ? 'disabled' : ''} class="flex-1 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-center transition ${isAvailable ? 'bg-[#0F4C5C] hover:bg-[#0c3c49] text-white shadow-sm' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}">
+                  ${isAvailable ? '🛏️ احجز سريرك' : 'مكتمل العدد'}
+                </button>
+                <a href="${getWhatsAppLink(p)}" target="_blank" rel="noopener noreferrer" class="py-2.5 px-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-black text-xs sm:text-sm flex items-center justify-center gap-1.5 transition shadow-sm shrink-0" title="تواصل مباشر عبر الواتساب">
+                  <span class="text-base">💬</span>
+                  <span>تواصل واتساب</span>
+                </a>
+              </div>
+              <div class="flex items-center gap-2 text-xs">
+                <button onclick="flyToMapApartment(${p.lat || 30.0}, ${p.lng || 31.0}, ${p.id})" class="flex-1 py-2 bg-sky-50 hover:bg-sky-100 text-sky-900 dark:bg-sky-950/60 dark:text-sky-200 rounded-xl font-bold text-xs transition border border-sky-200 dark:border-sky-800" title="تحديد السكن ورسم المسار على الخريطة">
+                  📍 موقع الخريطة
+                </button>
+                <button onclick="openVideoTourModal(${p.id})" class="flex-1 py-2 bg-amber-50 hover:bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-200 rounded-xl font-bold text-xs transition border border-amber-200 dark:border-amber-800" title="معاينة فيديو مباشر 10 دقائق">
+                  🎥 جولة فيديو
+                </button>
+                <button onclick="viewApartmentRoommates(${p.id})" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-bold text-xs transition" title="عرض الزملاء بالتقسيم">
+                  👥
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -3496,10 +3530,10 @@ git push -u origin main</pre>
           if (!uni.includes(uniFilter) && !gov.includes(uniFilter)) return false;
         }
 
-        // 3. Housing Type / Gender Filter (v4.0)
+        // 3. Housing Type / Gender Filter (v4.1)
         if (selectedGenderPill !== 'all' && p.gender !== selectedGenderPill) return false;
 
-        // 4. Room Type Filter (v4.0)
+        // 4. Room Type Filter (v4.1)
         if (selectedRoomTypePill !== 'all') {
           const beds = Number(p.total_beds || 4);
           if (selectedRoomTypePill === '1' && beds !== 1) return false;
@@ -3508,7 +3542,7 @@ git push -u origin main</pre>
           if (selectedRoomTypePill === '4+' && beds < 4) return false;
         }
 
-        // 5. Budget Range Filter (v4.0)
+        // 5. Budget Range Filter (v4.1)
         const price = Number(p.bed_monthly_price || 0);
         if (selectedBudgetPill === 'under1500' && price >= 1500) return false;
         if (selectedBudgetPill === '1500-2500' && (price < 1500 || price > 2500)) return false;
@@ -4811,7 +4845,7 @@ git push -u origin main</pre>
   </nav>
 
 
-  <!-- Floating Mobile Bar for Quick Map & List Switching (v4.0) -->
+  <!-- Floating Mobile Bar for Quick Map & List Switching (v4.1) -->
   <div class="sm:hidden fixed bottom-4 left-4 right-4 z-40 bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-2 shadow-2xl flex items-center justify-around text-xs font-bold border border-slate-700/60">
     <button onclick="scrollToPropertiesList()" class="flex items-center gap-1.5 py-1.5 px-3 bg-white/10 hover:bg-white/20 rounded-xl transition">
       <span>📋</span>
