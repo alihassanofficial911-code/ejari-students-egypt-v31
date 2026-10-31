@@ -1820,7 +1820,7 @@ git push -u origin main</pre>
             <span class="text-[10px] text-emerald-400 font-bold">تحديث فوري لروابط Vercel & Render</span>
           </div>
           <div class="flex items-center gap-2">
-            <input type="text" id="deployGithubUser" placeholder="مثال: alihassan أو اسم حسابك..." oninput="updateDeployLink(this.value)" class="flex-1 bg-black/60 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400">
+            <input type="text" id="deployGithubUser" value="alihassanofficial911-code" placeholder="مثال: alihassan أو اسم حسابك..." oninput="updateDeployLink(this.value)" class="flex-1 bg-black/60 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400">
             <button onclick="copyOneClickDeployUrl()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs rounded-xl border border-slate-600 transition flex items-center gap-1">
               <span>📋</span>
               <span id="copyDeployUrlText">نسخ الروابط</span>
@@ -1844,7 +1844,7 @@ git push -u origin main</pre>
               <p class="text-[11px] text-slate-400 mt-1">نشر فوري سريع بدون وقت نوم للسيرفر مع SQLite في /tmp.</p>
             </div>
             <div>
-              <a id="oneClickVercelBtn" href="https://vercel.com/new/clone?repository-url=https://github.com/USERNAME/ejari-students-egypt-v31" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-white hover:bg-slate-200 text-black font-black rounded-xl text-center text-xs shadow-md flex items-center justify-center gap-1.5 transition">
+              <a id="oneClickVercelBtn" href="https://vercel.com/new/clone?repository-url=https://github.com/alihassanofficial911-code/ejari-students-egypt-v31" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-white hover:bg-slate-200 text-black font-black rounded-xl text-center text-xs shadow-md flex items-center justify-center gap-1.5 transition">
                 <span>▲ نشر فوري على Vercel</span>
                 <span>↗</span>
               </a>
@@ -1864,7 +1864,7 @@ git push -u origin main</pre>
               <p class="text-[11px] text-slate-400 mt-1">بناء خادم الويب + قاعدة بيانات PostgreSQL السحابية مجاناً.</p>
             </div>
             <div>
-              <a id="oneClickDeployBtn" href="https://dashboard.render.com/blueprint/new?repo=https://github.com/USERNAME/ejari-students-egypt-v31" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-center text-xs shadow-md flex items-center justify-center gap-1.5 transition">
+              <a id="oneClickDeployBtn" href="https://dashboard.render.com/blueprint/new?repo=https://github.com/alihassanofficial911-code/ejari-students-egypt-v31" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-center text-xs shadow-md flex items-center justify-center gap-1.5 transition">
                 <span>🚀 نشر فوري على Render</span>
                 <span>↗</span>
               </a>
@@ -2175,7 +2175,7 @@ git push -u origin main</pre>
     }
 
     function updateDeployLink(user) {
-      const u = (user || '').trim() || 'USERNAME';
+      const u = (user || '').trim() || 'alihassanofficial911-code';
       const vercelUrl = `https://vercel.com/new/clone?repository-url=https://github.com/${u}/ejari-students-egypt-v31`;
       const renderUrl = `https://dashboard.render.com/blueprint/new?repo=https://github.com/${u}/ejari-students-egypt-v31`;
 
@@ -2187,7 +2187,7 @@ git push -u origin main</pre>
     }
 
     function copyOneClickDeployUrl() {
-      const u = (document.getElementById('deployGithubUser')?.value || '').trim() || 'USERNAME';
+      const u = (document.getElementById('deployGithubUser')?.value || '').trim() || 'alihassanofficial911-code';
       const vercelUrl = `https://vercel.com/new/clone?repository-url=https://github.com/${u}/ejari-students-egypt-v31`;
       const renderUrl = `https://dashboard.render.com/blueprint/new?repo=https://github.com/${u}/ejari-students-egypt-v31`;
       const textToCopy = `Vercel Deploy:\n${vercelUrl}\n\nRender Deploy:\n${renderUrl}`;
