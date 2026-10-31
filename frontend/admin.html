@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم المشرف — منصة إيجاري لطلاب جامعات المنيا</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              teal: '#0F4C5C',
+              orange: '#E36414',
+              emerald: '#0D9488'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cairo', 'Tajawal', system-ui, -apple-system, sans-serif;
+      background-color: #F8FAFC;
+    }
+    .leaflet-popup-content-wrapper {
+      direction: rtl;
+      font-family: 'Cairo', sans-serif;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 antialiased flex flex-col justify-between">
+
+  <!-- ================= AUTH LOCK SCREEN MODAL ================= -->
+  <div id="authOverlay" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-md w-full p-8 text-center animate-fade-in">
+      <div class="w-16 h-16 bg-teal-50 text-teal-700 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-teal-200 text-3xl shadow-inner">
+        🔒
+      </div>
+      <h2 class="text-2xl font-black text-slate-900 mb-2">لوحة المشرف والإدارة</h2>
+      <p class="text-sm text-slate-500 mb-6 leading-relaxed">
+        يرجى إدخال كلمة مرور المشرف للوصول إلى أدوات إدارة سكن طلاب جامعات المنيا وتعديل الخرائط.
+      </p>
+
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 text-right">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور السرية للمشرف</label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="adminPasswordInput" 
+              required 
+              placeholder="أدخل كلمة المرور (الافتراضية: admin123)"
+              class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-sans focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white text-sm"
+            >
+          </div>
+        </div>
+
+        <div id="loginErrorMsg" class="hidden p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-200 font-semibold text-center">
+          كلمة المرور غير صحيحة، يرجى المحاولة مرة أخرى.
+        </div>
+
+        <button 
+          type="submit" 
+          id="loginBtn"
+          class="w-full py-3.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl font-bold shadow-lg shadow-teal-900/20 transition-all flex items-center justify-center gap-2 text-sm"
+        >
+          <span>تسجيل الدخول للوحة التحكم</span>
+          <span>←</span>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <a href="/" class="hover:text-teal-700 font-bold flex items-center gap-1">
+          <span>🏠 العودة للمنصة الرئيسية</span>
+        </a>
+        <span class="text-slate-400">إيجاري المنيا v3.5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN ADMIN DASHBOARD CONTENT ================= -->
+  <div id="dashboardContainer" class="hidden min-h-screen flex flex-col">
+
+    <!-- Top Header Navigation -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
+        
+        <!-- Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-700 to-teal-900 text-white flex items-center justify-center font-black shadow-md text-xl">
+            إ
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg font-black text-slate-900 leading-tight">لوحة تحكم المشرف — منصة إيجاري</h1>
+              <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-teal-100 text-teal-800 border border-teal-200">
+                إصدار المنيا v3.5
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">إدارة سكن الطلاب، روابط خرائط جوجل، ومزامنة الإحداثيات الحية</p>
+          </div>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="flex items-center gap-3">
+          <a 
+            href="/" 
+            target="_blank"
+            class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-200"
+          >
+            <span>🏠 معاينة الموقع الرئيسي</span>
+            <span class="text-[10px]">↗</span>
+          </a>
+
+          <button 
+            onclick="fetchPropertiesList()" 
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-bold transition-all border border-teal-200"
+            title="تحديث البيانات من السيرفر"
+          >
+            <span id="refreshIcon">🔄</span>
+            <span class="hidden md:inline">تحديث البيانات</span>
+          </button>
+
+          <button 
+            onclick="handleLogout()" 
+            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold transition-all border border-red-200"
+          >
+            <span>🚪 خروج</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
+      <!-- Toast Notification Container -->
+      <div id="toastNotification" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden max-w-md w-full px-4">
+        <div id="toastContent" class="p-4 rounded-2xl shadow-xl border flex items-center justify-between gap-3 text-sm font-bold animate-fade-in bg-white">
+          <div class="flex items-center gap-2">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">تم تنفيذ العملية بنجاح!</span>
+          </div>
+          <button onclick="hideToast()" class="text-slate-400 hover:text-slate-600 font-mono text-xs">✕</button>
+        </div>
+      </div>
+
+      <!-- KPI Overview Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center text-2xl font-bold border border-teal-100">
+            🏢
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">إجمالي العقارات</div>
+            <div id="kpiTotalProperties" class="text-2xl font-black text-slate-900 mt-0.5">0</div>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-2xl font-bold border border-emerald-100">
+            🛏️
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">الأسرة المتاحة للتسكين</div>
+            <div id="kpiAvailableBeds" class="text-2xl font-black text-emerald-700 mt-0.5">0</div>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-2xl font-bold border border-amber-100">
+            💰
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">متوسط إيجار السرير</div>
+            <div id="kpiAvgRent" class="text-2xl font-black text-slate-900 mt-0.5">0 ج.م</div>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center text-2xl font-bold border border-blue-100">
+            🎓
+          </div>
+          <div>
+            <div class="text-xs text-slate-500 font-bold">الجامعات المغطاة</div>
+            <div class="text-sm font-black text-blue-900 mt-1">4 جامعات كبرى</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add / Edit Property Section -->
+      <div id="formCard" class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden transition-all">
+        <div class="bg-gradient-to-r from-slate-900 via-teal-950 to-slate-900 p-6 text-white flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h2 id="formTitle" class="text-xl font-black flex items-center gap-2">
+              <span>➕</span>
+              <span>إضافة سكن طلاب جديد بالمنيا</span>
+            </h2>
+            <p id="formSubtitle" class="text-xs text-teal-200/80 mt-1">
+              أدخل بيانات السكن مع رابط خرائط جوجل ليتم استخراج الموقع وحساب مسافة المشي للجامعة تلقائياً
+            </p>
+          </div>
+
+          <div id="editModeIndicator" class="hidden items-center gap-2">
+            <span class="px-3 py-1 bg-amber-500 text-slate-900 text-xs font-black rounded-full">
+              وضع التعديل النشط
+            </span>
+            <button 
+              onclick="resetFormToCreateMode()" 
+              class="px-3 py-1 bg-white/20 hover:bg-white/30 text-white text-xs font-bold rounded-xl transition"
+            >
+              إلغاء والعودة للإضافة
+            </button>
+          </div>
+        </div>
+
+        <form id="propertyForm" onsubmit="handlePropertySubmit(event)" class="p-6 md:p-8 space-y-6">
+          <input type="hidden" id="propId" value="">
+
+          <!-- Row 1: Title & University -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                اسم وعنوان السكن <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="propTitle" 
+                required 
+                placeholder="مثال: سكن النور الطبي — شلبي أمام مجمع الكليات الطبية" 
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                الجامعة التابع لها السكن <span class="text-red-500">*</span>
+              </label>
+              <select 
+                id="propUniversity" 
+                required 
+                onchange="onUniversitySelectChanged()"
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white text-sm"
+              >
+                <option value="جامعة المنيا">جامعة المنيا (الحكومية - شلبي / أرض سلطان)</option>
+                <option value="جامعة المنيا الأهلية">جامعة المنيا الأهلية (المنيا الجديدة - أمام الجهاز)</option>
+                <option value="جامعة دراية">جامعة دراية Deraya University (المنيا الجديدة - الحي الثالث)</option>
+                <option value="جامعة اللوتس">جامعة اللوتس Lotus University (المنيا الجديدة - امتداد الحي السادس)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 2: Region, Gender, Rent -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                المنطقة / الحي التفصيلي <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="propRegion" 
+                required 
+                placeholder="مثال: حي شلبي، شارع طه حسين، الحي الثالث..." 
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                نوع السكن المخصص <span class="text-red-500">*</span>
+              </label>
+              <select 
+                id="propGender" 
+                required 
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white text-sm"
+              >
+                <option value="male">سكن طلاب ذكور (بنين)</option>
+                <option value="female">سكن طالبات (بنات)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                سعر السرير الشهري (ج.م) <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <input 
+                  type="number" 
+                  id="propBedPrice" 
+                  required 
+                  min="500" 
+                  max="20000" 
+                  step="50" 
+                  placeholder="2000" 
+                  class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-black focus:outline-none focus:ring-2 focus:ring-teal-700 focus:bg-white text-sm pl-16"
+                >
+                <span class="absolute left-3 top-3.5 text-xs text-slate-400 font-bold">ج.م/شهر</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3: Beds & Deposit -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                إجمالي عدد الأسرة بالعقار
+              </label>
+              <input 
+                type="number" 
+                id="propTotalBeds" 
+                required 
+                min="1" 
+                max="50" 
+                value="4" 
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-teal-700 text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                الأسرة المتاحة للحجز الآن
+              </label>
+              <input 
+                type="number" 
+                id="propAvailableBeds" 
+                required 
+                min="0" 
+                max="50" 
+                value="2" 
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-teal-700 text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                مبلغ التأمين المسترد (ج.م)
+              </label>
+              <input 
+                type="number" 
+                id="propDeposit" 
+                min="0" 
+                step="100" 
+                value="2000" 
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-teal-700 text-sm"
+              >
+            </div>
+          </div>
+
+          <!-- Row 4: Study Environment & Phone -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                بيئة السكن والمذاكرة
+              </label>
+              <input 
+                type="text" 
+                id="propStudyEnv" 
+                placeholder="مثال: هادئ للمذاكرة - كليات طب وعلوم - غير مدخنين" 
+                value="هادئ للمذاكرة - كليات طب وهندسة"
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-teal-700 text-sm"
+              >
+            </div>
+
+            <div>
+              <label class="block text-xs font-black text-slate-700 mb-2">
+                هاتف المالك / إشراف السكن (واتساب)
+              </label>
+              <input 
+                type="text" 
+                id="propPhone" 
+                placeholder="مثال: 01019876543" 
+                value="01019876543"
+                class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-teal-700 text-sm"
+              >
+            </div>
+          </div>
+
+          <!-- Row 5: DEDICATED GOOGLE MAPS LINK & COORDINATES FIELD -->
+          <div class="p-5 bg-gradient-to-br from-teal-50/70 via-slate-50 to-amber-50/50 rounded-2xl border-2 border-dashed border-teal-300 space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-1.5 flex-wrap gap-2">
+                <label class="text-sm font-black text-teal-950 flex items-center gap-1.5">
+                  <span class="text-lg">📍</span>
+                  <span>رابط خرائط جوجل (Google Maps Link) أو إحداثيات السكن</span>
+                  <span class="text-red-500">*</span>
+                </label>
+                <span class="text-[11px] font-bold text-teal-800 bg-teal-100/70 px-2.5 py-0.5 rounded-full border border-teal-200">
+                  تحليل تلقائي فوري للإحداثيات
+                </span>
+              </div>
+              
+              <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+                الصق أي رابط من Google Maps (رابط مشاركة قصير مثل 
+                <code class="bg-white px-1.5 py-0.5 rounded border text-teal-800 font-mono text-[11px]">https://maps.app.goo.gl/...</code> 
+                أو رابط كامل، أو إحداثيات مباشرة مثل 
+                <code class="bg-white px-1.5 py-0.5 rounded border text-teal-800 font-mono text-[11px]">28.1158, 30.7525</code>).
+              </p>
+
+              <div class="flex gap-2">
+                <input 
+                  type="text" 
+                  id="propMapsUrl" 
+                  required
+                  placeholder="https://maps.app.goo.gl/... أو https://www.google.com/maps?q=28.1158,30.7525" 
+                  class="flex-1 px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-teal-700 shadow-sm"
+                >
+                <button 
+                  type="button" 
+                  onclick="previewCoordinatesFromInput()" 
+                  class="px-4 py-3 bg-teal-700 hover:bg-teal-800 text-white font-bold rounded-xl text-xs transition flex items-center gap-1.5 shrink-0 shadow-sm"
+                >
+                  <span>🔍 فحص الإحداثيات</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Coordinate Preview & Detected Campus Distance -->
+            <div id="coordPreviewBadge" class="hidden p-3.5 bg-white rounded-xl border border-slate-200 text-xs flex items-center justify-between flex-wrap gap-2 shadow-xs">
+              <div class="flex items-center gap-3">
+                <span class="text-teal-700 font-bold flex items-center gap-1">
+                  <span>🎯</span>
+                  <span>خط العرض: <b id="detectedLat" class="font-mono text-slate-900">-</b></span>
+                </span>
+                <span class="text-slate-300">|</span>
+                <span class="text-teal-700 font-bold flex items-center gap-1">
+                  <span>خط الطول: <b id="detectedLng" class="font-mono text-slate-900">-</b></span>
+                </span>
+              </div>
+              <div id="detectedDistanceBadge" class="font-bold text-teal-900 bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200">
+                -
+              </div>
+            </div>
+
+            <!-- Mini Map Preview with Click-to-Pin Feature -->
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px] text-slate-500 font-bold px-1">
+                <span>🗺️ خريطة تحديد الموقع التفاعلية (يمكنك أيضاً النقر على الخريطة لتغيير مكان السكن):</span>
+                <span id="mapHelpText" class="text-teal-700">انقر على الخريطة لتحديث الإحداثيات</span>
+              </div>
+              <div id="adminMiniMap" class="w-full h-56 rounded-xl border border-slate-300 overflow-hidden shadow-inner z-0"></div>
+            </div>
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button 
+              type="button" 
+              onclick="resetFormToCreateMode()" 
+              class="px-6 py-3 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm transition"
+            >
+              مسح وتفريغ الحقول
+            </button>
+
+            <button 
+              type="submit" 
+              id="submitBtn"
+              class="px-8 py-3.5 bg-teal-800 hover:bg-teal-900 text-white rounded-xl font-bold shadow-lg shadow-teal-950/20 text-sm transition flex items-center gap-2"
+            >
+              <span id="submitBtnIcon">💾</span>
+              <span id="submitBtnText">حفظ ونشر السكن على المنصة</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Properties Table Section -->
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        
+        <!-- Table Header & Filters -->
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h3 class="text-lg font-black text-slate-900 flex items-center gap-2">
+              <span>📋</span>
+              <span>سكن الطلاب المسجل في قاعدة البيانات</span>
+              <span id="tableCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-slate-100 text-slate-700 border border-slate-200">
+                0 عقار
+              </span>
+            </h3>
+            <p class="text-xs text-slate-500 mt-1">
+              يمكنك تعديل أي عقار، تحديث رابط الموقع الجغرافي، أو حذفه فوراً من المنصة
+            </p>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="flex items-center gap-2 flex-wrap w-full md:w-auto">
+            <input 
+              type="text" 
+              id="tableSearchInput" 
+              oninput="filterTableRows()" 
+              placeholder="بحث بالاسم أو المنطقة..." 
+              class="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-teal-700 w-full md:w-56"
+            >
+
+            <select 
+              id="tableFilterUni" 
+              onchange="filterTableRows()" 
+              class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-teal-700"
+            >
+              <option value="">جميع الجامعات</option>
+              <option value="جامعة المنيا">جامعة المنيا (الحكومية)</option>
+              <option value="جامعة المنيا الأهلية">جامعة المنيا الأهلية</option>
+              <option value="جامعة دراية">جامعة دراية</option>
+              <option value="جامعة اللوتس">جامعة اللوتس</option>
+            </select>
+
+            <select 
+              id="tableFilterGender" 
+              onchange="filterTableRows()" 
+              class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-teal-700"
+            >
+              <option value="">كل الأنواع</option>
+              <option value="male">طلاب (بنين)</option>
+              <option value="female">طالبات (بنات)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-right border-collapse">
+            <thead>
+              <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600 text-[11px] font-black uppercase tracking-wider">
+                <th class="py-3.5 px-4">#</th>
+                <th class="py-3.5 px-4">العقار والجامعة</th>
+                <th class="py-3.5 px-4">النوع</th>
+                <th class="py-3.5 px-4">الإيجار الشهري</th>
+                <th class="py-3.5 px-4">الأسرة (متاح/إجمالي)</th>
+                <th class="py-3.5 px-4">الإحداثيات والمسافة</th>
+                <th class="py-3.5 px-4 text-center">الإجراءات والتحكم</th>
+              </tr>
+            </thead>
+            <tbody id="propertiesTableBody" class="divide-y divide-slate-100 text-xs">
+              <!-- Dynamically populated rows -->
+              <tr>
+                <td colspan="7" class="py-8 text-center text-slate-400">
+                  <div class="animate-pulse">جاري تحميل العقارات وسكن الطلاب...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-400 mt-12">
+      <div class="max-w-7xl mx-auto px-4 flex items-center justify-between flex-wrap gap-2">
+        <span>منصة إيجاري لطلاب جامعات مصر — الإصدار v3.5 (Minya Universities Edition)</span>
+        <span>نظام الإدارة السحابي المتكامل</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-6 text-center animate-fade-in shadow-2xl">
+      <div class="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center mx-auto mb-3 text-2xl">
+        🗑️
+      </div>
+      <h3 class="text-base font-black text-slate-900 mb-1">تأكيد حذف السكن</h3>
+      <p class="text-xs text-slate-500 mb-5 leading-relaxed">
+        هل أنت متأكد من رغبتك في حذف هذا العقار نهائياً؟ سيتم حذفه من قاعدة البيانات والخريطة الرئيسية فوراً.
+      </p>
+      <div class="flex items-center justify-center gap-2">
+        <button 
+          onclick="closeDeleteModal()" 
+          class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition flex-1"
+        >
+          إلغاء
+        </button>
+        <button 
+          id="confirmDeleteBtn" 
+          onclick="executeDeleteProperty()" 
+          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition flex-1"
+        >
+          نعم، احذف الآن
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT APPLICATION LOGIC ================= -->
+  <script>
+    // State
+    let adminToken = localStorage.getItem('ejari_admin_token') || '';
+    let allProperties = [];
+    let currentDeleteId = null;
+    let miniMap = null;
+    let miniMapMarker = null;
+
+    // Campus Gate Coordinates Fallback
+    const CAMPUS_GATES = {
+      'جامعة المنيا': { lat: 28.1158, lng: 30.7525, name: 'بوابة شلبي الرئيسية' },
+      'جامعة المنيا الأهلية': { lat: 28.0694, lng: 30.8294, name: 'بوابة المنيا الأهلية' },
+      'جامعة دراية': { lat: 28.0768, lng: 30.8242, name: 'بوابة جامعة دراية' },
+      'جامعة اللوتس': { lat: 28.0655, lng: 30.8385, name: 'بوابة جامعة اللوتس' }
+    };
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+    });
+
+    // Authentication Checks
+    function checkAuth() {
+      if (adminToken) {
+        document.getElementById('authOverlay').classList.add('hidden');
+        document.getElementById('dashboardContainer').classList.remove('hidden');
+        initMiniMap();
+        fetchPropertiesList();
+      } else {
+        document.getElementById('authOverlay').classList.remove('hidden');
+        document.getElementById('dashboardContainer').classList.add('hidden');
+        document.getElementById('adminPasswordInput').focus();
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('adminPasswordInput').value.trim();
+      const errorMsg = document.getElementById('loginErrorMsg');
+      const loginBtn = document.getElementById('loginBtn');
+      
+      errorMsg.classList.add('hidden');
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = 'جاري التحقق...';
+
+      try {
+        const resp = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwd })
+        });
+        const data = await resp.json();
+
+        if (resp.ok && data.status === 'authenticated') {
+          adminToken = data.token;
+          localStorage.setItem('ejari_admin_token', adminToken);
+          checkAuth();
+          showToast('تم تسجيل الدخول بنجاح! مرحباً بك في لوحة المشرف', 'success');
+        } else {
+          errorMsg.textContent = data.message || 'كلمة المرور غير صحيحة';
+          errorMsg.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorMsg.textContent = 'حدث خطأ في الاتصال بالسيرفر';
+        errorMsg.classList.remove('hidden');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span>تسجيل الدخول للوحة التحكم</span><span>←</span>';
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('ejari_admin_token');
+      adminToken = '';
+      checkAuth();
+      showToast('تم تسجيل الخروج بنجاح', 'info');
+    }
+
+    // Mini Map Initialization
+    function initMiniMap() {
+      if (miniMap) return;
+      const initialLat = 28.1158;
+      const initialLng = 30.7525;
+
+      miniMap = L.map('adminMiniMap', {
+        center: [initialLat, initialLng],
+        zoom: 14,
+        zoomControl: true
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+      }).addTo(miniMap);
+
+      const customIcon = L.divIcon({
+        className: 'custom-pin',
+        html: `<div style="background-color:#0F4C5C;color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,0.3);border:2px solid #fff;font-size:16px;">🏠</div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+      });
+
+      miniMapMarker = L.marker([initialLat, initialLng], {
+        icon: customIcon,
+        draggable: true
+      }).addTo(miniMap);
+
+      miniMapMarker.on('dragend', function (e) {
+        const pos = e.target.getLatLng();
+        setCoordinatesInForm(pos.lat, pos.lng);
+      });
+
+      miniMap.on('click', function (e) {
+        miniMapMarker.setLatLng(e.latlng);
+        setCoordinatesInForm(e.latlng.lat, e.latlng.lng);
+      });
+    }
+
+    function setCoordinatesInForm(lat, lng) {
+      lat = Number(lat).toFixed(6);
+      lng = Number(lng).toFixed(6);
+      document.getElementById('propMapsUrl').value = `${lat}, ${lng}`;
+      updateCoordinateBadges(lat, lng);
+    }
+
+    function updateCoordinateBadges(lat, lng) {
+      document.getElementById('coordPreviewBadge').classList.remove('hidden');
+      document.getElementById('detectedLat').textContent = lat;
+      document.getElementById('detectedLng').textContent = lng;
+
+      // Calculate approximate distance to selected university
+      const uni = document.getElementById('propUniversity').value;
+      const gate = CAMPUS_GATES[uni] || CAMPUS_GATES['جامعة المنيا'];
+      const dLat = (lat - gate.lat) * 111000;
+      const dLng = (lng - gate.lng) * 100000;
+      const distMeters = Math.hypot(dLat, dLng);
+      const walkMins = Math.max(2, Math.min(25, Math.round(distMeters / 80)));
+      
+      document.getElementById('detectedDistanceBadge').textContent = `🚶 حوالي ${walkMins} دقائق مشياً إلى ${gate.name}`;
+    }
+
+    function onUniversitySelectChanged() {
+      const uni = document.getElementById('propUniversity').value;
+      const gate = CAMPUS_GATES[uni];
+      if (gate && miniMap) {
+        miniMap.setView([gate.lat, gate.lng], 14);
+        if (!document.getElementById('propMapsUrl').value.trim()) {
+          miniMapMarker.setLatLng([gate.lat, gate.lng]);
+          setCoordinatesInForm(gate.lat, gate.lng);
+        }
+      }
+    }
+
+    function previewCoordinatesFromInput() {
+      const input = document.getElementById('propMapsUrl').value.trim();
+      if (!input) {
+        showToast('يرجى لصق رابط أو إحداثيات أولاً', 'error');
+        return;
+      }
+
+      // Check regex for raw lat,lng
+      const coordMatch = input.match(/([-+]?[0-9]*\.?[0-9]+)[\s,]+([-+]?[0-9]*\.?[0-9]+)/);
+      if (coordMatch) {
+        const lat = parseFloat(coordMatch[1]);
+        const lng = parseFloat(coordMatch[2]);
+        if (lat >= 20 && lat <= 35 && lng >= 25 && lng <= 38) {
+          if (miniMap && miniMapMarker) {
+            miniMap.setView([lat, lng], 16);
+            miniMapMarker.setLatLng([lat, lng]);
+          }
+          updateCoordinateBadges(lat.toFixed(6), lng.toFixed(6));
+          showToast('تم استخراج الإحداثيات بنجاح وعرضها على الخريطة!', 'success');
+          return;
+        }
+      }
+
+      showToast('الرابط صالح، سيتم فك الرابط المختصر بواسطة السيرفر تلقائياً عند الحفظ', 'info');
+    }
+
+    // Fetch All Properties
+    async function fetchPropertiesList() {
+      const refreshIcon = document.getElementById('refreshIcon');
+      refreshIcon.classList.add('animate-spin');
+
+      try {
+        const resp = await fetch('/api/properties?_t=' + Date.now());
+        if (!resp.ok) throw new Error('فشل جلب البيانات');
+        allProperties = await resp.json();
+        renderPropertiesTable(allProperties);
+        updateKPIs(allProperties);
+      } catch (err) {
+        showToast('تعذر جلب العقارات من السيرفر', 'error');
+      } finally {
+        refreshIcon.classList.remove('animate-spin');
+      }
+    }
+
+    function updateKPIs(props) {
+      document.getElementById('kpiTotalProperties').textContent = props.length;
+      const availableBeds = props.reduce((acc, p) => acc + (Number(p.available_beds) || 0), 0);
+      document.getElementById('kpiAvailableBeds').textContent = availableBeds;
+      
+      const avgPrice = props.length > 0 
+        ? Math.round(props.reduce((acc, p) => acc + (Number(p.bed_monthly_price) || 0), 0) / props.length)
+        : 0;
+      document.getElementById('kpiAvgRent').textContent = `${avgPrice.toLocaleString('ar-EG')} ج.م`;
+      document.getElementById('tableCountBadge').textContent = `${props.length} عقار`;
+    }
+
+    function renderPropertiesTable(properties) {
+      const tbody = document.getElementById('propertiesTableBody');
+      if (!properties || properties.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-12 text-center text-slate-400">
+              لا توجد عقارات مطابقة في قاعدة البيانات. استخدم النموذج أعلاه لإضافة سكن جديد.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = properties.map(p => {
+        const genderBadge = p.gender === 'female' 
+          ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-100 text-pink-700">طالبات (بنات)</span>'
+          : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">طلاب (ذكور)</span>';
+
+        const bedsBadge = p.available_beds > 0
+          ? `<span class="font-bold text-emerald-700">${p.available_beds} متاح</span> / ${p.total_beds}`
+          : `<span class="font-bold text-red-600">مكتمل</span> / ${p.total_beds}`;
+
+        return `
+          <tr class="hover:bg-slate-50/70 transition-colors" id="row-prop-${p.id}">
+            <td class="py-3 px-4 font-mono font-bold text-slate-400">${p.id}</td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-slate-900 text-xs">${escapeHtml(p.title)}</div>
+              <div class="text-[11px] text-teal-700 font-semibold mt-0.5 flex items-center gap-1">
+                <span>🎓</span>
+                <span>${escapeHtml(p.university)}</span>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500">${escapeHtml(p.region)}</span>
+              </div>
+            </td>
+            <td class="py-3 px-4">${genderBadge}</td>
+            <td class="py-3 px-4 font-black text-slate-900 text-xs">
+              ${Number(p.bed_monthly_price).toLocaleString('ar-EG')} <span class="text-[10px] text-slate-500 font-normal">ج.م/سرير</span>
+            </td>
+            <td class="py-3 px-4 text-xs">${bedsBadge}</td>
+            <td class="py-3 px-4">
+              <div class="font-mono text-[11px] text-slate-600">
+                ${Number(p.lat).toFixed(4)}, ${Number(p.lng).toFixed(4)}
+              </div>
+              <div class="text-[10px] text-slate-500 font-medium mt-0.5">
+                🚶 ${escapeHtml(p.distance_walk || `${p.walk_minutes || 5} دقائق مشياً`)}
+              </div>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <div class="flex items-center justify-center gap-1.5">
+                <button 
+                  onclick="loadPropertyForEdit(${p.id})" 
+                  class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-lg font-bold text-[11px] transition border border-amber-200"
+                  title="تعديل السكن"
+                >
+                  ✏️ تعديل
+                </button>
+                <button 
+                  onclick="promptDeleteProperty(${p.id})" 
+                  class="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg font-bold text-[11px] transition border border-red-200"
+                  title="حذف السكن"
+                >
+                  🗑️ حذف
+                </button>
+                <a 
+                  href="https://www.google.com/maps?q=${p.lat},${p.lng}" 
+                  target="_blank" 
+                  class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-bold text-[11px] transition border border-slate-200"
+                  title="عرض في خرائط جوجل"
+                >
+                  🗺️ خريطة
+                </a>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterTableRows() {
+      const q = document.getElementById('tableSearchInput').value.trim().toLowerCase();
+      const uniFilter = document.getElementById('tableFilterUni').value;
+      const genderFilter = document.getElementById('tableFilterGender').value;
+
+      const filtered = allProperties.filter(p => {
+        const matchesQuery = !q || p.title.toLowerCase().includes(q) || p.region.toLowerCase().includes(q) || p.university.toLowerCase().includes(q);
+        const matchesUni = !uniFilter || p.university.includes(uniFilter);
+        const matchesGender = !genderFilter || p.gender === genderFilter;
+        return matchesQuery && matchesUni && matchesGender;
+      });
+
+      renderPropertiesTable(filtered);
+    }
+
+    // Submit Property (Create or Update)
+    async function handlePropertySubmit(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      const submitBtnText = document.getElementById('submitBtnText');
+      const propId = document.getElementById('propId').value;
+      const isEditing = !!propId;
+
+      submitBtn.disabled = true;
+      submitBtnText.textContent = isEditing ? 'جاري تحديث السكن...' : 'جاري حفظ السكن وتحليل الرابط...';
+
+      const payload = {
+        title: document.getElementById('propTitle').value.trim(),
+        university: document.getElementById('propUniversity').value,
+        region: document.getElementById('propRegion').value.trim(),
+        gender: document.getElementById('propGender').value,
+        bed_monthly_price: parseFloat(document.getElementById('propBedPrice').value),
+        total_beds: parseInt(document.getElementById('propTotalBeds').value, 10),
+        available_beds: parseInt(document.getElementById('propAvailableBeds').value, 10),
+        deposit_amount: parseFloat(document.getElementById('propDeposit').value) || 2000,
+        study_environment: document.getElementById('propStudyEnv').value.trim(),
+        landlord_phone: document.getElementById('propPhone').value.trim(),
+        maps_url: document.getElementById('propMapsUrl').value.trim()
+      };
+
+      try {
+        let resp;
+        if (isEditing) {
+          resp = await fetch(`/api/properties/${propId}`, {
+            method: 'PUT',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${adminToken}`
+            },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          resp = await fetch('/api/properties', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${adminToken}`
+            },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        const data = await resp.json();
+        if (resp.ok) {
+          showToast(isEditing ? 'تم تحديث بيانات السكن بنجاح!' : 'تم إضافة السكن الجديد واستخراج الإحداثيات بنجاح!', 'success');
+          resetFormToCreateMode();
+          await fetchPropertiesList();
+          
+          // Scroll to the updated or new property in table
+          const targetId = isEditing ? propId : data.id;
+          if (targetId) {
+            setTimeout(() => {
+              const el = document.getElementById(`row-prop-${targetId}`);
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('bg-teal-50');
+                setTimeout(() => el.classList.remove('bg-teal-50'), 3000);
+              }
+            }, 300);
+          }
+        } else {
+          showToast(data.message || 'حدث خطأ أثناء حفظ السكن', 'error');
+        }
+      } catch (err) {
+        showToast('تعذر الاتصال بالسيرفر لحفظ العقار', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtnText.textContent = isEditing ? 'تحديث بيانات السكن' : 'حفظ ونشر السكن على المنصة';
+      }
+    }
+
+    // Load property into form for Edit
+    async function loadPropertyForEdit(id) {
+      try {
+        const resp = await fetch(`/api/properties/${id}`);
+        if (!resp.ok) throw new Error('العقار غير موجود');
+        const p = await resp.json();
+
+        document.getElementById('propId').value = p.id;
+        document.getElementById('propTitle').value = p.title;
+        document.getElementById('propUniversity').value = p.university;
+        document.getElementById('propRegion').value = p.region;
+        document.getElementById('propGender').value = p.gender;
+        document.getElementById('propBedPrice').value = p.bed_monthly_price;
+        document.getElementById('propTotalBeds').value = p.total_beds;
+        document.getElementById('propAvailableBeds').value = p.available_beds;
+        document.getElementById('propDeposit').value = p.deposit_amount || 2000;
+        document.getElementById('propStudyEnv').value = p.study_environment || '';
+        document.getElementById('propPhone').value = p.landlord_phone || '';
+        document.getElementById('propMapsUrl').value = `${p.lat}, ${p.lng}`;
+
+        // Switch Form UI to Edit Mode
+        document.getElementById('formTitle').innerHTML = `<span>✏️</span><span>تعديل السكن: ${escapeHtml(p.title)}</span>`;
+        document.getElementById('formSubtitle').textContent = `تعديل بيانات السكن ID #${p.id} وموقعه الجغرافي`;
+        document.getElementById('editModeIndicator').classList.remove('hidden');
+        document.getElementById('editModeIndicator').classList.add('flex');
+        document.getElementById('submitBtnIcon').textContent = '🔄';
+        document.getElementById('submitBtnText').textContent = 'تحديث بيانات السكن';
+
+        // Update mini-map position
+        if (miniMap && miniMapMarker) {
+          miniMap.setView([p.lat, p.lng], 16);
+          miniMapMarker.setLatLng([p.lat, p.lng]);
+        }
+        updateCoordinateBadges(Number(p.lat).toFixed(6), Number(p.lng).toFixed(6));
+
+        // Scroll to form smoothly
+        document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
+        showToast(`تم تحميل بيانات السكن #${p.id} في النموذج لتعديلها`, 'info');
+      } catch (err) {
+        showToast('تعذر تحميل بيانات السكن للتعديل', 'error');
+      }
+    }
+
+    function resetFormToCreateMode() {
+      document.getElementById('propertyForm').reset();
+      document.getElementById('propId').value = '';
+      document.getElementById('formTitle').innerHTML = '<span>➕</span><span>إضافة سكن طلاب جديد بالمنيا</span>';
+      document.getElementById('formSubtitle').textContent = 'أدخل بيانات السكن مع رابط خرائط جوجل ليتم استخراج الموقع وحساب مسافة المشي للجامعة تلقائياً';
+      document.getElementById('editModeIndicator').classList.add('hidden');
+      document.getElementById('editModeIndicator').classList.remove('flex');
+      document.getElementById('submitBtnIcon').textContent = '💾';
+      document.getElementById('submitBtnText').textContent = 'حفظ ونشر السكن على المنصة';
+      document.getElementById('coordPreviewBadge').classList.add('hidden');
+      onUniversitySelectChanged();
+    }
+
+    // Delete Operations
+    function promptDeleteProperty(id) {
+      currentDeleteId = id;
+      document.getElementById('deleteModal').classList.remove('hidden');
+      document.getElementById('deleteModal').classList.add('flex');
+    }
+
+    function closeDeleteModal() {
+      currentDeleteId = null;
+      document.getElementById('deleteModal').classList.add('hidden');
+      document.getElementById('deleteModal').classList.remove('flex');
+    }
+
+    async function executeDeleteProperty() {
+      if (!currentDeleteId) return;
+      const btn = document.getElementById('confirmDeleteBtn');
+      btn.disabled = true;
+      btn.textContent = 'جاري الحذف...';
+
+      try {
+        const resp = await fetch(`/api/properties/${currentDeleteId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${adminToken}` }
+        });
+        const data = await resp.json();
+        if (resp.ok) {
+          showToast(`تم حذف السكن #${currentDeleteId} بنجاح من قاعدة البيانات`, 'success');
+          closeDeleteModal();
+          await fetchPropertiesList();
+        } else {
+          showToast(data.message || 'فشل حذف السكن', 'error');
+        }
+      } catch (err) {
+        showToast('حدث خطأ أثناء حذف السكن', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'نعم، احذف الآن';
+      }
+    }
+
+    // Toast Notifications
+    let toastTimeout = null;
+    function showToast(msg, type = 'info') {
+      const toast = document.getElementById('toastNotification');
+      const content = document.getElementById('toastContent');
+      const text = document.getElementById('toastMessage');
+      const icon = document.getElementById('toastIcon');
+
+      text.textContent = msg;
+      if (type === 'success') {
+        icon.textContent = '✅';
+        content.className = 'p-4 rounded-2xl shadow-xl border flex items-center justify-between gap-3 text-sm font-bold animate-fade-in bg-emerald-50 text-emerald-900 border-emerald-200';
+      } else if (type === 'error') {
+        icon.textContent = '⚠️';
+        content.className = 'p-4 rounded-2xl shadow-xl border flex items-center justify-between gap-3 text-sm font-bold animate-fade-in bg-red-50 text-red-900 border-red-200';
+      } else {
+        icon.textContent = 'ℹ️';
+        content.className = 'p-4 rounded-2xl shadow-xl border flex items-center justify-between gap-3 text-sm font-bold animate-fade-in bg-blue-50 text-blue-900 border-blue-200';
+      }
+
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => hideToast(), 4500);
+    }
+
+    function hideToast() {
+      document.getElementById('toastNotification').classList.add('hidden');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

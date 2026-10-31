@@ -290,6 +290,12 @@
           <span>🌐 مركز النشر السحابي (Admin)</span>
         </button>
 
+        <!-- Admin Dashboard Direct Shortcut -->
+        <a href="/admin" id="adminDashboardLink" class="inline-flex items-center gap-1.5 bg-teal-800 hover:bg-teal-900 text-white text-xs sm:text-sm font-bold px-3 py-2 rounded-xl transition shadow-sm border border-teal-700">
+          <span>⚙️</span>
+          <span>لوحة الإدارة (/admin)</span>
+        </a>
+
         <!-- Add Property Button (Visible to Landlord & Admin) -->
         <button id="addPropertyBtn" onclick="openAddPropertyModal()" class="inline-flex items-center gap-1.5 bg-[#E36414] hover:bg-[#d0570f] text-white text-xs sm:text-sm font-bold px-3.5 py-2 rounded-xl transition shadow-sm">
           <span>➕</span>
@@ -3063,7 +3069,7 @@ git push -u origin main</pre>
     async function fetchInitialData() {
       try {
         const [propsRes, statsRes, maintRes, utilRes, toursRes, revRes, notifRes] = await Promise.all([
-          apiFetch('/api/properties').then(r => r.json()),
+          apiFetch('/api/properties?_t=' + Date.now()).then(r => r.json()),
           apiFetch('/api/stats?plan=' + currentActivePlan).then(r => r.json()),
           apiFetch('/api/maintenance').then(r => r.json()),
           apiFetch('/api/utilities').then(r => r.json()),
@@ -3071,7 +3077,7 @@ git push -u origin main</pre>
           apiFetch('/api/reviews').then(r => r.json()),
           apiFetch('/api/notifications').then(r => r.json())
         ]);
-        if (propsRes && Array.isArray(propsRes) && propsRes.length > 0) { propertiesData = propsRes; }
+        if (propsRes && Array.isArray(propsRes)) { propertiesData = propsRes; }
         statsData = statsRes || {};
         maintenanceData = maintRes || [];
         utilitiesData = utilRes || [];

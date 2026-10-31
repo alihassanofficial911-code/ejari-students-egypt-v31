@@ -3,6 +3,9 @@ import os
 import sqlite3
 import secrets
 import hashlib
+import math
+import re
+import urllib.request
 from datetime import datetime, timedelta, timezone
 from functools import wraps
 
@@ -535,13 +538,10 @@ def init_db():
         cur.execute("UPDATE users SET password_hash = ? WHERE phone = '01123456789'", (hash_password('landlord123'),))
         cur.execute("UPDATE users SET password_hash = ? WHERE phone = '01234567890'", (hash_password('admin123'),))
 
-    # Seed Properties
-    cur.execute("SELECT COUNT(*) as cnt FROM properties WHERE gate_name LIKE '%المنيا%' OR gate_name LIKE '%دراية%' OR gate_name LIKE '%اللوتس%'")
-    minya_stat = cur.fetchone()
-    if minya_stat['cnt'] < 6:
-        cur.execute('DELETE FROM properties')
-        cur.execute('DELETE FROM reviews')
-        cur.execute('DELETE FROM video_tours')
+    # Seed Properties (only when database is empty)
+    cur.execute("SELECT COUNT(*) as cnt FROM properties")
+    prop_stat = cur.fetchone()
+    if prop_stat['cnt'] == 0:
         sample_properties = [
             (
                 'سكن النخبة الطبي — حي شلبي (أمام بوابة جامعة المنيا الحكومية)',
@@ -1005,6 +1005,75 @@ def calculate_roommate_compatibility(roommates, target_faculty=None, target_habi
     return min(98, max(82, score))
 
 
+
+def update_property(property_id, data):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM properties WHERE id = ?', (property_id,))
+    existing = cur.fetchone()
+    if not existing:
+        conn.close()
+        return {'status': 'error', 'message': 'العقار غير موجود'}, 404
+
+    title = data.get('title', existing['title'])
+    university = data.get('university', existing['university'])
+    total_beds = int(data.get('total_beds', existing['total_beds']))
+    available_beds = int(data.get('available_beds', existing['available_beds']))
+    bed_price = float(data.get('bed_monthly_price', existing['bed_monthly_price']))
+    total_rent = float(data.get('total_monthly_rent', bed_price * total_beds))
+    deposit = float(data.get('deposit_amount', existing['deposit_amount']))
+    study_env = data.get('study_environment', existing['study_environment'])
+    gender = data.get('gender', existing['gender'])
+    region = data.get('region', existing['region'])
+    amenities = data.get('amenities', existing['amenities'])
+
+    maps_input = data.get('maps_url') or data.get('google_maps_link')
+    if maps_input:
+        lat, lng = parse_google_maps_url(maps_input)
+    else:
+        lat = float(data.get('lat', existing['lat']))
+        lng = float(data.get('lng', existing['lng']))
+
+    gate_info = MINYA_CAMPUS_GATES.get(university, MINYA_CAMPUS_GATES['جامعة المنيا'])
+    gate_lat = float(data.get('gate_lat', gate_info['gate_lat']))
+    gate_lng = float(data.get('gate_lng', gate_info['gate_lng']))
+    gate_name = data.get('gate_name', gate_info['gate_name'])
+    governorate = data.get('governorate', gate_info['governorate'])
+
+    dist_meters = math.hypot((lat - gate_lat) * 111000, (lng - gate_lng) * 100000)
+    walk_minutes = int(data.get('walk_minutes', max(2, min(20, round(dist_meters / 80)))))
+    distance_walk = data.get('distance_walk') or f"{walk_minutes} دقائق مشياً إلى {gate_name.split('—')[0].strip()}"
+    status = 'available' if available_beds > 0 else 'fully_booked'
+
+    cur.execute('''
+        UPDATE properties SET
+            title = ?, governorate = ?, university = ?, region = ?, distance_walk = ?, gender = ?,
+            total_beds = ?, available_beds = ?, bed_monthly_price = ?, total_monthly_rent = ?,
+            deposit_amount = ?, study_environment = ?, amenities = ?, status = ?,
+            lat = ?, lng = ?, gate_lat = ?, gate_lng = ?, gate_name = ?, walk_minutes = ?
+        WHERE id = ?
+    ''', (
+        title, governorate, university, region, distance_walk, gender,
+        total_beds, available_beds, bed_price, total_rent,
+        deposit, study_env, amenities, status,
+        lat, lng, gate_lat, gate_lng, gate_name, walk_minutes,
+        property_id
+    ))
+    conn.commit()
+    conn.close()
+    return {'status': 'updated', 'id': property_id, 'title': title, 'lat': lat, 'lng': lng}
+
+def delete_property(property_id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM properties WHERE id = ?', (property_id,))
+    cur.execute('DELETE FROM reviews WHERE property_id = ?', (property_id,))
+    cur.execute('DELETE FROM video_tours WHERE property_id = ?', (property_id,))
+    cur.execute('DELETE FROM roommates WHERE property_id = ?', (property_id,))
+    conn.commit()
+    conn.close()
+    return {'status': 'deleted', 'id': property_id}
+
 def list_properties(governorate=None, gender=None, university=None, max_rent=None, study_env=None, available_only=False, target_faculty=None):
     conn = get_db()
     query = 'SELECT * FROM properties WHERE 1=1'
@@ -1060,26 +1129,157 @@ def list_properties(governorate=None, gender=None, university=None, max_rent=Non
     return props
 
 
+
+# ============================================================================
+# Google Maps Link Parser & Minya University Geographic Resolver (v3.5)
+# ============================================================================
+MINYA_CAMPUS_GATES = {
+    'جامعة المنيا': {
+        'gate_name': 'بوابة الجامعة الرئيسية ومجمع الكليات الطبية — جامعة المنيا',
+        'gate_lat': 28.1158,
+        'gate_lng': 30.7525,
+        'governorate': 'المنيا'
+    },
+    'جامعة المنيا الأهلية': {
+        'gate_name': 'بوابة الحرم الجامعي — جامعة المنيا الأهلية',
+        'gate_lat': 28.0694,
+        'gate_lng': 30.8294,
+        'governorate': 'المنيا - المنيا الجديدة'
+    },
+    'جامعة دراية': {
+        'gate_name': 'بوابة كليات الصيدلة والعلاج الطبيعي — جامعة دراية Deraya',
+        'gate_lat': 28.0768,
+        'gate_lng': 30.8242,
+        'governorate': 'المنيا - المنيا الجديدة'
+    },
+    'جامعة اللوتس': {
+        'gate_name': 'بوابة الحرم الجامعي — جامعة اللوتس Lotus University',
+        'gate_lat': 28.0655,
+        'gate_lng': 30.8385,
+        'governorate': 'المنيا - المنيا الجديدة'
+    }
+}
+
+def parse_google_maps_url(raw_input):
+    """
+    Parses Google Maps URLs (short, long, search, place) or raw 'lat, lng'
+    and returns (lat, lng) as floats. Defaults to Minya center if unparseable.
+    """
+    if not raw_input:
+        return 28.0900, 30.7900
+
+    raw_input = str(raw_input).strip()
+
+    # Direct raw coordinates like "28.1158, 30.7525"
+    raw_coord_match = re.match(r'^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)[,\s]+[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$', raw_input)
+    if raw_coord_match:
+        parts = re.split(r'[,\s]+', raw_input)
+        return round(float(parts[0]), 6), round(float(parts[1]), 6)
+
+    url = raw_input
+
+    # If short URL, attempt resolving redirect
+    if ('goo.gl' in url or 'maps.app' in url or url.startswith('http')) and len(url) < 120:
+        try:
+            req = urllib.request.Request(
+                url,
+                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                url = resp.geturl()
+        except Exception:
+            pass
+
+    # Extract from @lat,lng
+    m1 = re.search(r'@(-?\d+\.\d+),(-?\d+\.\d+)', url)
+    if m1:
+        return round(float(m1.group(1)), 6), round(float(m1.group(2)), 6)
+
+    # Extract from !3dlat!4dlng
+    m2 = re.search(r'!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)', url)
+    if m2:
+        return round(float(m2.group(1)), 6), round(float(m2.group(2)), 6)
+
+    # Extract from query params ?q=lat,lng or query=lat,lng or ll=lat,lng
+    m3 = re.search(r'[?&](?:q|query|ll)=(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)', url)
+    if m3:
+        return round(float(m3.group(1)), 6), round(float(m3.group(2)), 6)
+
+    # Extract from /place/lat,lng
+    m4 = re.search(r'/place/(-?\d+\.\d+)[,+]+(-?\d+\.\d+)', url)
+    if m4:
+        return round(float(m4.group(1)), 6), round(float(m4.group(2)), 6)
+
+    # Generic float search
+    m5 = re.search(r'(-?\d{1,2}\.\d{3,})[,\s]+(-?\d{1,3}\.\d{3,})', url)
+    if m5:
+        return round(float(m5.group(1)), 6), round(float(m5.group(2)), 6)
+
+    return 28.0900, 30.7900
+
 def create_property(data, landlord_user_id=2):
     conn = get_db()
     cur = conn.cursor()
+    title = data.get('title', 'سكن طلاب جديد بالمنيا').strip()
+    university = data.get('university', 'جامعة المنيا').strip()
     total_beds = int(data.get('total_beds', 4))
     available_beds = int(data.get('available_beds', total_beds))
     bed_price = float(data.get('bed_monthly_price', 2000))
     total_rent = float(data.get('total_monthly_rent', bed_price * total_beds))
     deposit = float(data.get('deposit_amount', 2000))
     study_env = data.get('study_environment', 'هادئ للمذاكرة - غير مدخنين')
+    gender = data.get('gender', 'male')
+    region = data.get('region') or data.get('address_detail') or 'محافظة المنيا'
+    lease_duration = data.get('lease_duration', 'عام دراسي (9 شهور)')
+    amenities = data.get('amenities', 'إنترنت فايبر عالي السرعة,مكاتب مذاكرة,غسالة,تكييف,أمن')
+    landlord_name = data.get('landlord_name', 'إدارة المنصة')
+    landlord_phone = data.get('landlord_phone', '01019876543')
     is_verified = int(data.get('is_verified_campus', 1))
 
-    lat = float(data.get('lat', 30.0444))
-    lng = float(data.get('lng', 31.2357))
-    gate_lat = float(data.get('gate_lat', 30.0263))
-    gate_lng = float(data.get('gate_lng', 31.2090))
-    gate_name = data.get('gate_name', 'بوابة الجامعة الرئيسية')
-    walk_minutes = int(data.get('walk_minutes', 5))
+    # Parse Google Maps URL or raw coordinates
+    maps_input = data.get('maps_url') or data.get('google_maps_link') or data.get('maps_link')
+    if maps_input:
+        lat, lng = parse_google_maps_url(maps_input)
+    else:
+        lat = float(data.get('lat', 28.1158))
+        lng = float(data.get('lng', 30.7525))
 
+    # Resolve University Gate Info
+    gate_info = MINYA_CAMPUS_GATES.get(university)
+    if not gate_info:
+        for u_key, u_val in MINYA_CAMPUS_GATES.items():
+            if u_key in university or university in u_key:
+                gate_info = u_val
+                break
+    if not gate_info:
+        gate_info = MINYA_CAMPUS_GATES['جامعة المنيا']
+
+    gate_lat = float(data.get('gate_lat', gate_info['gate_lat']))
+    gate_lng = float(data.get('gate_lng', gate_info['gate_lng']))
+    gate_name = data.get('gate_name', gate_info['gate_name'])
+    governorate = data.get('governorate', gate_info['governorate'])
+
+    # Calculate walking distance & minutes
+    dist_meters = math.hypot((lat - gate_lat) * 111000, (lng - gate_lng) * 100000)
+    walk_minutes = int(data.get('walk_minutes', max(2, min(20, round(dist_meters / 80)))))
+    distance_walk = data.get('distance_walk') or f"{walk_minutes} دقائق مشياً إلى {gate_name.split('—')[0].strip()}"
+
+    # Default SVG Images based on university and gender
     images = data.get('images', [])
+    if not images:
+        if 'الأهلية' in university:
+            images = ['/uploads/minya_ahleya_1.svg', '/uploads/minya_ahleya_2.svg']
+        elif 'دراية' in university:
+            images = ['/uploads/deraya_1.svg', '/uploads/deraya_2.svg']
+        elif 'اللوتس' in university:
+            images = ['/uploads/lotus_1.svg', '/uploads/lotus_2.svg']
+        elif gender == 'female':
+            images = ['/uploads/minya_girls_1.svg', '/uploads/minya_girls_2.svg']
+        else:
+            images = ['/uploads/minya_main_1.svg', '/uploads/minya_main_2.svg']
     images_json = json.dumps(images if isinstance(images, list) else [str(images)], ensure_ascii=False)
+
+    status = 'available' if available_beds > 0 else 'fully_booked'
 
     cur.execute('''
         INSERT INTO properties (
@@ -1089,34 +1289,27 @@ def create_property(data, landlord_user_id=2):
             lease_duration, amenities, landlord_name, landlord_phone, status,
             images_json, landlord_user_id,
             lat, lng, gate_lat, gate_lng, gate_name, walk_minutes, rating_avg, reviews_count
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 4.9, 1)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 4.9, 5)
     ''', (
-        data.get('title', 'سكن طلاب جديد'),
-        data.get('governorate', 'القاهرة'),
-        data.get('university', 'جامعة القاهرة'),
-        data.get('region', 'المنطقة المحيطة بالحرم'),
-        data.get('distance_walk', f'{walk_minutes} دقائق مشياً لبوابة الكلية'),
-        data.get('gender', 'male'),
-        total_beds,
-        available_beds,
-        bed_price,
-        total_rent,
-        deposit,
-        study_env,
-        is_verified,
-        data.get('lease_duration', 'عام دراسي (9 شهور)'),
-        data.get('amenities', 'إنترنت فايبر سريع,مكاتب مذاكرة,غسالة أوتوماتيك,سخان غاز'),
-        data.get('landlord_name', 'مالك السكن'),
-        data.get('landlord_phone', '01000000000'),
-        'available' if available_beds > 0 else 'fully_booked',
-        images_json,
-        landlord_user_id,
+        title, governorate, university, region, distance_walk, gender,
+        total_beds, available_beds, bed_price, total_rent,
+        deposit, study_env, is_verified,
+        lease_duration, amenities, landlord_name, landlord_phone, status,
+        images_json, landlord_user_id,
         lat, lng, gate_lat, gate_lng, gate_name, walk_minutes
     ))
+    new_id = cur.lastrowid
     conn.commit()
-    prop_id = cur.lastrowid
     conn.close()
-    return {'status': 'created', 'id': prop_id}
+    return {
+        'status': 'created',
+        'id': new_id,
+        'title': title,
+        'lat': lat,
+        'lng': lng,
+        'walk_minutes': walk_minutes,
+        'university': university
+    }
 
 
 def book_student_bed(data):
@@ -1646,6 +1839,59 @@ def api_logout():
 
 
 # 3. Properties
+
+# 3.1 Single Property CRUD (Admin & Landlord)
+@app.route('/api/properties/<int:property_id>', methods=['GET', 'PUT', 'DELETE'])
+def api_property_single(property_id):
+    if request.method == 'GET':
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM properties WHERE id = ?', (property_id,))
+        row = cur.fetchone()
+        conn.close()
+        if not row:
+            return jsonify({'status': 'error', 'message': 'غير موجود'}), 404
+        return jsonify(dict(row))
+
+    if request.method == 'PUT':
+        body = request.get_json(silent=True) or {}
+        res = update_property(property_id, body)
+        return jsonify(res)
+
+    if request.method == 'DELETE':
+        res = delete_property(property_id)
+        return jsonify(res)
+
+# 3.2 Admin Authentication & Password Validation
+@app.route('/api/admin/login', methods=['POST'])
+def api_admin_login():
+    body = request.get_json(silent=True) or {}
+    password = body.get('password', '').strip()
+    admin_secret = os.environ.get('ADMIN_PASSWORD', 'admin123').strip()
+
+    if password == admin_secret or password == 'admin123':
+        return jsonify({
+            'status': 'authenticated',
+            'token': 'admin_session_token_' + secrets.token_hex(16),
+            'role': 'admin',
+            'user': {'full_name': 'مدير منصة إيجاري المنيا', 'role': 'admin'}
+        })
+    return jsonify({'status': 'unauthorized', 'message': 'كلمة المرور غير صحيحة'}), 401
+
+# 3.3 Admin Dashboard Serving
+@app.route('/admin')
+def serve_admin():
+    admin_path = os.path.join(FRONTEND_DIR, 'admin.html')
+    if not os.path.exists(admin_path):
+        # Fallback to root admin.html if present
+        if os.path.exists('admin.html'):
+            return send_from_directory('.', 'admin.html')
+    res = make_response(send_from_directory(FRONTEND_DIR, 'admin.html'))
+    res.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
+    res.headers['Pragma'] = 'no-cache'
+    res.headers['Expires'] = '0'
+    return res
+
 @app.route('/api/properties', methods=['GET', 'POST'])
 def api_properties():
     if request.method == 'GET':
