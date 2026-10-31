@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة إيجاري طلاب مصر v3.1 | Ejari Students Egypt — سكن الطلاب المغتربين والوافدين بالمحافظات</title>
+  <title>منصة إيجاري طلاب مصر | Ejari Students Egypt — سكن الطلاب المغتربين والوافدين بالجامعات المصرية</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -144,8 +144,8 @@
   <!-- Top Announcement Bar with Fast Demo Auth & Dark Mode -->
   <div class="bg-gradient-to-r from-[#0F4C5C] via-[#0D9488] to-[#0F4C5C] text-white text-xs py-2 px-4 shadow-sm flex flex-wrap items-center justify-between gap-2">
     <div class="flex items-center gap-2">
-      <span class="bg-[#E36414] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">إصدار v3.1 Production</span>
-      <span class="hidden sm:inline">سكن الطلاب المغتربين • خرائط بوابات الجامعات • تقييمات الطلاب • إشعارات أولياء الأمور WhatsApp • أمان JWT وتشفير عالي</span>
+      <span class="bg-[#E36414] text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-sm">سكن موثق</span>
+      <span class="hidden sm:inline">سكن الطلاب المغتربين والوافدين • بوابات الجامعات المصرية • حماية التأمين بالضمان • إشعارات أولياء الأمور WhatsApp</span>
     </div>
 
     <div class="flex items-center gap-2">
@@ -183,9 +183,9 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-xl font-black text-[#0F4C5C] dark:text-emerald-400 tracking-tight">إيجاري طلاب مصر</h1>
-            <span class="text-[10px] bg-[#E36414]/10 text-[#E36414] dark:bg-amber-400/20 dark:text-amber-300 font-bold px-2 py-0.5 rounded-full border border-[#E36414]/20">v3.2 Production-Ready</span>
+            <span class="text-[10px] bg-emerald-500/10 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/20">منصة سكن الطلاب المعتمدة</span>
           </div>
-          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سوق وحجز سكن الطلاب المغتربين • خرائط البوابات • حماية التأمين بالضمان والـ JWT</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">سوق وحجز سكن الطلاب المغتربين والوافدين • حماية التأمين بالضمان • معاينات فيديو مباشرة</p>
         </div>
       </div>
 
@@ -219,10 +219,10 @@
           <span>تسجيل الدخول / حساب جديد</span>
         </button>
 
-        <!-- Prominent Render Live Button -->
-        <button onclick="openCloudDeployModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-black px-3.5 py-2 rounded-xl transition shadow-md shadow-emerald-600/30 border border-emerald-400/40">
+        <!-- Admin Only Cloud Deploy Button -->
+        <button id="adminDeployBtn" onclick="openCloudDeployModal()" class="hidden inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-black px-3.5 py-2 rounded-xl transition shadow-md shadow-emerald-600/30 border border-emerald-400/40">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-200 animate-pulse"></span>
-          <span>🌐 رابط النشر السحابي المباشر (Render Live)</span>
+          <span>🌐 مركز النشر السحابي (Admin)</span>
         </button>
 
         <!-- Add Property Button (Visible to Landlord & Admin) -->
@@ -269,14 +269,15 @@
   </header>
 
   <!-- Main Content Area -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-20 md:pb-8">
 
     <!-- VIEW 1: MARKETPLACE -->
-    <section id="view-market" class="space-y-6">
+    <!-- VIEW 1: MARKETPLACE (v3.3 Streamlined UX & Split-Map) -->
+    <section id="view-market" class="space-y-5">
       
       <!-- Marketplace Banner -->
-      <div class="bg-gradient-to-br from-[#0F4C5C] to-[#1E6B7B] dark:from-[#064E3B] dark:to-[#0F172A] rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
-        <div class="relative z-10 max-w-3xl space-y-3">
+      <div class="bg-gradient-to-br from-[#0F4C5C] to-[#1E6B7B] dark:from-[#064E3B] dark:to-[#0F172A] rounded-3xl p-6 sm:p-7 text-white shadow-lg relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl space-y-2.5">
           <div class="inline-flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
             <span>🇪🇬 سكن جامعي آمن وموثق 100%</span>
             <span>•</span>
@@ -284,12 +285,12 @@
           </div>
           <h2 class="text-2xl sm:text-3xl font-black leading-snug">ابحث عن سكن طلاب مفحوص بمندوب الجامعة مع معاينة فيديو مباشر</h2>
           <p class="text-slate-200 text-xs sm:text-sm leading-relaxed">
-            احجز سريرك المستقل مع زملاء متوافقين دراسياً. تأمينك المالي محفوظ في حساب ضمان المنصة (Escrow) ويسترد بنهاية العام. احجز معاينة فيديو مباشر مدتها 10 دقائق قبل أن تسافر من محافظتك.
+            احجز سريرك المستقل مع زملاء متوافقين دراسياً. تأمينك المالي محفوظ في حساب ضمان المنصة (Escrow) ويسترد بنهاية الإقامة. احجز معاينة فيديو مباشر قبل السفر من محافظتك.
           </p>
-          <div class="flex flex-wrap items-center gap-3 pt-1 text-xs font-semibold">
-            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🛡️ تم الفحص والتوثيق بواسطة مندوب الجامعة</span>
-            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🔒 حماية مبلغ التأمين المسترد بالضمان</span>
-            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🎥 معاينة فيديو مباشر عبر واتساب وزووم</span>
+          <div class="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-semibold">
+            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🛡️ توثيق وفحص ميداني معتمد</span>
+            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🔒 حماية مبلغ التأمين بالضمان البنكي</span>
+            <span class="flex items-center gap-1.5 bg-black/25 px-3 py-1.5 rounded-lg">🎥 معاينة فيديو مباشر WhatsApp & Zoom</span>
           </div>
         </div>
         <div class="absolute -left-10 -bottom-10 opacity-10 text-9xl pointer-events-none select-none">
@@ -297,88 +298,85 @@
         </div>
       </div>
 
-      <!-- ESCROW RECEIPT TRACKER (v3.2) -->
-      <div class="bg-gradient-to-r from-slate-900 via-[#0a2e36] to-slate-900 text-white rounded-3xl p-6 border-2 border-emerald-500/40 shadow-xl space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+      <!-- COMPACT ESCROW TRUST BAR (v3.3) -->
+      <div id="escrowTrustBar" class="bg-gradient-to-r from-slate-900 via-[#0a2e36] to-slate-900 text-white rounded-2xl p-4 sm:p-5 border border-emerald-500/30 shadow-md space-y-3 transition">
+        <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-2xl font-black">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-xl font-black shrink-0">
               🛡️
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h3 class="font-black text-base sm:text-lg text-white">التحقق الفوري من إيصال التأمين وحالة الضمان (Escrow Receipt Tracker)</h3>
-                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-black px-2.5 py-0.5 rounded-full border border-emerald-500/30">جديد v3.2</span>
+                <h3 class="font-black text-sm sm:text-base text-white">فحص وثيقة الضمان والتأمين (Escrow Receipt Tracker)</h3>
+                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">حماية معتمدة</span>
               </div>
-              <p class="text-xs text-slate-300 mt-0.5">للطالب وولي الأمر بالمحافظات: أدخل كود الإيصال المعتمد للتحقق من حفظ وتأمين وديعة السكن في حساب الضمان البنكي الرسمي.</p>
+              <p class="text-xs text-slate-300">تحقق فوري من إيداع تأمين السكن واسترداده بالكامل عند إخلاء الغرفة</p>
             </div>
           </div>
-          <span class="text-xs bg-emerald-500/20 text-emerald-300 font-extrabold px-3 py-1.5 rounded-xl border border-emerald-500/30 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            حساب الضمان البنكي الذكي المعتمد
-          </span>
-        </div>
 
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
-          <div class="relative flex-1">
-            <span class="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-slate-400 text-base">
-              🏷️
-            </span>
-            <input type="text" id="escrowReceiptInput" placeholder="أدخل كود الإيصال (مثال: EJR-202610-101)..." class="w-full bg-black/40 border border-emerald-500/40 rounded-xl pr-11 pl-4 py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-mono tracking-wider">
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <div class="relative flex-1 sm:w-64">
+              <span class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-slate-400 text-sm">
+                🏷️
+              </span>
+              <input type="text" id="escrowReceiptInput" placeholder="كود الإيصال (مثال: EJR-202610-101)" class="w-full bg-black/40 border border-emerald-500/40 rounded-xl pr-9 pl-3 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 font-mono">
+            </div>
+            <button onclick="verifyEscrowReceipt()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-xs transition shadow-md flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <span>🔍 تحقق الآن</span>
+            </button>
           </div>
-          <button onclick="verifyEscrowReceipt()" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black rounded-xl text-xs sm:text-sm transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
-            <span>🔍 تحقق من الضمان الآن</span>
-          </button>
         </div>
 
         <!-- Demo pills to test instantly with 1-click -->
-        <div class="flex flex-wrap items-center gap-2 text-xs">
-          <span class="text-slate-400 font-bold text-[11px]">أكواد معتمدة للفحص التجريبي السريع:</span>
-          <button onclick="quickTestReceipt('EJR-202610-101')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-emerald-500/20 transition">
+        <div class="flex flex-wrap items-center gap-1.5 text-xs pt-2 border-t border-white/10">
+          <span class="text-slate-400 font-bold text-[11px]">أكواد معتمدة للفحص التجريبي:</span>
+          <button onclick="quickTestReceipt('EJR-202610-101')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-0.5 rounded-lg border border-emerald-500/20 transition">
             EJR-202610-101 (المنصورة)
           </button>
-          <button onclick="quickTestReceipt('EJR-202610-201')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-emerald-500/20 transition">
+          <button onclick="quickTestReceipt('EJR-202610-201')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-0.5 rounded-lg border border-emerald-500/20 transition">
             EJR-202610-201 (القاهرة)
           </button>
-          <button onclick="quickTestReceipt('EJR-202610-301')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-emerald-500/20 transition">
+          <button onclick="quickTestReceipt('EJR-202610-301')" class="bg-white/10 hover:bg-white/20 text-emerald-300 font-mono text-[11px] px-2.5 py-0.5 rounded-lg border border-emerald-500/20 transition">
             EJR-202610-301 (الإسكندرية)
           </button>
         </div>
 
-        <!-- Result Card Box (Injected via JS) -->
+        <!-- Result Drawer Box (Injected via JS) -->
         <div id="escrowReceiptResultBox" class="hidden"></div>
       </div>
 
-      <!-- Filters Bar -->
-      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="text-lg">🔍</span>
-            <h3 class="font-extrabold text-sm sm:text-base text-slate-800 dark:text-slate-100">تصفية وبحث سكن الطلاب حسب الجامعة، التوافق، والبيئة الدراسية</h3>
+      <!-- STREAMLINED SMART FILTER BAR -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3.5">
+        
+        <!-- Row 1: Governorate Pills -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <span>🏛️</span>
+              <span>المحافظة والجامعة:</span>
+            </span>
+            <button onclick="resetFilters()" class="text-xs text-[#0F4C5C] dark:text-emerald-400 hover:underline font-bold">
+              إعادة تعيين الفلاتر
+            </button>
           </div>
-          <button onclick="resetFilters()" class="text-xs text-[#0F4C5C] dark:text-emerald-400 hover:underline font-bold">إعادة تعيين الفلاتر</button>
-        </div>
-
-        <!-- Governorate Quick Filter Pills (v3.2) -->
-        <div class="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
-          <span class="text-xs font-bold text-slate-600 dark:text-slate-400 block">تصفية سريعة بالمحافظة والجامعة:</span>
           <div class="flex flex-wrap items-center gap-1.5" id="govPillsContainer">
             <button onclick="selectGovPill('all')" data-gov="all" class="gov-pill-active px-3 py-1.5 rounded-xl text-xs font-extrabold transition">
               🏛️ كل المحافظات
             </button>
             <button onclick="selectGovPill('المنصورة')" data-gov="المنصورة" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              الدقهلية (المنصورة والدلتا)
+              الدقهلية (جامعة المنصورة)
             </button>
             <button onclick="selectGovPill('القاهرة')" data-gov="القاهرة" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
               الجيزة والقاهرة (جامعة القاهرة وعين شمس)
             </button>
             <button onclick="selectGovPill('الإسكندرية')" data-gov="الإسكندرية" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              الإسكندرية والأكاديمية
+              الإسكندرية (المجمع النظري)
             </button>
             <button onclick="selectGovPill('أسيوط')" data-gov="أسيوط" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
               أسيوط والمنيا
             </button>
             <button onclick="selectGovPill('طنطا')" data-gov="طنطا" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
-              الغربية والمنوفية (طنطا)
+              الغربية (جامعة طنطا)
             </button>
             <button onclick="selectGovPill('أكتوبر')" data-gov="أكتوبر" class="gov-pill-inactive px-3 py-1.5 rounded-xl text-xs font-bold transition">
               6 أكتوبر وزايد (MUST & AUC)
@@ -386,127 +384,142 @@
           </div>
         </div>
 
-        <!-- Interactive Max Price Slider (v3.2) -->
-        <div class="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/60 space-y-2">
-          <div class="flex items-center justify-between text-xs sm:text-sm font-bold">
-            <span class="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-              <span>💰</span>
-              <span>شريط تحديد الحد الأقصى لسعر السرير الشهري (Max Price Slider):</span>
-            </span>
-            <span id="priceSliderValueLabel" class="font-black text-[#0F4C5C] dark:text-emerald-400 bg-white dark:bg-slate-900 px-3 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
-              حتى 4,000 ج.م / شهرياً
-            </span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-slate-400 font-bold">1,000 ج.م</span>
-            <input type="range" id="filterPriceSlider" min="1000" max="4000" step="100" value="4000" oninput="onPriceSliderChange(this.value)" class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#0F4C5C] dark:accent-emerald-500">
-            <span class="text-xs text-slate-400 font-bold">4,000 ج.م</span>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs sm:text-sm">
-          <!-- Governorate & University -->
-          <div>
-            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">المحافظة والجامعة</label>
-            <select id="filterUniversity" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
-              <option value="all">كل الجامعات بالمحافظات</option>
-              <option value="المنصورة">الدقهلية — جامعة المنصورة والدلتا (شارع جيهان، توشكى)</option>
-              <option value="القاهرة">الجيزة والقاهرة — جامعة القاهرة وعين شمس (الدقي، بين السرايات)</option>
-              <option value="الإسكندرية">الإسكندرية — جامعة الإسكندرية (سوتر، المجمع النظري)</option>
-              <option value="أسيوط">أسيوط والمنيا — جامعة أسيوط (حي فريال، شارع المكتبات)</option>
-              <option value="طنطا">الغربية — جامعة طنطا والمنوفية (سبرباي، شارع سعيد)</option>
-              <option value="أكتوبر">الجيزة — جامعة 6 أكتوبر وMUST وAUC (الحي المتميز)</option>
-            </select>
-          </div>
-
-          <!-- Gender Allocation -->
-          <div>
-            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">نوع السكن والطلبة</label>
-            <select id="filterGender" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
-              <option value="all">الكل (سكن شباب + سكن طالبات)</option>
+        <!-- Row 2: Secondary Controls (Gender, Study Env, Slider, Map Toggle) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+          
+          <!-- Gender Allocation (3 cols) -->
+          <div class="lg:col-span-3">
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">نوع السكن</label>
+            <select id="filterGender" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
+              <option value="all">الكل (شباب + طالبات)</option>
               <option value="male">👨‍🎓 سكن طلاب ذكور (شباب)</option>
               <option value="female">👩‍🎓 سكن طالبات إناث (مغتربات)</option>
             </select>
           </div>
 
-          <!-- Study Environment -->
-          <div>
-            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">بيئة السكن والمذاكرة</label>
-            <select id="filterStudyEnv" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
-              <option value="all">الكل (جميع البيئات)</option>
-              <option value="هادئ">مذاكرة هادئة جداً (كليات عليا)</option>
-              <option value="غير مدخنين">سكن غير مدخنين تماماً</option>
+          <!-- Study Environment (3 cols) -->
+          <div class="lg:col-span-3">
+            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">بيئة المذاكرة</label>
+            <select id="filterStudyEnv" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
+              <option value="all">كل البيئات</option>
+              <option value="هادئ">مذاكرة هادئة (كليات عليا)</option>
+              <option value="غير مدخنين">سكن غير مدخنين</option>
               <option value="فندقي">مستوى فندقي فاخر</option>
             </select>
           </div>
 
-          <!-- Max Bed Rent -->
-          <div>
-            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">الحد الأقصى لسعر السرير</label>
-            <select id="filterMaxRent" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
-              <option value="all">أي سعر</option>
-              <option value="1800">حتى 1,800 ج.م / شهرياً</option>
-              <option value="2500">حتى 2,500 ج.م / شهرياً</option>
-              <option value="3500">حتى 3,500 ج.م / شهرياً</option>
-            </select>
-          </div>
-
-          <!-- Availability -->
-          <div>
-            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">حالة التوفر الفوري</label>
-            <select id="filterAvailability" onchange="applyFilters()" class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 font-medium text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#0F4C5C]">
-              <option value="all">كل الشقق</option>
-              <option value="available">متاح سرير فوري الآن فقط</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- Interactive Leaflet Campus Map & Polyline Routes (v3.1) -->
-      <div id="leafletMapSection" class="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-[#0F4C5C]/10 text-[#0F4C5C] dark:bg-emerald-500/20 dark:text-emerald-400 flex items-center justify-center text-xl font-black">
-              🗺️
+          <!-- Max Price Slider (4 cols) -->
+          <div class="lg:col-span-4 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/60 space-y-1">
+            <div class="flex items-center justify-between text-[11px] font-bold">
+              <span class="text-slate-600 dark:text-slate-400">الحد الأقصى لسعر السرير:</span>
+              <span id="priceSliderValueLabel" class="font-black text-[#0F4C5C] dark:text-emerald-400">
+                حتى 4,000 ج.م / شهرياً
+              </span>
             </div>
-            <div>
-              <h3 class="font-extrabold text-sm sm:text-base text-slate-900 dark:text-slate-100 flex items-center gap-2">
-                <span>خريطة الحرم الجامعي وبوابات الكليات والمسارات المباشرة</span>
-                <span class="text-[10px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold px-2 py-0.5 rounded-full">تفاعلية Leaflet.js</span>
-              </h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">تتبع موقع كل سكن بدقة والمسافة مشياً إلى بوابة الكلية مع مسار السير المباشر</p>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] text-slate-400 font-bold">1,000</span>
+              <input type="range" id="filterPriceSlider" min="1000" max="4000" step="100" value="4000" oninput="onPriceSliderChange(this.value)" class="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#0F4C5C] dark:accent-emerald-500">
+              <span class="text-[10px] text-slate-400 font-bold">4,000</span>
             </div>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2 text-xs font-bold">
-            <span class="inline-flex items-center gap-1.5 bg-teal-50 dark:bg-teal-950/70 text-teal-800 dark:text-teal-300 px-3 py-1.5 rounded-xl border border-teal-200 dark:border-teal-900">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#0F4C5C]"></span> دبابيس الشقق
-            </span>
-            <span class="inline-flex items-center gap-1.5 bg-orange-50 dark:bg-orange-950/70 text-orange-800 dark:text-orange-300 px-3 py-1.5 rounded-xl border border-orange-200 dark:border-orange-900">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#E36414]"></span> بوابات الجامعات
-            </span>
-            <button onclick="resetMapView()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-bold transition flex items-center gap-1">
-              <span>🔄</span><span>إعادة ضبط الخريطة</span>
+          <!-- Toggle Map Button (2 cols) -->
+          <div class="lg:col-span-2 flex items-end">
+            <button id="toggleMapBtn" onclick="toggleMapVisibility()" class="w-full py-2 px-3 rounded-xl font-bold bg-[#0F4C5C]/10 hover:bg-[#0F4C5C]/20 text-[#0F4C5C] dark:bg-emerald-500/15 dark:hover:bg-emerald-500/25 dark:text-emerald-300 border border-[#0F4C5C]/20 dark:border-emerald-500/30 transition flex items-center justify-center gap-1.5">
+              <span>🗺️</span>
+              <span id="toggleMapBtnText">الخريطة</span>
             </button>
           </div>
-        </div>
 
-        <div id="campusMap" class="w-full h-80 sm:h-96 rounded-2xl border border-slate-200 dark:border-slate-800 z-0 overflow-hidden shadow-inner"></div>
+        </div>
       </div>
 
-      <!-- Properties Results Count & Grid -->
-      <div class="space-y-4">
-        <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-400">
-          <div>الشقق وسكن الطلاب المتاح: <span id="marketCount" class="text-[#0F4C5C] dark:text-emerald-400 font-extrabold text-base">0</span> سكن</div>
-          <div class="flex items-center gap-3">
-            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> سكن شباب</span>
-            <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-pink-600"></span> سكن طالبات</span>
+      <!-- APARTMENTS-FIRST SPLIT-VIEW WITH STICKY MAP (v3.3) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Listings Column (7 cols on lg, 8 cols on xl) -->
+        <div id="listingsCol" class="lg:col-span-7 xl:col-span-8 space-y-4">
+          
+          <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-400 bg-white dark:bg-slate-900 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div>
+              الشقق وسكن الطلاب المتاح: <span id="marketCount" class="text-[#0F4C5C] dark:text-emerald-400 font-black text-base">6</span> سكن
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> سكن شباب</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-pink-600"></span> سكن طالبات</span>
+            </div>
+          </div>
+
+          <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- 3 Skeleton Pulse Cards shown while loading / cold start -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse">
+              <div class="w-full h-44 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+              <div class="space-y-2">
+                <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+                <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+              </div>
+              <div class="flex gap-2">
+                <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-16"></div>
+                <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-20"></div>
+              </div>
+              <div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-full"></div>
+            </div>
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse">
+              <div class="w-full h-44 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+              <div class="space-y-2">
+                <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+                <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+              </div>
+              <div class="flex gap-2">
+                <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-16"></div>
+                <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-20"></div>
+              </div>
+              <div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-full"></div>
+            </div>
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 animate-pulse">
+              <div class="w-full h-44 bg-slate-200 dark:bg-slate-800 rounded-2xl"></div>
+              <div class="space-y-2">
+                <div class="h-4 bg-slate-200 dark:bg-slate-800 rounded w-3/4"></div>
+                <div class="h-3 bg-slate-200 dark:bg-slate-800 rounded w-1/2"></div>
+              </div>
+              <div class="flex gap-2">
+                <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-16"></div>
+                <div class="h-6 bg-slate-200 dark:bg-slate-800 rounded-lg w-20"></div>
+              </div>
+              <div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-xl w-full"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sticky Map Column (5 cols on lg, 4 cols on xl) -->
+        <div id="mapCol" class="lg:col-span-5 xl:col-span-4 sticky top-20 space-y-3">
+          <div class="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">🗺️</span>
+                <h3 class="font-black text-sm text-slate-900 dark:text-slate-100">خريطة بوابات الجامعات والمسارات</h3>
+              </div>
+              <button onclick="resetMapView()" class="text-xs px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg font-bold transition flex items-center gap-1">
+                <span>🔄</span>
+                <span>ضبط</span>
+              </button>
+            </div>
+
+            <div class="flex items-center gap-2 text-[11px] font-bold text-slate-600 dark:text-slate-400">
+              <span class="inline-flex items-center gap-1 bg-teal-50 dark:bg-teal-950/70 text-teal-800 dark:text-teal-300 px-2 py-0.5 rounded-lg border border-teal-200 dark:border-teal-900">
+                <span class="w-2 h-2 rounded-full bg-[#0F4C5C]"></span> سكن الطلاب
+              </span>
+              <span class="inline-flex items-center gap-1 bg-orange-50 dark:bg-orange-950/70 text-orange-800 dark:text-orange-300 px-2 py-0.5 rounded-lg border border-orange-200 dark:border-orange-900">
+                <span class="w-2 h-2 rounded-full bg-[#E36414]"></span> بوابات الكليات
+              </span>
+            </div>
+
+            <!-- Leaflet Campus Map Container -->
+            <div id="campusMap" class="w-full h-80 sm:h-[480px] rounded-2xl border border-slate-200 dark:border-slate-800 z-0 overflow-hidden shadow-inner"></div>
           </div>
         </div>
 
-        <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Injected via JS -->
-        </div>
       </div>
 
     </section>
@@ -638,7 +651,7 @@
     <section id="view-landlord" class="space-y-6 hidden">
 
       <!-- Cloud Deployment & DevOps Guide Card -->
-      <div id="adminCloudDeploymentCard" class="bg-gradient-to-br from-slate-900 via-[#0a2f38] to-slate-900 text-white rounded-3xl p-6 border-2 border-emerald-500/40 shadow-xl space-y-4">
+      <div id="adminCloudDeploymentCard" class="hidden bg-gradient-to-br from-slate-900 via-[#0a2f38] to-slate-900 text-white rounded-3xl p-6 border-2 border-emerald-500/40 shadow-xl space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
           <div class="flex items-center gap-3">
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl">
@@ -1952,7 +1965,203 @@ git push -u origin main</pre>
   <!-- ==================== SCRIPT LOGIC ==================== -->
   <script>
     // State management
-    let propertiesData = [];
+        // Fast Fallback Seed Data (<100ms instant load for cold starts)
+    const DEFAULT_PROPERTIES_SEED = [
+      {
+        id: 1,
+        title: "سكن الفردوس للطلاب — خطوات من بوابة توشكى ومجمع الكليات الطبية",
+        governorate: "الدقهلية",
+        university: "جامعة المنصورة",
+        address_detail: "شارع جيهان، حي الجامعة",
+        distance_walk: "4 دقائق مشياً لبوابة توشكى وكلية الطب",
+        gender: "male",
+        total_beds: 4,
+        available_beds: 1,
+        bed_monthly_price: 2200.0,
+        full_apt_monthly_price: 8800.0,
+        deposit_amount: 2000.0,
+        study_environment: "هادئ للمذاكرة - غير مدخنين",
+        is_verified_campus: 1,
+        lease_duration_type: "عام دراسي (9 شهور)",
+        amenities: "إنترنت فايبر WE Space فائق السرعة,مكاتب مذاكرة خاصة لكل طالب,غسالة أوتوماتيك,ميكروويف,تكييف صالة,سخان غاز,أمن ودخول ذكي",
+        landlord_name: "الحاج إبراهيم الدسوقي",
+        landlord_phone: "01019876543",
+        status: "available",
+        images: ["/uploads/mansoura_1.svg", "/uploads/mansoura_2.svg"],
+        landlord_user_id: 2,
+        lat: 31.0421,
+        lng: 31.3582,
+        gate_lat: 31.0442,
+        gate_lng: 31.3540,
+        gate_name: "بوابة توشكى - مجمع الكليات الطبية بالمنصورة",
+        walk_minutes: 4,
+        rating_avg: 4.9,
+        reviews_count: 8,
+        compatibility_score: 96
+      },
+      {
+        id: 2,
+        title: "سكن النيل للطالبات المغتربات — برج الأطباء بالدقي قرب المترو",
+        governorate: "الجيزة",
+        university: "جامعة القاهرة",
+        address_detail: "الدقي وبين السرايات",
+        distance_walk: "6 دقائق مشياً لمترو الدقي وبوابة تجارة جامعة القاهرة",
+        gender: "female",
+        total_beds: 3,
+        available_beds: 0,
+        bed_monthly_price: 2800.0,
+        full_apt_monthly_price: 8400.0,
+        deposit_amount: 2500.0,
+        study_environment: "هادئ للمذاكرة - طالبات كليات عليا",
+        is_verified_campus: 1,
+        lease_duration_type: "عام دراسي (9 شهور)",
+        amenities: "إنترنت منزلي فايبر غير محدود,مكاتب مذاكرة وإضاءة LED مريحة,أمن وحراسة نسائية 24 ساعة,غسالة أوتوماتيك,تكييف,شاشة سمارت",
+        landlord_name: "أستاذة ماجدة الشافعي",
+        landlord_phone: "01123450987",
+        status: "fully_booked",
+        images: ["/uploads/cairo_1.svg", "/uploads/cairo_2.svg"],
+        landlord_user_id: 2,
+        lat: 30.0385,
+        lng: 31.2115,
+        gate_lat: 30.0263,
+        gate_lng: 31.2090,
+        gate_name: "بوابة كلية التجارة ومترو جامعة القاهرة",
+        walk_minutes: 6,
+        rating_avg: 4.8,
+        reviews_count: 5,
+        compatibility_score: 94
+      },
+      {
+        id: 3,
+        title: "سكن إطلالة البحر للطالبات — بجوار المجمع النظري بسوتر والشاطبي",
+        governorate: "الإسكندرية",
+        university: "جامعة الإسكندرية",
+        address_detail: "سوتر والشاطبي، المجمع النظري",
+        distance_walk: "3 دقائق مشياً لكليات الآداب والحقوق والتجارة بسوتر",
+        gender: "female",
+        total_beds: 4,
+        available_beds: 2,
+        bed_monthly_price: 2400.0,
+        full_apt_monthly_price: 9600.0,
+        deposit_amount: 2000.0,
+        study_environment: "هادئ للمذاكرة - غير مدخنين",
+        is_verified_campus: 1,
+        lease_duration_type: "فصل دراسي (5 شهور)",
+        amenities: "موقع بحري هادئ,مكاتب مذاكرة ومكتبة مراجع,إنترنت فايبر سريع,غسالة أوتوماتيك,سخان غاز,مطبخ كامل مجهز",
+        landlord_name: "المهندس وليد السكندري",
+        landlord_phone: "01278901234",
+        status: "available",
+        images: ["/uploads/alex_1.svg", "/uploads/alex_2.svg"],
+        landlord_user_id: 2,
+        lat: 31.2085,
+        lng: 29.9142,
+        gate_lat: 31.2062,
+        gate_lng: 29.9180,
+        gate_name: "بوابة المجمع النظري بسوتر - جامعة الإسكندرية",
+        walk_minutes: 3,
+        rating_avg: 4.9,
+        reviews_count: 6,
+        compatibility_score: 98
+      },
+      {
+        id: 4,
+        title: "سكن الأكاديميين للطلاب — شارع المكتبات وحي فريال الهادئ",
+        governorate: "أسيوط",
+        university: "جامعة أسيوط",
+        address_detail: "حي فريال، شارع المكتبات",
+        distance_walk: "5 دقائق مشياً للبوابة البحرية لجامعة أسيوط",
+        gender: "male",
+        total_beds: 4,
+        available_beds: 1,
+        bed_monthly_price: 1600.0,
+        full_apt_monthly_price: 6400.0,
+        deposit_amount: 1500.0,
+        study_environment: "هادئ للمذاكرة - كليات طب وهندسة",
+        is_verified_campus: 1,
+        lease_duration_type: "عام دراسي (9 شهور)",
+        amenities: "جو هادئ مخصص لطلبة كليات القمة,إنترنت فايبر عالي السرعة,مكاتب خشب زان,غسالة فل أوتوماتيك,موزع مياه بارد وساخن",
+        landlord_name: "الدكتور رأفت الأسيوطي",
+        landlord_phone: "01065432109",
+        status: "available",
+        images: ["/uploads/assiut_1.svg", "/uploads/assiut_2.svg"],
+        landlord_user_id: 2,
+        lat: 27.1852,
+        lng: 31.1785,
+        gate_lat: 27.1895,
+        gate_lng: 31.1712,
+        gate_name: "البوابة البحرية - جامعة أسيوط",
+        walk_minutes: 5,
+        rating_avg: 4.7,
+        reviews_count: 4,
+        compatibility_score: 92
+      },
+      {
+        id: 5,
+        title: "سكن مجمع الكليات بسبرباي للطلاب — أمام البوابة الرئيسية",
+        governorate: "الغربية",
+        university: "جامعة طنطا",
+        address_detail: "سبرباي، شارع الكليات",
+        distance_walk: "4 دقائق مشياً لبوابة مجمع كليات سبرباي (هندسة وطب أسنان)",
+        gender: "male",
+        total_beds: 4,
+        available_beds: 2,
+        bed_monthly_price: 1800.0,
+        full_apt_monthly_price: 7200.0,
+        deposit_amount: 1800.0,
+        study_environment: "هادئ للمذاكرة - غير مدخنين",
+        is_verified_campus: 1,
+        lease_duration_type: "عقد سنوي (12 شهراً)",
+        amenities: "إنترنت WE Space فايبر,غرفة معيشة مزودة بشاشة,مكاتب للمذاكرة,غسالة أوتوماتيك,سخان غاز فوري,شرفة تهوية واسعة",
+        landlord_name: "الأستاذ كمال الطنطاوي",
+        landlord_phone: "01156789012",
+        status: "available",
+        images: ["/uploads/tanta_1.svg", "/uploads/tanta_2.svg"],
+        landlord_user_id: 2,
+        lat: 30.7682,
+        lng: 31.0125,
+        gate_lat: 30.7645,
+        gate_lng: 31.0090,
+        gate_name: "بوابة مجمع كليات سبرباي - جامعة طنطا",
+        walk_minutes: 4,
+        rating_avg: 4.8,
+        reviews_count: 7,
+        compatibility_score: 95
+      },
+      {
+        id: 6,
+        title: "فيلا سكن طالبات النخبة — الحي المتميز قرب MUST وجامعة 6 أكتوبر",
+        governorate: "الجيزة - 6 أكتوبر",
+        university: "جامعة 6 أكتوبر وMUST",
+        address_detail: "الحي المتميز، قرب محور 26 يوليو",
+        distance_walk: "7 دقائق مشياً لبوابة جامعة مصر للعلوم والتكنولوجيا (MUST)",
+        gender: "female",
+        total_beds: 4,
+        available_beds: 1,
+        bed_monthly_price: 3500.0,
+        full_apt_monthly_price: 14000.0,
+        deposit_amount: 3000.0,
+        study_environment: "مستوى فندقي فاخر - بيئة هادئة",
+        is_verified_campus: 1,
+        lease_duration_type: "عام دراسي (9 شهور)",
+        amenities: "مستوى فندقي فاخر,تكييفات بكل الغرف,إنترنت فايبر فائق السرعة,مكتبات دراسية,غسالة وميكروويف,كاميرات مراقبة وأمن خاص",
+        landlord_name: "الدكتورة سناء المرشدي",
+        landlord_phone: "01099887766",
+        status: "available",
+        images: ["/uploads/october_1.svg", "/uploads/october_2.svg"],
+        landlord_user_id: 2,
+        lat: 29.9740,
+        lng: 30.9520,
+        gate_lat: 29.9715,
+        gate_lng: 30.9565,
+        gate_name: "بوابة جامعة مصر للعلوم والتكنولوجيا (MUST)",
+        walk_minutes: 7,
+        rating_avg: 5.0,
+        reviews_count: 9,
+        compatibility_score: 99
+      }
+    ];
+
+    let propertiesData = [...DEFAULT_PROPERTIES_SEED];
     let statsData = {};
     let maintenanceData = [];
     let utilitiesData = [];
@@ -1971,6 +2180,64 @@ git push -u origin main</pre>
     let pendingUploadedImages = [];
     let propertyPhotoIndexes = {};
     let favoritePropIds = JSON.parse(localStorage.getItem('ejari_favs') || '[]');
+
+        // Map Split Toggle & Mobile Navigation Actions (v3.3)
+    function toggleMapVisibility() {
+      const mapCol = document.getElementById('mapCol');
+      const btnText = document.getElementById('toggleMapBtnText');
+      if (!mapCol) return;
+      const isHidden = mapCol.classList.contains('hidden');
+      if (isHidden) {
+        mapCol.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'إخفاء الخريطة';
+        setTimeout(() => {
+          if (mapInstance) {
+            mapInstance.invalidateSize();
+            updateMapMarkers();
+          }
+        }, 150);
+      } else {
+        mapCol.classList.add('hidden');
+        if (btnText) btnText.textContent = 'الخريطة';
+      }
+    }
+
+    function mobileNavAction(action) {
+      if (action === 'apartments') {
+        switchView('market');
+        const listings = document.getElementById('listingsCol');
+        if (listings) listings.scrollIntoView({ behavior: 'smooth' });
+      } else if (action === 'map') {
+        switchView('market');
+        const mapCol = document.getElementById('mapCol');
+        if (mapCol) {
+          mapCol.classList.remove('hidden');
+          mapCol.scrollIntoView({ behavior: 'smooth' });
+          setTimeout(() => {
+            if (mapInstance) {
+              mapInstance.invalidateSize();
+              updateMapMarkers();
+            }
+          }, 200);
+        }
+      } else if (action === 'escrow') {
+        switchView('market');
+        const bar = document.getElementById('escrowTrustBar');
+        const inp = document.getElementById('escrowReceiptInput');
+        if (bar) bar.scrollIntoView({ behavior: 'smooth' });
+        if (inp) inp.focus();
+      } else if (action === 'account') {
+        if (currentUser) {
+          if (currentUser.role === 'landlord') {
+            switchView('landlord');
+          } else {
+            switchView('roommates');
+          }
+        } else {
+          openAuthModal();
+        }
+      }
+    }
 
     // API Helper injecting JWT Authorization
     async function apiFetch(url, options = {}) {
@@ -2424,6 +2691,17 @@ git push -u origin main</pre>
         roommatesTab.classList.remove('hidden');
       }
 
+      // DevOps & Cloud Deploy Controls (Exclusively for Admin)
+      const adminDeployBtn = document.getElementById('adminDeployBtn');
+      const adminCloudCard = document.getElementById('adminCloudDeploymentCard');
+      if (role === 'admin') {
+        if (adminDeployBtn) adminDeployBtn.classList.remove('hidden');
+        if (adminCloudCard) adminCloudCard.classList.remove('hidden');
+      } else {
+        if (adminDeployBtn) adminDeployBtn.classList.add('hidden');
+        if (adminCloudCard) adminCloudCard.classList.add('hidden');
+      }
+
       const userPill = document.getElementById('userProfilePill');
       const loginBtn = document.getElementById('loginModalBtn');
       if (currentUser) {
@@ -2603,7 +2881,7 @@ git push -u origin main</pre>
           apiFetch('/api/reviews').then(r => r.json()),
           apiFetch('/api/notifications').then(r => r.json())
         ]);
-        propertiesData = propsRes || [];
+        if (propsRes && Array.isArray(propsRes) && propsRes.length > 0) { propertiesData = propsRes; }
         statsData = statsRes || {};
         maintenanceData = maintRes || [];
         utilitiesData = utilRes || [];
@@ -4126,12 +4404,33 @@ git push -u origin main</pre>
       }
     }
 
-    // On Load
+    // On Load (Instant Seed Render <100ms)
     window.addEventListener('DOMContentLoaded', () => {
       initTheme();
+      renderMarketplace(); // Instant render from seed data
       checkAuthSession();
       fetchInitialData();
     });
   </script>
+  <!-- Fixed Mobile Bottom Navigation Bar (v3.3) -->
+  <nav id="mobileBottomNav" class="fixed bottom-0 inset-x-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 z-50 md:hidden flex items-center justify-around py-2 px-1 shadow-lg transition-colors">
+    <button onclick="mobileNavAction('apartments')" class="flex flex-col items-center gap-0.5 text-[#0F4C5C] dark:text-emerald-400 font-bold text-[11px]">
+      <span class="text-xl">🏠</span>
+      <span>الشقق</span>
+    </button>
+    <button onclick="mobileNavAction('map')" class="flex flex-col items-center gap-0.5 text-slate-500 dark:text-slate-400 hover:text-[#0F4C5C] dark:hover:text-emerald-400 font-bold text-[11px]">
+      <span class="text-xl">🗺️</span>
+      <span>الخريطة</span>
+    </button>
+    <button onclick="mobileNavAction('escrow')" class="flex flex-col items-center gap-0.5 text-slate-500 dark:text-slate-400 hover:text-[#0F4C5C] dark:hover:text-emerald-400 font-bold text-[11px]">
+      <span class="text-xl">🛡️</span>
+      <span>فحص الضمان</span>
+    </button>
+    <button onclick="mobileNavAction('account')" class="flex flex-col items-center gap-0.5 text-slate-500 dark:text-slate-400 hover:text-[#0F4C5C] dark:hover:text-emerald-400 font-bold text-[11px]">
+      <span class="text-xl">👨‍🎓</span>
+      <span>حسابي</span>
+    </button>
+  </nav>
+
 </body>
 </html>
