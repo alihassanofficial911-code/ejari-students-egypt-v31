@@ -733,6 +733,47 @@ def init_db():
                 WHERE id = ?
             ''', (lat, lng, glat, glng, gname, walk, ravg, rcnt, pid))
 
+        # Always ensure all properties have high-res Unsplash interior photos
+        minya_unsplash_map = {
+            1: [
+                "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+            ],
+            2: [
+                "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+            ],
+            3: [
+                "https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80"
+            ],
+            4: [
+                "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1540518614846-7ede433c4ef6?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80"
+            ],
+            5: [
+                "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80"
+            ],
+            6: [
+                "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80",
+                "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80"
+            ]
+        }
+        for prop_id, img_arr in minya_unsplash_map.items():
+            img_json = json.dumps(img_arr, ensure_ascii=False)
+            cur.execute('''
+                UPDATE properties
+                SET images_json = ?, images = ?
+                WHERE id = ? AND (images_json IS NULL OR images_json = '' OR images_json = '[]' OR images_json LIKE '%.svg%')
+            ''', (img_json, img_json, prop_id))
+
     # Roommates seed
     cur.execute('SELECT COUNT(*) as cnt FROM roommates')
     if cur.fetchone()['cnt'] == 0:
