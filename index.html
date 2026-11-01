@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إيجاري المنيا | بوابة السكن الجامعي الموثق — v7.0 Full Student Ecosystem</title>
+  <title>إيجاري المنيا | بوابة السكن الجامعي الموثق</title>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ejari-students-egypt-v31.vercel.app/">
+  <meta property="og:title" content="إيجاري المنيا — بوابة السكن الجامعي الموثق لطلاب المنيا">
+  <meta property="og:description" content="أول منصة سكن جامعي موثق بضمان بنكي مستقل لطلاب جامعات المنيا الحكومية والأهلية والخاصة. احجز سريرك بثقة وأمان.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=1200&q=80">
+  <meta name="theme-color" content="#059669">
+  <meta name="twitter:card" content="summary_large_image">
   
   <!-- Google Fonts: Cairo -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +30,50 @@
           }
         }
       }
+    }
+
+    // 15. Carousel Navigation
+    function slideCarousel(cardId, direction) {
+      const imgs = document.querySelectorAll(`img[data-card="${cardId}"]`);
+      if (imgs.length <= 1) return;
+      let current = 0;
+      imgs.forEach((img, i) => { if (!img.classList.contains('hidden')) current = i; });
+      imgs[current].classList.add('hidden');
+      let next = (current + direction + imgs.length) % imgs.length;
+      imgs[next].classList.remove('hidden');
+      // Update dots
+      document.querySelectorAll(`.carousel-dot[data-card="${cardId}"]`).forEach((dot, i) => {
+        dot.classList.toggle('active', i === next);
+      });
+    }
+
+    function goToSlide(cardId, slideIdx) {
+      const imgs = document.querySelectorAll(`img[data-card="${cardId}"]`);
+      imgs.forEach((img, i) => { img.classList.toggle('hidden', i !== slideIdx); });
+      document.querySelectorAll(`.carousel-dot[data-card="${cardId}"]`).forEach((dot, i) => {
+        dot.classList.toggle('active', i === slideIdx);
+      });
+    }
+
+    // 16. Search & Sort
+    function applySearchAndSort() {
+      renderPropertiesGrid();
+    }
+
+    // 17. FAQ Accordion
+    function toggleFaq(btn) {
+      const content = btn.nextElementSibling;
+      const arrow = btn.querySelector('.faq-arrow');
+      content.classList.toggle('hidden');
+      if (arrow) arrow.classList.toggle('rotate');
+    }
+
+    // 18. localStorage Sync Helpers
+    function syncToLocalStorage(key, data) {
+      try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+    }
+    function loadFromLocalStorage(key) {
+      try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; }
     }
   </script>
 
@@ -47,6 +98,13 @@
       #printableContract, #printableContract * { visibility: visible; }
       #printableContract { position: absolute; left: 0; top: 0; width: 100%; }
     }
+    .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.5); transition: all 0.2s; cursor: pointer; }
+    .carousel-dot.active { background: white; transform: scale(1.25); box-shadow: 0 0 4px rgba(0,0,0,0.3); }
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.4); color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; opacity: 0; transition: opacity 0.2s; border: none; backdrop-filter: blur(4px); z-index: 5; }
+    .carousel-btn:hover { background: rgba(0,0,0,0.6); }
+    .group:hover .carousel-btn { opacity: 1; }
+    .faq-arrow { transition: transform 0.3s; }
+    .faq-arrow.rotate { transform: rotate(180deg); }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
@@ -217,6 +275,17 @@
             <span>🗺️</span><span id="mapBtnText">الخريطة التفاعلية</span>
           </button>
         </div>
+        <div class="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <div class="flex-1 min-w-[200px]">
+            <input type="text" id="searchInput" oninput="applySearchAndSort()" placeholder="🔍 ابحث بالمنطقة، الجامعة، أو الميزة مثل: شلبي، تكييف..." class="w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder:text-slate-400 dark:placeholder:text-slate-500">
+          </div>
+          <select id="sortSelect" onchange="applySearchAndSort()" class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-2.5 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="default">🔃 ترتيب: الافتراضي</option>
+            <option value="nearest">🚶 الأقرب لبوابة الكلية</option>
+            <option value="cheapest">💰 الأقل سعراً</option>
+            <option value="rating">⭐ الأعلى تقييماً</option>
+          </select>
+        </div>
       </div>
 
       <!-- INTERACTIVE MAP CONTAINER -->
@@ -237,7 +306,16 @@
         <!-- Card 1: Minya Main University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
-            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" data-card="1" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" data-card="1" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" data-card="1" data-slide="2" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <button onclick="slideCarousel(1,-1)" class="carousel-btn right-2">‹</button>
+              <button onclick="slideCarousel(1,1)" class="carousel-btn left-2">›</button>
+              <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
+                <span onclick="goToSlide(1,0)" class="carousel-dot active" data-card="1" data-dot="0"></span>
+                <span onclick="goToSlide(1,1)" class="carousel-dot" data-card="1" data-dot="1"></span>
+                <span onclick="goToSlide(1,2)" class="carousel-dot" data-card="1" data-dot="2"></span>
+              </div>
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
@@ -278,7 +356,16 @@
         <!-- Card 2: Minya National University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
-            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" data-card="2" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" data-card="2" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" data-card="2" data-slide="2" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <button onclick="slideCarousel(2,-1)" class="carousel-btn right-2">‹</button>
+              <button onclick="slideCarousel(2,1)" class="carousel-btn left-2">›</button>
+              <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
+                <span onclick="goToSlide(2,0)" class="carousel-dot active" data-card="2" data-dot="0"></span>
+                <span onclick="goToSlide(2,1)" class="carousel-dot" data-card="2" data-dot="1"></span>
+                <span onclick="goToSlide(2,2)" class="carousel-dot" data-card="2" data-dot="2"></span>
+              </div>
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا الأهلية</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
@@ -319,7 +406,16 @@
         <!-- Card 3: Deraya University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
-            <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" data-card="3" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" data-card="3" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <img src="https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" data-card="3" data-slide="2" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <button onclick="slideCarousel(3,-1)" class="carousel-btn right-2">‹</button>
+              <button onclick="slideCarousel(3,1)" class="carousel-btn left-2">›</button>
+              <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
+                <span onclick="goToSlide(3,0)" class="carousel-dot active" data-card="3" data-dot="0"></span>
+                <span onclick="goToSlide(3,1)" class="carousel-dot" data-card="3" data-dot="1"></span>
+                <span onclick="goToSlide(3,2)" class="carousel-dot" data-card="3" data-dot="2"></span>
+              </div>
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة دراية</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-rose-600 text-white">👩‍🎓 طالبات</span>
@@ -360,7 +456,16 @@
         <!-- Card 4: Lotus University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
-            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" data-card="4" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img src="https://images.unsplash.com/photo-1540518614846-7ede433c4ef6?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" data-card="4" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" data-card="4" data-slide="2" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <button onclick="slideCarousel(4,-1)" class="carousel-btn right-2">‹</button>
+              <button onclick="slideCarousel(4,1)" class="carousel-btn left-2">›</button>
+              <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
+                <span onclick="goToSlide(4,0)" class="carousel-dot active" data-card="4" data-dot="0"></span>
+                <span onclick="goToSlide(4,1)" class="carousel-dot" data-card="4" data-dot="1"></span>
+                <span onclick="goToSlide(4,2)" class="carousel-dot" data-card="4" data-dot="2"></span>
+              </div>
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة اللوتس</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
@@ -401,7 +506,16 @@
         <!-- Card 5: Minya Corniche -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
-            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" data-card="5" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" data-card="5" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" data-card="5" data-slide="2" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <button onclick="slideCarousel(5,-1)" class="carousel-btn right-2">‹</button>
+              <button onclick="slideCarousel(5,1)" class="carousel-btn left-2">›</button>
+              <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
+                <span onclick="goToSlide(5,0)" class="carousel-dot active" data-card="5" data-dot="0"></span>
+                <span onclick="goToSlide(5,1)" class="carousel-dot" data-card="5" data-dot="1"></span>
+                <span onclick="goToSlide(5,2)" class="carousel-dot" data-card="5" data-dot="2"></span>
+              </div>
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-sky-600 text-white">👨‍🎓 شباب</span>
@@ -442,7 +556,16 @@
         <!-- Card 6: Minya Girls University -->
         <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
-            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" data-card="6" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" data-card="6" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <img src="https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" data-card="6" data-slide="2" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
+              <button onclick="slideCarousel(6,-1)" class="carousel-btn right-2">‹</button>
+              <button onclick="slideCarousel(6,1)" class="carousel-btn left-2">›</button>
+              <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
+                <span onclick="goToSlide(6,0)" class="carousel-dot active" data-card="6" data-dot="0"></span>
+                <span onclick="goToSlide(6,1)" class="carousel-dot" data-card="6" data-dot="1"></span>
+                <span onclick="goToSlide(6,2)" class="carousel-dot" data-card="6" data-dot="2"></span>
+              </div>
             <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ جامعة المنيا</span>
             <div class="absolute top-3 left-3 flex items-center gap-1.5">
               <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md bg-rose-600 text-white">👩‍🎓 طالبات</span>
@@ -480,6 +603,41 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- FAQ ACCORDION -->
+      <div id="faqContainer" class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+        <h3 class="p-5 pb-3 font-black text-base text-slate-900 dark:text-slate-100">❓ الأسئلة الشائعة</h3>
+        <div class="divide-y divide-slate-100 dark:divide-slate-800">
+          <div>
+            <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 py-4 text-right text-sm font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+              <span>كيف يعمل نظام الضمان البنكي المستقل (Escrow)؟</span>
+              <span class="faq-arrow text-slate-400 text-lg">▼</span>
+            </button>
+            <div class="hidden px-5 pb-4 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">يتم إيداع مبلغ التأمين في حساب وسيط مستقل لا يمكن للمؤجر أو المستأجر سحبه إلا بموافقة الطرفين أو بعد انتهاء العقد. هذا يحمي حقوقك بالكامل ويضمن استرداد التأمين عند مغادرة السكن بحالته الأصلية.</div>
+          </div>
+          <div>
+            <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 py-4 text-right text-sm font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+              <span>هل يمكنني معاينة السكن بالفيديو قبل الحجز؟</span>
+              <span class="faq-arrow text-slate-400 text-lg">▼</span>
+            </button>
+            <div class="hidden px-5 pb-4 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">نعم، يمكنك طلب جولة فيديو مباشرة عبر واتساب مع المؤجر. اضغط على أيقونة 💬 في بطاقة أي سكن وسيتم فتح محادثة مباشرة مع صاحب السكن لترتيب معاينة بالفيديو أو زيارة ميدانية.</div>
+          </div>
+          <div>
+            <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 py-4 text-right text-sm font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+              <span>هل العقود موثقة رسمياً ومعتمدة؟</span>
+              <span class="faq-arrow text-slate-400 text-lg">▼</span>
+            </button>
+            <div class="hidden px-5 pb-4 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">جميع العقود على المنصة إلكترونية وقابلة للطباعة بصيغة رسمية مع بيانات الطرفين كاملة. يمكنك اعتمادها لدى الجامعة كإثبات سكن خارجي رسمي عند الحاجة.</div>
+          </div>
+          <div>
+            <button onclick="toggleFaq(this)" class="w-full flex items-center justify-between p-5 py-4 text-right text-sm font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+              <span>كيف أصل من وسط المنيا لجامعات المنيا الجديدة؟</span>
+              <span class="faq-arrow text-slate-400 text-lg">▼</span>
+            </button>
+            <div class="hidden px-5 pb-4 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">تتوفر خطوط سيرفيس ومايكروباص مباشرة من محطة المنيا الرئيسية إلى المنيا الجديدة (15-20 دقيقة). كما تتوفر خطوط باص جامعي مباشر لبوابات الأهلية ودراية واللوتس بتكلفة يومية بسيطة. راجع شارة المواصلات 🚌 على كل بطاقة سكن.</div>
+          </div>
+        </div>
       </div>
 
     </section>
@@ -848,14 +1006,35 @@
     </button>
   </div>
 
-  <!-- 3. FOOTER -->
-  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 py-6 text-xs text-slate-500 dark:text-slate-400 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-right">
-      <div class="flex items-center gap-2">
-        <span class="font-black text-slate-800 dark:text-slate-200">منصة إيجاري طلاب مصر</span>
-        <span>• إصدار منظومة الطالب الشاملة v7.0 Full Student Ecosystem</span>
+  <!-- 3. PROFESSIONAL FOOTER -->
+  <footer class="bg-slate-900 dark:bg-slate-950 text-slate-300 py-10 mt-auto border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+        <div class="space-y-3">
+          <h4 class="font-black text-white text-base">إيجاري المنيا 🏠</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">أول منصة سكن جامعي موثق بضمان بنكي مستقل لطلاب جامعات المنيا الحكومية والأهلية والخاصة. نوفر سكناً آمناً وقريباً من حرمك الجامعي بأفضل الأسعار.</p>
+        </div>
+        <div class="space-y-3">
+          <h4 class="font-black text-white text-base">🎓 روابط الجامعات</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="https://www.minia.edu.eg" target="_blank" rel="noopener" class="hover:text-emerald-400 transition">🏛️ جامعة المنيا الحكومية</a></li>
+            <li><a href="#" class="hover:text-emerald-400 transition">🏛️ جامعة المنيا الأهلية</a></li>
+            <li><a href="https://www.deraya.edu.eg" target="_blank" rel="noopener" class="hover:text-emerald-400 transition">🏛️ جامعة دراية</a></li>
+            <li><a href="#" class="hover:text-emerald-400 transition">🏛️ جامعة اللوتس الدولية</a></li>
+          </ul>
+        </div>
+        <div class="space-y-3">
+          <h4 class="font-black text-white text-base">📞 تواصل معنا</h4>
+          <ul class="space-y-2 text-xs">
+            <li>📧 support@ejari-minya.com</li>
+            <li>📱 واتساب: <a href="https://wa.me/201019876543" class="hover:text-emerald-400 transition">01019876543</a></li>
+            <li class="text-amber-400 font-bold">🚨 خط الأمان للأهالي: <a href="tel:01234567890" class="hover:text-amber-300 transition">01234567890</a></li>
+          </ul>
+        </div>
       </div>
-      <div>حماية التأمين بالضمان البنكي المستقل • جميع الحقوق محفوظة 2026</div>
+      <div class="mt-8 pt-6 border-t border-slate-800 text-center text-xs text-slate-500">
+        حماية التأمين بالضمان البنكي المستقل • جميع الحقوق محفوظة © 2026 منصة إيجاري المنيا
+      </div>
     </div>
   </footer>
 
@@ -1124,7 +1303,7 @@
         lat: 28.1174, lng: 30.7508,
         amenities: "تكييف, إنترنت فايبر WE, مكاتب مذاكرة خاصة",
         whatsapp_phone: "01019876543",
-        images: ["https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80"]
+        images: ["https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"]
       },
       {
         id: 2,
@@ -1140,7 +1319,7 @@
         lat: 28.0712, lng: 30.8275,
         amenities: "مستوى فندقي, تكييفات سبليت, ميكروويف ونظافة",
         whatsapp_phone: "01123450987",
-        images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80"]
+        images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"]
       },
       {
         id: 3,
@@ -1156,7 +1335,7 @@
         lat: 28.0785, lng: 30.8226,
         amenities: "أمن نسائي 24 ساعة, مطبخ إيطالي كامل, مكتبة هادئة",
         whatsapp_phone: "01278901234",
-        images: ["https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80"]
+        images: ["https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80"]
       },
       {
         id: 4,
@@ -1172,7 +1351,7 @@
         lat: 28.0638, lng: 30.8362,
         amenities: "إنترنت فايبر سريع, مكاتب مذاكرة زان, أمن ذكي",
         whatsapp_phone: "01065432109",
-        images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"]
+        images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1540518614846-7ede433c4ef6?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80"]
       },
       {
         id: 5,
@@ -1188,7 +1367,7 @@
         lat: 28.1120, lng: 30.7555,
         amenities: "إطلالة نيلية مفتوحة, شرفة واسعة, غسالة أوتوماتيك",
         whatsapp_phone: "01156789012",
-        images: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80"]
+        images: ["https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80"]
       },
       {
         id: 6,
@@ -1204,7 +1383,7 @@
         lat: 28.1186, lng: 30.7512,
         amenities: "إشراف نسائي دوري, مطبخ متكامل, إنترنت فايبر",
         whatsapp_phone: "01099887766",
-        images: ["https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80"]
+        images: ["https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=800&q=80"]
       }
     ];
 
@@ -1215,6 +1394,13 @@
       updateFavsBadge();
       loadProperties();
       calculateSplitBills();
+      // Restore localStorage data for serverless persistence
+      const savedRoommates = loadFromLocalStorage('ejari_roommates');
+      const savedTickets = loadFromLocalStorage('ejari_maint_tickets');
+      const savedBookings = loadFromLocalStorage('ejari_bookings');
+      if (savedRoommates.length > 0) console.log('[localStorage] Restored', savedRoommates.length, 'roommate posts');
+      if (savedTickets.length > 0) console.log('[localStorage] Restored', savedTickets.length, 'maintenance tickets');
+      if (savedBookings.length > 0) console.log('[localStorage] Restored', savedBookings.length, 'bookings');
     });
 
     // 1. Strict 4-Tab View Switching
@@ -1281,14 +1467,29 @@
       const grid = document.getElementById('propertiesGrid');
       if (!grid) return;
 
-      const filtered = propertiesData.filter(p => {
+      const searchText = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+      const sortBy = document.getElementById('sortSelect')?.value || 'default';
+
+      let filtered = propertiesData.filter(p => {
         if (selectedUni !== 'all' && !(p.university || '').includes(selectedUni) && !(p.title || '').includes(selectedUni)) return false;
         if (selectedGender !== 'all' && p.gender !== selectedGender) return false;
         if (selectedBudget === 'under2000' && p.bed_monthly_price >= 2000) return false;
         if (selectedBudget === '2000-2500' && (p.bed_monthly_price < 2000 || p.bed_monthly_price > 2500)) return false;
         if (selectedBudget === 'above2500' && p.bed_monthly_price <= 2500) return false;
+        if (searchText) {
+          const hay = [p.title, p.university, p.amenities, p.governorate, p.transit_info, p.distance_walk].join(' ').toLowerCase();
+          if (!hay.includes(searchText)) return false;
+        }
         return true;
       });
+
+      // Sort
+      if (sortBy === 'cheapest') filtered.sort((a, b) => a.bed_monthly_price - b.bed_monthly_price);
+      else if (sortBy === 'nearest') filtered.sort((a, b) => {
+        const getMin = s => { const m = (s||'').match(/(\d+)/); return m ? parseInt(m[1]) : 99; };
+        return getMin(a.distance_walk) - getMin(b.distance_walk);
+      });
+      else if (sortBy === 'rating') filtered.sort((a, b) => (b.available_beds || 1) - (a.available_beds || 1));
 
       const countEl = document.getElementById('propertiesCountText');
       if (countEl) countEl.textContent = filtered.length;
@@ -1317,7 +1518,17 @@
         return `
           <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
             <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
-              <img src="${img}" alt="${p.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              ${(function() {
+                  const allImgs = (p.images && p.images.length > 0) ? p.images : [img];
+                  return allImgs.map((src, idx) => 
+                    \`<img src="\${src}" alt="\${p.title}" data-card="\${p.id}" data-slide="\${idx}" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 \${idx > 0 ? 'hidden' : ''}">\`
+                  ).join('') + (allImgs.length > 1 ? \`
+                  <button onclick="slideCarousel(\${p.id},-1)" class="carousel-btn right-2">‹</button>
+                  <button onclick="slideCarousel(\${p.id},1)" class="carousel-btn left-2">›</button>
+                  <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
+                    \${allImgs.map((_, i) => \`<span onclick="goToSlide(\${p.id},\${i})" class="carousel-dot \${i===0?'active':''}" data-card="\${p.id}" data-dot="\${i}"></span>\`).join('')}
+                  </div>\` : '');
+                })()}
               <span class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-white/10">🏛️ ${p.university || 'جامعة المنيا'}</span>
               <div class="absolute top-3 left-3 flex items-center gap-1.5">
                 <span class="text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md ${isMale ? 'bg-sky-600 text-white' : 'bg-rose-600 text-white'}">
