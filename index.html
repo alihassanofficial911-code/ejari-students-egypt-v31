@@ -1162,12 +1162,17 @@
         <button onclick="closeDetailsModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition">✕</button>
       </div>
       <div class="p-6 overflow-y-auto space-y-4 text-xs">
-        <div class="relative w-full h-56 rounded-2xl overflow-hidden bg-slate-900">
-          <img id="detailsModalImg" src="" alt="معاينة السكن" class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <div class="bg-white/20 hover:bg-white/30 backdrop-blur-md p-4 rounded-full text-white text-2xl cursor-pointer transition" onclick="alert('جارٍ تشغيل جولة الفيديو التفاعلية عالية الدقة...')">▶️</div>
+        <div class="relative w-full h-64 rounded-2xl overflow-hidden bg-slate-900 select-none group" id="detailsModalCarousel">
+          <div id="detailsModalImgContainer" class="w-full h-full relative">
+            <img id="detailsModalImg" src="" alt="معاينة السكن" class="w-full h-full object-cover transition-all duration-300">
+            <div class="absolute inset-0 bg-black/30 flex items-center justify-center pointer-events-none">
+              <div class="bg-white/20 backdrop-blur-md p-3.5 rounded-full text-white text-xl">▶️</div>
+            </div>
           </div>
-          <span class="absolute bottom-3 left-3 bg-black/70 text-white text-[11px] px-2.5 py-1 rounded-lg">🎥 معاينة فيديو موثقة للحرم</span>
+          <button type="button" onclick="slideModalCarousel(-1)" class="carousel-btn right-2 z-20">‹</button>
+          <button type="button" onclick="slideModalCarousel(1)" class="carousel-btn left-2 z-20">›</button>
+          <div id="detailsModalDots" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20"></div>
+          <span class="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white text-[11px] px-2.5 py-1 rounded-lg z-20 font-bold">🎥 معاينة فيديو ومجموعة صور موثقة</span>
         </div>
 
         <div class="bg-sky-50 dark:bg-sky-950/60 p-3 rounded-xl border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-300 font-bold flex items-center gap-2">
@@ -1398,9 +1403,48 @@
       const savedRoommates = loadFromLocalStorage('ejari_roommates');
       const savedTickets = loadFromLocalStorage('ejari_maint_tickets');
       const savedBookings = loadFromLocalStorage('ejari_bookings');
-      if (savedRoommates.length > 0) console.log('[localStorage] Restored', savedRoommates.length, 'roommate posts');
-      if (savedTickets.length > 0) console.log('[localStorage] Restored', savedTickets.length, 'maintenance tickets');
-      if (savedBookings.length > 0) console.log('[localStorage] Restored', savedBookings.length, 'bookings');
+
+      if (savedTickets.length > 0) {
+        const slot = document.getElementById('recentTicketSlot');
+        if (slot) {
+          const t = savedTickets[0];
+          slot.innerHTML = `<span>🔧 ${t.cat}: ${(t.desc || '').slice(0, 25)}</span><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-bold">قيد التنفيذ ⏳</span>`;
+        }
+      }
+
+      if (savedRoommates.length > 0) {
+        const rmGrid = document.getElementById('roommatesGrid');
+        if (rmGrid) {
+          savedRoommates.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'bg-white dark:bg-slate-900 rounded-2xl border-2 border-emerald-500 p-5 space-y-3.5 shadow-md';
+            card.innerHTML = `
+              <div class="flex items-center justify-between">
+                <span class="text-xs bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full">${(item.faculty || '').split('—')[0]}</span>
+                <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">إعلان محفوظ 💾</span>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-base text-slate-900 dark:text-white">${item.name}</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">${item.faculty} — ${item.year}</p>
+              </div>
+              <div class="space-y-1 text-xs text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl">
+                <div>🏠 <strong>المحافظة:</strong> ${item.gov}</div>
+                <div>💤 <strong>العادات:</strong> ${item.habits}</div>
+              </div>
+              <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <div>
+                  <span class="text-[10px] text-slate-400 block font-bold">الميزانية:</span>
+                  <span class="text-sm font-black text-emerald-600 dark:text-emerald-400">${Number(item.budget).toLocaleString()} ج.م / شهر</span>
+                </div>
+                <a href="https://wa.me/2${item.phone}?text=${encodeURIComponent('مرحباً ' + item.name + '، أود التنسيق معك بخصوص سكن مشترك')}" target="_blank" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+                  <span>💬</span><span>واتساب</span>
+                </a>
+              </div>
+            `;
+            rmGrid.prepend(card);
+          });
+        }
+      }
     });
 
     // 1. Strict 4-Tab View Switching
@@ -1716,6 +1760,18 @@
 
         const data = await resp.json();
         const receiptCode = (data && data.receipt_code) ? data.receipt_code : 'EJR-' + Date.now().toString().slice(-6);
+        try {
+          const savedBookings = loadFromLocalStorage('ejari_bookings');
+          syncToLocalStorage('ejari_bookings', [{
+            receiptCode,
+            studentName: sName,
+            faculty,
+            propTitle: activeBookingProp ? activeBookingProp.title : 'سكن طلابي',
+            totalMonthly: total,
+            addonsSummary,
+            date: new Date().toLocaleDateString('ar-EG')
+          }, ...savedBookings]);
+        } catch (err) {}
 
         // Show Contract Preview
         document.getElementById('bookingFormContainer').classList.add('hidden');
@@ -1739,12 +1795,16 @@
     }
 
     // 6. Details Modal & Video Preview
+    let modalImages = [];
+    let modalSlideIndex = 0;
+
     function openDetailsModal(propId) {
       const prop = propertiesData.find(x => x.id === propId) || DEFAULT_PROPERTIES[0];
-      const img = (prop.images && prop.images.length > 0) ? prop.images[0] : 'https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80';
+      modalImages = (prop.images && prop.images.length > 0) ? prop.images : ['https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80'];
+      modalSlideIndex = 0;
+      updateModalCarousel();
       
       document.getElementById('detailsModalTitle').textContent = `معاينة: ${prop.title}`;
-      document.getElementById('detailsModalImg').src = img;
       document.getElementById('detailsModalTransit').textContent = prop.transit_info || '🚌 خط باص مباشر لبوابات الجامعة';
       document.getElementById('detailsModalPrice').textContent = `${Number(prop.bed_monthly_price).toLocaleString()} ج.م / شهر`;
       document.getElementById('detailsModalDeposit').textContent = `تأمين مسترد ${Number(prop.deposit_amount || 1800).toLocaleString()} ج.م 🔒`;
@@ -1761,6 +1821,28 @@
         };
       }
       document.getElementById('detailsModal').classList.remove('hidden');
+    }
+
+    function slideModalCarousel(dir) {
+      if (modalImages.length <= 1) return;
+      modalSlideIndex = (modalSlideIndex + dir + modalImages.length) % modalImages.length;
+      updateModalCarousel();
+    }
+
+    function goToModalSlide(idx) {
+      modalSlideIndex = idx;
+      updateModalCarousel();
+    }
+
+    function updateModalCarousel() {
+      const imgEl = document.getElementById('detailsModalImg');
+      if (imgEl && modalImages[modalSlideIndex]) {
+        imgEl.src = modalImages[modalSlideIndex];
+      }
+      const dotsEl = document.getElementById('detailsModalDots');
+      if (dotsEl) {
+        dotsEl.innerHTML = modalImages.map((_, i) => `<span onclick="goToModalSlide(${i})" class="carousel-dot ${i === modalSlideIndex ? 'active' : ''}"></span>`).join('');
+      }
     }
 
     function closeDetailsModal() {
@@ -1842,6 +1924,12 @@
         grid.prepend(newCard);
       }
 
+      // Save to localStorage
+      try {
+        const savedRoommates = loadFromLocalStorage('ejari_roommates');
+        syncToLocalStorage('ejari_roommates', [{ name, faculty, year, gov, budget: parseFloat(budget), habits, phone, date: new Date().toLocaleDateString('ar-EG') }, ...savedRoommates]);
+      } catch (err) {}
+
       alert('تم نشر طلب زميل السكن بنجاح!');
       closeNewRoommateModal();
     }
@@ -1902,6 +1990,10 @@
         if (slot) {
           slot.innerHTML = `<span>🔧 ${cat}: ${desc.slice(0, 25)}</span><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-bold">قيد التنفيذ ⏳</span>`;
         }
+        try {
+          const savedTickets = loadFromLocalStorage('ejari_maint_tickets');
+          syncToLocalStorage('ejari_maint_tickets', [{ cat, desc, date: new Date().toLocaleDateString('ar-EG') }, ...savedTickets]);
+        } catch (err) {}
         alert('تم إرسال بلاغ الصيانة بنجاح للمؤجر وفريق الدعم الفني!');
         document.getElementById('maintDescription').value = '';
       } catch (e) {
