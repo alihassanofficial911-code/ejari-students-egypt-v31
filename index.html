@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>إيجاري المنيا | بوابة السكن الجامعي الموثق</title>
+  <title>إيجاري المنيا | بوابة السكن الجامعي الموثق — v8.0 Flawless Mobile & Animations</title>
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ejari-students-egypt-v31.vercel.app/">
   <meta property="og:title" content="إيجاري المنيا — بوابة السكن الجامعي الموثق لطلاب المنيا">
@@ -75,6 +75,35 @@
     function loadFromLocalStorage(key) {
       try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch(e) { return []; }
     }
+
+    // 19. Animated Hero Stats Counter (v8.0)
+    function animateHeroStats() {
+      const duration = 800;
+      const start = performance.now();
+      
+      const elRooms = document.getElementById('heroStatRooms');
+      const elUnis = document.getElementById('heroStatUnis');
+      const elRefund = document.getElementById('heroStatRefund');
+
+      function step(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3); // smooth cubic easeOut
+
+        if (elRooms) elRooms.textContent = '+' + Math.floor(ease * 120);
+        if (elUnis) elUnis.textContent = Math.floor(ease * 4);
+        if (elRefund) elRefund.textContent = Math.floor(ease * 100) + '%';
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          if (elRooms) elRooms.textContent = '+120';
+          if (elUnis) elUnis.textContent = '4';
+          if (elRefund) elRefund.textContent = '100%';
+        }
+      }
+      requestAnimationFrame(step);
+    }
   </script>
 
   <!-- Leaflet Map CSS & JS -->
@@ -82,6 +111,21 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
   <style>
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden !important;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
     body { font-family: 'Cairo', sans-serif; }
     .glass-nav { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     .segmented-active { background-color: #059669; color: white; font-weight: 800; box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.25); }
@@ -105,187 +149,235 @@
     .group:hover .carousel-btn { opacity: 1; }
     .faq-arrow { transition: transform 0.3s; }
     .faq-arrow.rotate { transform: rotate(180deg); }
+
+    /* v8.0 Animations & Transitions */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-up {
+      animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes scaleFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-tab-enter {
+      animation: scaleFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+    }
+    .badge-pulse {
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .stat-float {
+      animation: floatBadge 3.5s ease-in-out infinite;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
 
   <!-- 1. STICKY GLASS NAVBAR (h-20 with 4 Segmented Tabs) -->
-  <header class="sticky top-0 z-40 h-20 bg-white/90 dark:bg-slate-900/90 glass-nav border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
+    <!-- 1. STICKY GLASS NAVBAR (Compact Mobile Header & 4-Tab Grid) -->
+  <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 glass-nav border-b border-slate-200/80 dark:border-slate-800 transition-colors w-full overflow-x-hidden">
+    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 w-full">
       
-      <!-- Right: Logo & Campus Brand -->
-      <a href="#" onclick="switchView('market'); return false;" class="flex items-center gap-3 group shrink-0">
-        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 flex items-center justify-center text-white text-xl sm:text-2xl font-black shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform">
-          🏛️
-        </div>
-        <div>
-          <div class="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight leading-tight flex items-center gap-1.5">
-            <span>إيجاري المنيا</span>
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <!-- Top Row -->
+      <div class="flex items-center justify-between gap-2 w-full py-2.5">
+        
+        <!-- Right: Logo & Campus Brand -->
+        <a href="#" onclick="switchView('market'); return false;" class="flex items-center gap-2 sm:gap-3 group shrink-0 active:scale-95 transition-all duration-200">
+          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 flex items-center justify-center text-white text-lg sm:text-xl font-black shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform shrink-0">
+            🏛️
           </div>
-          <div class="text-[11px] sm:text-xs font-bold text-emerald-600 dark:text-emerald-400">بوابة السكن الجامعي الموثق</div>
+          <div>
+            <div class="text-base sm:text-xl font-extrabold leading-tight text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
+              <span>إيجاري المنيا</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            </div>
+            <div class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 truncate max-w-[140px] sm:max-w-none">بوابة السكن الجامعي الموثق</div>
+          </div>
+        </a>
+
+        <!-- Center: 4 Segmented Tabs for Desktop (hidden on mobile, visible lg:flex) -->
+        <div class="hidden lg:flex items-center bg-slate-100 dark:bg-slate-800/90 p-1.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-inner">
+          <button id="tab-market" onclick="switchView('market')" class="segmented-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95">
+            <span>🏠</span><span>تصفح السكن</span>
+          </button>
+          <button id="tab-roommates" onclick="switchView('roommates')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95">
+            <span>🤝</span><span>مطلوب زميل سكن</span>
+          </button>
+          <button id="tab-escrow" onclick="switchView('escrow')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95">
+            <span>🛡️</span><span>فحص وثيقة الضمان</span>
+          </button>
+          <button id="tab-dashboard" onclick="switchView('dashboard')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95">
+            <span>👨‍🎓</span><span>حسابي والفواتير</span>
+          </button>
         </div>
-      </a>
 
-      <!-- Center: 4 Segmented Tabs (Clean & Balanced) -->
-      <div class="hidden lg:flex items-center bg-slate-100 dark:bg-slate-800/90 p-1.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/60 shadow-inner">
-        <button id="tab-market" onclick="switchView('market')" class="segmented-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
-          <span>🏠</span><span>تصفح السكن</span>
-        </button>
-        <button id="tab-roommates" onclick="switchView('roommates')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
-          <span>🤝</span><span>مطلوب زميل سكن</span>
-        </button>
-        <button id="tab-escrow" onclick="switchView('escrow')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
-          <span>🛡️</span><span>فحص وثيقة الضمان</span>
-        </button>
-        <button id="tab-dashboard" onclick="switchView('dashboard')" class="segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5">
-          <span>👨‍🎓</span><span>حسابي والفواتير</span>
-        </button>
-      </div>
-
-      <!-- Left: Theme Toggle, Favorites, & User Account Dropdown -->
-      <div class="flex items-center gap-2 sm:gap-2.5">
-        <button onclick="toggleDarkMode()" id="themeToggleBtn" title="تبديل الوضع الليلي / النهاري" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center text-lg border border-slate-200 dark:border-slate-700 transition">
-          🌙
-        </button>
-
-        <button onclick="openFavoritesModal()" class="hidden sm:inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 text-xs font-bold px-3 py-2 rounded-xl transition">
-          <span>❤️</span><span>المفضلة</span>
-          <span id="favsCountBadge" class="bg-rose-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black">0</span>
-        </button>
-
-        <!-- Account Switcher Dropdown -->
-        <div class="relative">
-          <button onclick="toggleUserDropdown(event)" id="userDropdownBtn" class="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm font-bold px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition">
-            <span>👤</span>
-            <span id="currentAccountLabel" class="max-w-[110px] truncate">حساب تجريبي</span>
-            <span class="text-[10px] text-slate-400">▼</span>
+        <!-- Left: Theme Toggle, Favorites, & User Account Dropdown -->
+        <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          <button onclick="toggleDarkMode()" id="themeToggleBtn" title="تبديل الوضع الليلي / النهاري" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center text-base sm:text-lg border border-slate-200 dark:border-slate-700 transition shrink-0 active:scale-95">
+            🌙
           </button>
 
-          <div id="userDropdownMenu" class="hidden absolute left-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-2 z-50 text-xs space-y-1">
-            <div class="px-3 py-2 bg-slate-50 dark:bg-slate-800/60 rounded-xl mb-1 border border-slate-100 dark:border-slate-700/50">
-              <div class="font-black text-slate-900 dark:text-white" id="dropdownUserName">أحمد محمود</div>
-              <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold" id="dropdownUserRole">طالب • كلية الطب البشري جامعة المنيا</div>
+          <button onclick="openFavoritesModal()" class="hidden sm:inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200 dark:border-rose-900/50 text-xs font-bold px-3 py-2 rounded-xl transition shrink-0 active:scale-95">
+            <span>❤️</span><span>المفضلة</span>
+            <span id="favsCountBadge" class="bg-rose-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black">0</span>
+          </button>
+
+          <!-- Account Switcher Dropdown -->
+          <div class="relative shrink-0">
+            <button onclick="toggleUserDropdown(event)" id="userDropdownBtn" class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 px-2.5 py-1.5 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition shrink-0 active:scale-95">
+              <span>👤</span>
+              <span id="currentAccountLabel" class="max-w-[80px] sm:max-w-[110px] truncate">حساب تجريبي</span>
+              <span class="text-[9px] text-slate-400">▼</span>
+            </button>
+
+            <div id="userDropdownMenu" class="hidden absolute left-0 mt-2 w-64 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-2 z-50 text-xs space-y-1">
+              <div class="px-3 py-2 bg-slate-50 dark:bg-slate-800/60 rounded-xl mb-1 border border-slate-100 dark:border-slate-700/50">
+                <div class="font-black text-slate-900 dark:text-white" id="dropdownUserName">أحمد محمود</div>
+                <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold" id="dropdownUserRole">طالب • كلية الطب البشري جامعة المنيا</div>
+              </div>
+              <div class="text-[10px] font-black text-slate-400 px-2 pt-1">تبديل الحساب السريع:</div>
+              <button onclick="quickAuth('student')" class="w-full text-right px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-between transition">
+                <span>👨‍🎓 طالب (أحمد محمود)</span>
+                <span class="text-[10px] text-emerald-600 bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded">طالب</span>
+              </button>
+              <button onclick="quickAuth('landlord')" class="w-full text-right px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-between transition">
+                <span>🏢 مؤجر سكن الطلاب</span>
+                <span class="text-[10px] text-amber-600 bg-amber-50 dark:bg-amber-950 px-1.5 py-0.5 rounded">مالك</span>
+              </button>
+              <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
+              <a href="/admin" class="w-full text-right px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-between transition">
+                <span>⚙️ لوحة تحكم الإدارة (/admin)</span>
+                <span class="text-[10px] text-teal-600 font-mono">لوحة التحكم</span>
+              </a>
             </div>
-            <div class="text-[10px] font-black text-slate-400 px-2 pt-1">تبديل الحساب السريع:</div>
-            <button onclick="quickAuth('student')" class="w-full text-right px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-between transition">
-              <span>👨‍🎓 طالب (أحمد محمود)</span>
-              <span class="text-[10px] text-emerald-600 bg-emerald-50 dark:bg-emerald-950 px-1.5 py-0.5 rounded">طالب</span>
-            </button>
-            <button onclick="quickAuth('landlord')" class="w-full text-right px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-between transition">
-              <span>🏢 مؤجر سكن الطلاب</span>
-              <span class="text-[10px] text-amber-600 bg-amber-50 dark:bg-amber-950 px-1.5 py-0.5 rounded">مالك</span>
-            </button>
-            <div class="border-t border-slate-100 dark:border-slate-800 my-1"></div>
-            <a href="/admin" class="w-full text-right px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold flex items-center justify-between transition">
-              <span>⚙️ لوحة تحكم الإدارة (/admin)</span>
-              <span class="text-[10px] text-teal-600 font-mono">لوحة التحكم</span>
-            </a>
           </div>
+        </div>
+
+      </div>
+
+      <!-- Mobile Navigation Tab Bar (Equal 4-Column Mobile Grid) -->
+      <div class="lg:hidden pb-2.5 pt-0.5 w-full">
+        <div class="grid grid-cols-4 gap-1 p-1 bg-slate-100 dark:bg-slate-800/90 rounded-xl w-full text-center">
+          <button onclick="switchView('market')" id="mob-market" class="segmented-active text-[11px] sm:text-sm font-bold py-2 px-1 rounded-lg transition-all duration-200 truncate flex items-center justify-center gap-1 active:scale-95">
+            <span>🏠</span><span class="truncate">السكن</span>
+          </button>
+          <button onclick="switchView('roommates')" id="mob-roommates" class="segmented-inactive text-[11px] sm:text-sm font-bold py-2 px-1 rounded-lg transition-all duration-200 truncate flex items-center justify-center gap-1 active:scale-95">
+            <span>🤝</span><span class="truncate">زميل سكن</span>
+          </button>
+          <button onclick="switchView('escrow')" id="mob-escrow" class="segmented-inactive text-[11px] sm:text-sm font-bold py-2 px-1 rounded-lg transition-all duration-200 truncate flex items-center justify-center gap-1 active:scale-95">
+            <span>🛡️</span><span class="truncate">الضمان</span>
+          </button>
+          <button onclick="switchView('dashboard')" id="mob-dashboard" class="segmented-inactive text-[11px] sm:text-sm font-bold py-2 px-1 rounded-lg transition-all duration-200 truncate flex items-center justify-center gap-1 active:scale-95">
+            <span>👨‍🎓</span><span class="truncate">حسابي</span>
+          </button>
         </div>
       </div>
 
-    </div>
-
-    <!-- Mobile Navigation Tab Bar (4 Tabs) -->
-    <div class="lg:hidden flex items-center justify-around border-t border-slate-200/80 dark:border-slate-800 px-3 py-2 bg-white/95 dark:bg-slate-900/95 text-xs font-bold">
-      <button onclick="switchView('market')" id="mob-market" class="text-emerald-600 dark:text-emerald-400 font-black flex items-center gap-1">
-        <span>🏠</span><span>السكن</span>
-      </button>
-      <button onclick="switchView('roommates')" id="mob-roommates" class="text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
-        <span>🤝</span><span>زميل سكن</span>
-      </button>
-      <button onclick="switchView('escrow')" id="mob-escrow" class="text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
-        <span>🛡️</span><span>الضمان</span>
-      </button>
-      <button onclick="switchView('dashboard')" id="mob-dashboard" class="text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
-        <span>👨‍🎓</span><span>حسابي</span>
-      </button>
     </div>
   </header>
 
   <!-- 2. MAIN CONTAINER -->
-  <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
+  <main class="w-full max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 overflow-x-hidden">
 
     <!-- ========================================================================= -->
     <!-- VIEW 1: تصفح السكن (الصفحة الرئيسية - 3 بلوكات متناسقة بدون أي تكرار) -->
     <!-- ========================================================================= -->
-    <section id="view-market" class="space-y-6">
+    <section id="view-market" class="space-y-6 w-full max-w-full overflow-x-hidden">
 
-      <!-- BLOCK 1: HERO CARD (Compact & Modern) -->
-      <div class="bg-gradient-to-l from-slate-900 via-slate-800 to-emerald-950 text-white p-7 sm:p-9 rounded-3xl shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-emerald-500/20">
-        <div class="space-y-2.5 max-w-2xl text-right">
-          <div class="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-300 px-3.5 py-1 rounded-full text-xs font-extrabold border border-emerald-500/30">
-            <span>🛡️ سكن طلابي مفحوص ومطابق للحرم 100%</span>
+      <!-- BLOCK 1: HERO CARD (Mobile-Centered Hero Card) -->
+      <div class="w-full rounded-2xl sm:rounded-3xl p-5 sm:p-8 my-3 sm:my-6 overflow-hidden relative box-border bg-gradient-to-l from-slate-900 via-slate-800 to-emerald-950 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-emerald-500/20">
+        <div class="space-y-2.5 max-w-2xl text-right w-full">
+          <div class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-[11px] sm:text-xs font-extrabold border border-emerald-500/30 max-w-full badge-pulse">
+            <span>🛡️</span><span>سكن طلابي مفحوص ومطابق للحرم 100%</span>
           </div>
-          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight text-white tracking-tight">
+          <h1 class="text-xl sm:text-3xl lg:text-4xl font-extrabold leading-snug text-white tracking-tight break-words">
             سكنك الجامعي في المنيا.. مضمون ومفحوص قبل ما تسافر
           </h1>
-          <p class="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed">
+          <p class="text-xs sm:text-base leading-relaxed text-slate-200 mt-2 font-medium">
             غرف وشقق مفروشة ومعاينة ميدانياً بجوار جامعات المنيا الأربع مع حماية كاملة للتأمين عبر الضمان البنكي المسترد ومعاينات مرئية مباشرة.
           </p>
         </div>
 
-        <div class="grid grid-cols-3 gap-2.5 sm:gap-3 w-full md:w-auto shrink-0">
-          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center">
-            <div class="text-lg sm:text-xl font-black text-emerald-400">+120</div>
-            <div class="text-[11px] font-bold text-slate-300 mt-0.5">غرفة موثقة</div>
+        <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full md:w-auto shrink-0 mt-5 md:mt-0">
+          <div class="p-2.5 sm:p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-center flex flex-col items-center justify-center stat-float">
+            <div id="heroStatRooms" class="text-lg sm:text-2xl font-black text-emerald-400">+120</div>
+            <div class="text-[10px] sm:text-xs text-slate-200 mt-0.5 leading-tight font-bold">غرفة موثقة</div>
           </div>
-          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center">
-            <div class="text-lg sm:text-xl font-black text-teal-300">4</div>
-            <div class="text-[11px] font-bold text-slate-300 mt-0.5">جامعات كبرى</div>
+          <div class="p-2.5 sm:p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-center flex flex-col items-center justify-center stat-float" style="animation-delay: 0.5s;">
+            <div id="heroStatUnis" class="text-lg sm:text-2xl font-black text-teal-300">4</div>
+            <div class="text-[10px] sm:text-xs text-slate-200 mt-0.5 leading-tight font-bold">جامعات كبرى</div>
           </div>
-          <div class="bg-white/10 dark:bg-slate-900/40 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 text-center">
-            <div class="text-lg sm:text-xl font-black text-amber-400">100%</div>
-            <div class="text-[11px] font-bold text-slate-300 mt-0.5">استرداد التأمين</div>
+          <div class="p-2.5 sm:p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-center flex flex-col items-center justify-center stat-float" style="animation-delay: 1s;">
+            <div id="heroStatRefund" class="text-lg sm:text-2xl font-black text-emerald-300">100%</div>
+            <div class="text-[10px] sm:text-xs text-slate-200 mt-0.5 leading-tight font-bold">استرداد التأمين</div>
           </div>
         </div>
       </div>
+      </div>
 
-      <!-- BLOCK 2: UNIFIED FILTER BAR -->
-      <div class="bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-800 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex flex-wrap items-center gap-1.5" id="uniPillsContainer">
-            <button onclick="setUniFilter('all')" data-uni="all" class="filter-btn-active px-4 py-2 rounded-xl text-xs font-bold transition">الكل</button>
-            <button onclick="setUniFilter('جامعة المنيا')" data-uni="جامعة المنيا" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">🎓 جامعة المنيا</button>
-            <button onclick="setUniFilter('المنيا الأهلية')" data-uni="المنيا الأهلية" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">🏛️ المنيا الأهلية</button>
-            <button onclick="setUniFilter('دراية')" data-uni="دراية" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">💊 جامعة دراية</button>
-            <button onclick="setUniFilter('اللوتس')" data-uni="اللوتس" class="filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition">🪷 جامعة اللوتس</button>
+      <!-- BLOCK 2: UNIFIED FILTER BAR (Responsive Filter & Search Box) -->
+      <div class="p-3.5 sm:p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm mb-6 w-full space-y-4">
+        
+        <!-- Row 1: University Selector (2x2 Grid on Mobile with 'All' on top) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 w-full">
+          <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-1.5 sm:gap-2 w-full" id="uniPillsContainer">
+            <button onclick="setUniFilter('all')" data-uni="all" class="filter-btn-active col-span-2 sm:col-span-1 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-center justify-center truncate transition active:scale-95">الكل</button>
+            <button onclick="setUniFilter('جامعة المنيا')" data-uni="جامعة المنيا" class="filter-btn-inactive px-2.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-center justify-center truncate border transition active:scale-95">🎓 جامعة المنيا</button>
+            <button onclick="setUniFilter('المنيا الأهلية')" data-uni="المنيا الأهلية" class="filter-btn-inactive px-2.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-center justify-center truncate border transition active:scale-95">🏛️ المنيا الأهلية</button>
+            <button onclick="setUniFilter('دراية')" data-uni="دراية" class="filter-btn-inactive px-2.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-center justify-center truncate border transition active:scale-95">💊 جامعة دراية</button>
+            <button onclick="setUniFilter('اللوتس')" data-uni="اللوتس" class="filter-btn-inactive px-2.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-center justify-center truncate border transition active:scale-95">🪷 جامعة اللوتس</button>
           </div>
-          <div class="text-xs font-bold text-slate-500 dark:text-slate-400">
+          <div class="text-xs font-bold text-slate-500 dark:text-slate-400 shrink-0 text-left sm:text-right">
             المتاح حالياً: <span id="propertiesCountText" class="font-black text-emerald-600 dark:text-emerald-400 text-sm">6</span> سكن
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-          <div class="flex flex-wrap items-center gap-3">
-            <div class="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl" id="genderToggle">
-              <button onclick="setGenderFilter('all')" data-gender="all" class="filter-btn-active px-3 py-1.5 rounded-lg text-xs font-bold transition">الكل</button>
-              <button onclick="setGenderFilter('male')" data-gender="male" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none">👨‍🎓 سكن شباب</button>
-              <button onclick="setGenderFilter('female')" data-gender="female" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none">👩‍🎓 سكن طالبات</button>
+        <!-- Row 2: Gender Toggle + Budget Select + Campus Map Button -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs w-full">
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+            <div class="flex items-center justify-between sm:justify-start gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl w-full sm:w-auto" id="genderToggle">
+              <button onclick="setGenderFilter('all')" data-gender="all" class="filter-btn-active px-3 py-1.5 rounded-lg text-xs font-bold transition active:scale-95">الكل</button>
+              <button onclick="setGenderFilter('male')" data-gender="male" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none active:scale-95">👨‍🎓 سكن شباب</button>
+              <button onclick="setGenderFilter('female')" data-gender="female" class="filter-btn-inactive px-3 py-1.5 rounded-lg text-xs font-bold transition border-none active:scale-95">👩‍🎓 سكن طالبات</button>
             </div>
-            <select id="budgetFilterSelect" onchange="setBudgetFilter(this.value)" class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <select id="budgetFilterSelect" onchange="setBudgetFilter(this.value)" class="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-2 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
               <option value="all">💰 الميزانية: كل الأسعار</option>
               <option value="under2000">أقل من 2,000 ج.م شهرياً</option>
               <option value="2000-2500">من 2,000 إلى 2,500 ج.م</option>
               <option value="above2500">أكثر من 2,500 ج.م</option>
             </select>
           </div>
-          <button onclick="toggleCampusMap()" id="toggleMapBtn" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 rounded-xl font-bold transition flex items-center gap-2">
+          <button onclick="toggleCampusMap()" id="toggleMapBtn" class="w-full sm:w-auto px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 rounded-xl font-bold transition flex items-center justify-center gap-2 active:scale-95">
             <span>🗺️</span><span id="mapBtnText">الخريطة التفاعلية</span>
           </button>
         </div>
-        <div class="flex flex-wrap items-center gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-          <div class="flex-1 min-w-[200px]">
+
+        <!-- Row 3: Instant Search & Sort -->
+        <div class="flex flex-col sm:flex-row gap-2.5 w-full mt-2.5 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <div class="w-full flex-1">
             <input type="text" id="searchInput" oninput="applySearchAndSort()" placeholder="🔍 ابحث بالمنطقة، الجامعة، أو الميزة مثل: شلبي، تكييف..." class="w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-4 py-2.5 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder:text-slate-400 dark:placeholder:text-slate-500">
           </div>
-          <select id="sortSelect" onchange="applySearchAndSort()" class="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-2.5 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <select id="sortSelect" onchange="applySearchAndSort()" class="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 px-3 py-2.5 rounded-xl font-bold text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 shrink-0">
             <option value="default">🔃 ترتيب: الافتراضي</option>
             <option value="nearest">🚶 الأقرب لبوابة الكلية</option>
             <option value="cheapest">💰 الأقل سعراً</option>
             <option value="rating">⭐ الأعلى تقييماً</option>
           </select>
         </div>
+
       </div>
 
       <!-- INTERACTIVE MAP CONTAINER -->
@@ -301,10 +393,10 @@
       </div>
 
       <!-- BLOCK 3: UNIFORM 3-COLUMN APARTMENTS GRID (Pre-rendered Static Cards with Transit & Compare) -->
-      <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+      <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7 w-full">
         
         <!-- Card 1: Minya Main University -->
-        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group w-full max-w-full animate-fade-up" style="animation-delay: 0ms;">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" data-card="1" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=800&q=80" alt="سكن النخبة الطبي" data-card="1" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
@@ -354,7 +446,7 @@
         </div>
 
         <!-- Card 2: Minya National University -->
-        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group w-full max-w-full animate-fade-up" style="animation-delay: 65ms;">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" data-card="2" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80" alt="سكن الرواد الفندقي" data-card="2" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
@@ -404,7 +496,7 @@
         </div>
 
         <!-- Card 3: Deraya University -->
-        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group w-full max-w-full animate-fade-up" style="animation-delay: 130ms;">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" data-card="3" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80" alt="إقامة الصفوة للطالبات" data-card="3" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
@@ -454,7 +546,7 @@
         </div>
 
         <!-- Card 4: Lotus University -->
-        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group w-full max-w-full animate-fade-up" style="animation-delay: 195ms;">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" data-card="4" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <img src="https://images.unsplash.com/photo-1540518614846-7ede433c4ef6?auto=format&fit=crop&w=800&q=80" alt="سكن اللوتس المتميز" data-card="4" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
@@ -504,7 +596,7 @@
         </div>
 
         <!-- Card 5: Minya Corniche -->
-        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group w-full max-w-full animate-fade-up" style="animation-delay: 260ms;">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" data-card="5" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <img src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80" alt="برج الكورنيش الجامعي" data-card="5" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
@@ -554,7 +646,7 @@
         </div>
 
         <!-- Card 6: Minya Girls University -->
-        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+        <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group w-full max-w-full animate-fade-up" style="animation-delay: 325ms;">
           <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
             <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" data-card="6" data-slide="0" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80" alt="سكن الياسمين للطالبات" data-card="6" data-slide="1" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 hidden">
@@ -645,7 +737,7 @@
     <!-- ========================================================================= -->
     <!-- VIEW 2: مطلوب زميل سكن (مستقل ومعزول بكلاس hidden) -->
     <!-- ========================================================================= -->
-    <section id="view-roommates" class="hidden space-y-6">
+    <section id="view-roommates" class="hidden space-y-6 w-full max-w-full overflow-x-hidden">
       
       <!-- Roommate Banner -->
       <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-950 text-white p-7 sm:p-8 rounded-3xl shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 border border-teal-500/20">
@@ -775,7 +867,7 @@
     <!-- ========================================================================= -->
     <!-- VIEW 3: فحص وثيقة الضمان (مستقل ومعزول بكلاس hidden) -->
     <!-- ========================================================================= -->
-    <section id="view-escrow" class="hidden space-y-6">
+    <section id="view-escrow" class="hidden space-y-6 w-full max-w-full overflow-x-hidden">
       
       <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white rounded-3xl p-7 sm:p-10 border border-emerald-500/30 shadow-xl space-y-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
@@ -821,7 +913,7 @@
     <!-- ========================================================================= -->
     <!-- VIEW 4: حسابي والفواتير + حاسبة الفواتير الذكية وتذاكر الصيانة (مستقل) -->
     <!-- ========================================================================= -->
-    <section id="view-dashboard" class="hidden space-y-6">
+    <section id="view-dashboard" class="hidden space-y-6 w-full max-w-full overflow-x-hidden">
 
       <!-- Student Profile Header -->
       <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -993,7 +1085,7 @@
   </main>
 
   <!-- FLOATING BAR: المقارنة السريعة بين الشقق (Side-by-Side Compare Floating Bar) -->
-  <div id="compareFloatingBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 backdrop-blur-md text-white px-5 py-3 rounded-2xl shadow-2xl border border-emerald-500/40 flex items-center gap-4 text-xs font-bold">
+  <div id="compareFloatingBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900/95 backdrop-blur-md text-white px-4 sm:px-5 py-3 rounded-2xl shadow-2xl border border-emerald-500/40 flex items-center gap-2.5 sm:gap-4 text-xs font-bold max-w-[94vw] overflow-hidden">
     <div class="flex items-center gap-2">
       <span class="text-base">⚖️</span>
       <span>مقارنة الشقق المختارة: <span id="compareCountLabel" class="text-emerald-400 font-black">2</span>/3</span>
@@ -1043,8 +1135,8 @@
   <!-- ========================================================================= -->
 
   <!-- MODAL 1: حجز السرير وعقد الإيجار + باقات راحة الطالب المغترب (Student Life Add-ons) -->
-  <div id="bookingModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[90vh] flex flex-col">
+  <div id="bookingModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white dark:bg-slate-900 w-[94vw] max-w-lg mx-auto rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[88vh] flex flex-col">
       <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <span class="text-xl">📝</span>
@@ -1155,8 +1247,8 @@
   </div>
 
   <!-- MODAL 2: تفاصيل ومعاينة فيديو السكن مع دليل المواصلات -->
-  <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[90vh] flex flex-col">
+  <div id="detailsModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white dark:bg-slate-900 w-[94vw] max-w-lg mx-auto rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[88vh] flex flex-col">
       <div class="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <h3 class="font-black text-base text-slate-900 dark:text-white" id="detailsModalTitle">تفاصيل ومعاينة السكن</h3>
         <button onclick="closeDetailsModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center justify-center transition">✕</button>
@@ -1199,8 +1291,8 @@
   </div>
 
   <!-- MODAL 3: إضافة إعلان بحث عن زميل سكن (New Roommate Modal) -->
-  <div id="newRoommateModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+  <div id="newRoommateModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white dark:bg-slate-900 w-[94vw] max-w-lg mx-auto rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 space-y-4 max-h-[88vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
         <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
           <span>🤝</span><span>إضافة إعلان بحث عن زميل غرفة</span>
@@ -1251,8 +1343,8 @@
   </div>
 
   <!-- MODAL 4: جدول المقارنة جنباً إلى جنب (Side-by-Side Compare Modal) -->
-  <div id="compareModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+  <div id="compareModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white dark:bg-slate-900 w-[94vw] max-w-4xl mx-auto rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 space-y-4 max-h-[88vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
         <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
           <span>⚖️</span><span>مقارنة تفصيلية بين الشقق المختارة</span>
@@ -1266,8 +1358,8 @@
   </div>
 
   <!-- MODAL 5: المفضلة (Favorites Modal) -->
-  <div id="favoritesModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
+  <div id="favoritesModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white dark:bg-slate-900 w-[94vw] max-w-lg mx-auto rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 space-y-4 max-h-[88vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
         <h3 class="font-black text-base text-slate-900 dark:text-white flex items-center gap-2">
           <span>❤️</span><span>قائمة السكن المفضلة</span>
@@ -1399,6 +1491,7 @@
       updateFavsBadge();
       loadProperties();
       calculateSplitBills();
+      animateHeroStats();
       // Restore localStorage data for serverless persistence
       const savedRoommates = loadFromLocalStorage('ejari_roommates');
       const savedTickets = loadFromLocalStorage('ejari_maint_tickets');
@@ -1447,7 +1540,7 @@
       }
     });
 
-    // 1. Strict 4-Tab View Switching
+    // 1. Strict 4-Tab View Switching (v8.0 Smooth Tab Transition)
     function switchView(viewName) {
       currentView = viewName;
       const views = ['market', 'roommates', 'escrow', 'dashboard'];
@@ -1458,17 +1551,23 @@
         const mobBtn = document.getElementById(`mob-${v}`);
         
         if (v === viewName) {
-          if (el) el.classList.remove('hidden');
-          if (tabBtn) tabBtn.className = 'segmented-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5';
-          if (mobBtn) mobBtn.className = 'text-emerald-600 dark:text-emerald-400 font-black flex items-center gap-1';
+          if (el) {
+            el.classList.remove('hidden');
+            el.classList.remove('animate-tab-enter');
+            void el.offsetWidth; // force reflow for smooth animation replay
+            el.classList.add('animate-tab-enter');
+          }
+          if (tabBtn) tabBtn.className = 'segmented-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95';
+          if (mobBtn) mobBtn.className = 'segmented-active text-[11px] sm:text-sm font-bold py-2 px-1 rounded-lg transition-all duration-200 truncate flex items-center justify-center gap-1 active:scale-95';
         } else {
           if (el) el.classList.add('hidden');
-          if (tabBtn) tabBtn.className = 'segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5';
-          if (mobBtn) mobBtn.className = 'text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1';
+          if (tabBtn) tabBtn.className = 'segmented-inactive px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 active:scale-95';
+          if (mobBtn) mobBtn.className = 'segmented-inactive text-[11px] sm:text-sm font-bold py-2 px-1 rounded-lg transition-all duration-200 truncate flex items-center justify-center gap-1 active:scale-95';
         }
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    window.switchTab = switchView;
 
     // 2. Fetch & Safe Merge Properties
     async function loadProperties() {
@@ -1550,7 +1649,7 @@
         return;
       }
 
-      grid.innerHTML = filtered.map(p => {
+      grid.innerHTML = filtered.map((p, idx) => {
         const isMale = p.gender === 'male';
         const isFav = favoriteIds.includes(p.id);
         const isCmp = compareIds.includes(p.id);
@@ -1558,9 +1657,10 @@
         const tags = (p.amenities || 'تكييف, فايبر WE, مكاتب مذاكرة').split(',').slice(0, 3);
         const waLink = `https://wa.me/2${p.whatsapp_phone || '01019876543'}?text=${encodeURIComponent('مرحباً، أستفسر عن حجز السرير في ' + p.title)}`;
         const transit = p.transit_info || '🚌 خط باص مباشر لبوابات الجامعة';
+        const staggerDelay = idx * 65;
 
         return `
-          <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group">
+          <div class="flex flex-col justify-between h-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group w-full max-w-full animate-fade-up" style="animation-delay: ${staggerDelay}ms;">
             <div class="relative h-56 w-full bg-slate-800 overflow-hidden select-none">
               ${(function() {
                   const allImgs = (p.images && p.images.length > 0) ? p.images : [img];
@@ -1619,7 +1719,12 @@
     function setUniFilter(uni) {
       selectedUni = uni;
       document.querySelectorAll('#uniPillsContainer button').forEach(btn => {
-        btn.className = (btn.getAttribute('data-uni') === uni) ? 'filter-btn-active px-4 py-2 rounded-xl text-xs font-bold transition' : 'filter-btn-inactive px-4 py-2 rounded-xl text-xs font-bold border transition';
+        const isAll = btn.getAttribute('data-uni') === 'all';
+        const isTarget = btn.getAttribute('data-uni') === uni;
+        const colClass = isAll ? 'col-span-2 sm:col-span-1' : '';
+        btn.className = isTarget 
+          ? `filter-btn-active ${colClass} px-3 py-2 rounded-xl text-xs sm:text-sm font-bold text-center justify-center truncate transition active:scale-95`
+          : `filter-btn-inactive ${colClass} px-2.5 py-2 rounded-xl text-xs sm:text-sm font-bold text-center justify-center truncate border transition active:scale-95`;
       });
       renderPropertiesGrid();
     }
